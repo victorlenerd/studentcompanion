@@ -2,7 +2,16 @@ package com.studentcompanion;
 
 import android.app.Application;
 
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import net.no_mad.tts.TextToSpeechPackage;
+import cl.json.RNSharePackage;
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+import io.invertase.firebase.crash.RNFirebaseCrashPackage;
+
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,7 +31,15 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+            new RNFirebasePackage(),
+            new TextToSpeechPackage(),
+            new RNSharePackage(),
+            new PickerPackage(),
+            new RNFirebaseAnalyticsPackage(),
+            new RNFirebaseCrashPackage(),
+            new ReactNativePushNotificationPackage(),
+            new RNDeviceInfo()
       );
     }
 
