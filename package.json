@@ -9,6 +9,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "firebase": "^4.8.1",
+    "moment": "^2.20.1",
+    "naija-phone-number": "^1.0.2",
+    "native-navigation": "^0.2.1",
+    "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "0.51.0",
     "react-native-animatable": "^1.1.1",
