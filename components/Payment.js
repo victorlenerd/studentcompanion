@@ -97,48 +97,34 @@ class Payment extends Component {
     }
 
     _renderWebview() {
-        if (Platform.OS == "android") {
-            return (
-                <WebView
-                    ref={(e)=> {this.webView = e}}
-                    style={{flex: 1}}
-                    onLoad={this.onLoad.bind(this)}
-                    onMessage={this._Message.bind(this)}
-                    javaScriptEnabled={true}
-                    mediaPlaybackRequiresUserAction={true}
-                    source={{uri: "https://universitypastquestions.com/payment"}}>
-                </WebView>
-            );
-        } else {
-            const patchPostMessageFunction = function() {
-                var originalPostMessage = window.postMessage;
+        const patchPostMessageFunction = function() {
+            var originalPostMessage = window.postMessage;
 
-                var patchedPostMessage = function(message, targetOrigin, transfer) { 
-                    originalPostMessage(message, targetOrigin, transfer);
-                };
-
-                patchedPostMessage.toString = function() { 
-                    return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
-                };
-
-                window.postMessage = patchedPostMessage;
+            var patchedPostMessage = function(message, targetOrigin, transfer) { 
+                originalPostMessage(message, targetOrigin, transfer);
             };
 
-            const patchPostMessageJsCode = '(' + String(patchPostMessageFunction) + ')();';
+            patchedPostMessage.toString = function() { 
+                return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');
+            };
 
-            return (
-                <WebView
-                    ref={(e)=> {this.webView = e}}
-                    style={{flex: 1}}
-                    injectedJavaScript={patchPostMessageJsCode}
-                    onMessage={this.state.loaded ? this._Message.bind(this) : null}
-                    onLoad={this.onLoadIos.bind(this)}
-                    javaScriptEnabled={true}
-                    mediaPlaybackRequiresUserAction={true}
-                    source={{uri: "https://universitypastquestions.com/payment"}}>
-                </WebView>
-            );
-        }
+            window.postMessage = patchedPostMessage;
+        };
+
+        const patchPostMessageJsCode = '(' + String(patchPostMessageFunction) + ')();';
+
+        return (
+            <WebView
+                ref={(e)=> {this.webView = e}}
+                style={{flex: 1}}
+                injectedJavaScript={patchPostMessageJsCode}
+                onMessage={this.state.loaded ? this._Message.bind(this) : null}
+                onLoad={this.onLoadIos.bind(this)}
+                javaScriptEnabled={true}
+                mediaPlaybackRequiresUserAction={true}
+                source={{uri: "https://universitypastquestions.com/payment"}}>
+            </WebView>
+        );
     }
 
     render() {

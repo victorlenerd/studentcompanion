@@ -15,6 +15,10 @@ import * as Animatable from 'react-native-animatable';
 import { navigator } from '../shared/Navigation';
 import { intro, main, colors } from '../shared/styles';
 
+import { Button, ButtonInActive } from './Buttons';
+
+import Swiper from 'react-native-swiper';
+
 class Intro extends Component {
     
     done =()=> {
@@ -46,70 +50,73 @@ class Intro extends Component {
     render () {
         return (
             <View style={{flex: 1}}>
-                <View style={intro.slide}>
-                    <View style={intro.slideTop}>
-                        <Animatable.View ref={(r)=> this.bookImage = r}>
-                            <Image
-                                resizeMode="contain"
-                                source={require('../assets/open-book.png')}
-                                style={intro.image}
-                            />
-                        </Animatable.View>
+                <Swiper style={{flex: 1}} loop={false} activeDotColor="#fff">
+                    <View style={intro.slide}>
+                        <View style={intro.slideTop}>
+                            <Animatable.View ref={(r)=> this.bookImage = r}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../assets/open-book.png')}
+                                    style={intro.image}
+                                />
+                            </Animatable.View>
+                        </View>
+                        <View style={intro.slideBottom}>
+                            <Text style={intro.info}>
+                                Find notes for your courses.
+                            </Text>
+                        </View>
                     </View>
-                    <View style={intro.slideBottom}>
-                        <Text style={intro.info}>
-                            Find notes for your courses.
-                        </Text>
+                    <View style={intro.slide}>
+                        <View style={intro.slideTop}>
+                            <Animatable.View ref={(r)=> this.headPhoneImage = r}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../assets/headphones.png')}
+                                    style={intro.image}
+                                />
+                            </Animatable.View>
+                        </View>
+                        <View style={intro.slideBottom}>
+                            <Text style={intro.info}>
+                                Listen to the audio of your notes.
+                            </Text>
+                        </View>
                     </View>
-                </View>
-                <View style={intro.slide}>
-                    <View style={intro.slideTop}>
-                        <Animatable.View ref={(r)=> this.headPhoneImage = r}>
-                            <Image
-                                resizeMode="contain"
-                                source={require('../assets/headphones.png')}
-                                style={intro.image}
-                            />
-                        </Animatable.View>
+                    <View style={intro.slide}>
+                        <View style={intro.slideTop}>
+                            <Animatable.View ref={(r)=> this.pasteImage = r}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../assets/paste.png')}
+                                    style={intro.image}
+                                />
+                            </Animatable.View>
+                        </View>
+                        <View style={intro.slideBottom}>
+                            <Text style={intro.info}>
+                                Find past questions for courses.
+                            </Text>
+                        </View>
                     </View>
-                    <View style={intro.slideBottom}>
-                        <Text style={intro.info}>
-                            Listen to the audio of your notes.
-                        </Text>
+                    <View style={intro.slide}>
+                        <View style={intro.slideTop}>
+                            <Animatable.View ref={(r)=> this.notesImage = r}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../assets/notes.png')}
+                                    style={intro.image}
+                                />
+                            </Animatable.View>
+                        </View>
+                        <View style={intro.slideBottom}>
+                            <Text style={intro.info}>
+                                Earn from uploads of notes & P.Qs
+                            </Text>
+                            <Button text="Get Started" onPress={this.done} />
+                        </View>
                     </View>
-                </View>
-                <View style={intro.slide}>
-                    <View style={intro.slideTop}>
-                        <Animatable.View ref={(r)=> this.pasteImage = r}>
-                            <Image
-                                resizeMode="contain"
-                                source={require('../assets/paste.png')}
-                                style={intro.image}
-                            />
-                        </Animatable.View>
-                    </View>
-                    <View style={intro.slideBottom}>
-                        <Text style={intro.info}>
-                            Find past questions for courses.
-                        </Text>
-                    </View>
-                </View>
-                <View style={intro.slide}>
-                    <View style={intro.slideTop}>
-                        <Animatable.View ref={(r)=> this.notesImage = r}>
-                            <Image
-                                resizeMode="contain"
-                                source={require('../assets/notes.png')}
-                                style={intro.image}
-                            />
-                        </Animatable.View>
-                    </View>
-                    <View style={intro.slideBottom}>
-                        <Text style={intro.info}>
-                            Earn from uploads of notes & P.Qs
-                        </Text>
-                    </View>
-                </View>
+                </Swiper>
             </View>
         )
     }
