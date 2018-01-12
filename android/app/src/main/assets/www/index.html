@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            @font-face {
+                font-family: "OpenSans-Regular";
+                src: url('./assets/OpenSans-Regular.ttf');
+            }
+            html, body {
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+                font-size: 16px;
+                font-family: "OpenSans-Regular";
+            }
+
+            #content {
+                width: 100%;
+                height: auto;
+            }
+
+            img {
+                width: 100%;
+            }
+
+            .section {
+                width: 100%;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .correct {
+                padding: 5px;
+                color: #fff;
+                text-align: center;
+                background-color: #2ecc71;
+            }
+        </style>
+        <script type="text/javascript" src="./assets/quill.min.js"></script>
+        <script type="text/javascript">
+            window.addEventListener("load",function () {
+                window.ContentBody = function (data) {
+
+                    var questionsQuills = [];
+                    var answersQuills = [];
+
+                    var contents = document.getElementById("contents");
+
+                    for (var i=0; i<data.length; i++) {
+                        var section = document.createElement("section");
+                        var Qbody = document.createElement("div");
+                        var Qh5 = document.createElement("h5");
+                        
+                        section.className += "section";
+                
+                        Qbody.id = "body-id-"+i;
+                        Qh5.innerText = "Question "+(i+1);
+
+                        contents.appendChild(section);
+
+                        section.appendChild(Qh5);
+                        section.appendChild(Qbody);
+
+                        questionsQuills[i] = new Quill(document.getElementById("body-id-"+i), {
+                                        readOnly: true
+                                    });
+
+                        questionsQuills[i].setContents(data[i].question);
+
+                        questionsQuills[i].enable(false);
+                        
+                        if (data[i].answers[0].answer !== "") {
+                            for (var j=0; j<data[i].answers.length; j++) {
+
+                                var Abody = document.createElement("div");
+                                var Ah5 = document.createElement("h5");
+                                var correctLabel = document.createElement("span");
+
+                                Abody.id = "ans-body-id-"+j;
+                                Ah5.innerText = "Answer "+(j+1); 
+
+                                correctLabel.className += "correct";
+                                correctLabel.innerText = "Correct";
+
+                                section.appendChild(Ah5);
+                                section.appendChild(Abody);
+
+                                if (data[i].answers[j].correct) {
+                                    section.appendChild(correctLabel);
+                                }
+
+                                answersQuills[j] = new Quill(document.getElementById("ans-body-id-"+j), {
+                                                readOnly: true
+                                            });
+
+                                answersQuills[j].setContents(data[i].answers[j].answer);
+
+                                answersQuills[j].enable(false);                            
+                            }
+                        }
+                    }
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <div id="contents"></div>
+    </body>
+</html

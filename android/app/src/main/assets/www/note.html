@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./assets/katex.min.css" />
+        <style type="text/css">
+            @font-face {
+                font-family: "OpenSans-Regular";
+                src: url('./assets/OpenSans-Regular.ttf');
+            }
+            html, body {
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+                font-size: 16px;
+                font-family: "OpenSans-Regular";
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none; /* Safari */
+                -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                    -ms-user-select: none; /* Internet Explorer/Edge */
+                        user-select: none; /* Non-prefixed version, currently
+                                            supported by Chrome and Opera */
+            }
+
+            #content {
+                width: 100%;
+                height: 100%;
+            }
+
+            img {
+                width: 100%;
+            }
+
+            .section {
+                width: 100%;
+                border-bottom: 1px solid #ccc;
+            }
+
+            #note-body {
+                width: 100%;
+                height: 100%;
+            }
+
+            .correct {
+                padding: 5px;
+                color: #fff;
+                text-align: center;
+                background-color: #2ecc71;
+            }
+        </style>
+        <script type="text/javascript" src="./assets/katex.min.js"></script>
+        <script type="text/javascript" src="./assets/quill.min.js"></script>
+        <script type="text/javascript">
+            var noteQuill,
+                playing = false,
+                currentTextStartIndex = 0,
+                currentTextEndIndex = 0,
+                endIndex = 0,
+                nightMode = false;
+
+            window.addEventListener("load",function () {
+                window.ContentBody = function (data) {
+                    noteQuill = new Quill(document.getElementById("contents"), {
+                                    readOnly: true,
+                                    modules: {
+                                        formula: true
+                                    }
+                                });
+
+                    noteQuill.setContents(data.body);
+
+                    noteQuill.enable(false);
+                }
+            });
+            
+            document.addEventListener('message', function (message) { 
+                if (message.data == 'dark.mode') {
+                    nightMode = true;
+                    document.body.style.backgroundColor = "#1a1a1a";
+                    document.body.style.color = "#ffffff";
+                    
+                    if (playing) {
+                        noteQuill.formatText(0, endIndex, 'bold', false);
+                        noteQuill.formatText(0, endIndex, 'background', "#1a1a1a"); 
+                        noteQuill.formatText(0, endIndex, 'color', "#ffffff");
+
+                        noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'background',  "#ffffff"); 
+                        noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'color', "#1a1a1a");
+                    }
+                } else if (message.data == 'light.mode') {
+                    nightMode = false;
+                    document.body.style.backgroundColor = "#FFFFFF";
+                    document.body.style.color = "#000000";
+
+                    if (playing) {
+                        noteQuill.formatText(0, endIndex, 'bold', false);
+                        noteQuill.formatText(0, endIndex, 'background',  "#ffffff"); 
+                        noteQuill.formatText(0, endIndex, 'color', "#1a1a1a");
+
+                        noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'background', "#1a1a1a"); 
+                        noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'color', "#ffffff");
+                    }
+                } else if (message.data == 'play.mode') {
+                    playing = true;
+                } else if (message.data == 'stop.mode') {
+                    playing = false;
+                } else {
+                    var cords = message.data.split(",");
+                    
+                    currentTextStartIndex = Number(cords[0]);
+                    currentTextEndIndex = Number(cords[1]);
+                    endIndex = Number(cords[2]);
+
+                    noteQuill.formatText(0, endIndex, 'bold', false);
+                    noteQuill.formatText(0, endIndex, 'background', (nightMode) ? "#1a1a1a" : "#ffffff"); 
+                    noteQuill.formatText(0, endIndex, 'color', (nightMode) ? "#ffffff" : "#1a1a1a");
+
+                    noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'bold', true); 
+                    noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'background', (nightMode) ? "#ffffff" : "#1a1a1a"); 
+                    noteQuill.formatText(currentTextStartIndex, currentTextEndIndex, 'color', (nightMode) ? "#1a1a1a" : "#ffffff"); 
+                }
+            });
+        </script>
+    </head>
+    <body oncopy="return false" oncut="return false" onpaste="return false">
+        <div id="contents">
+            <div id="note-body"></div>
+        </div>
+    </body>
+</html
