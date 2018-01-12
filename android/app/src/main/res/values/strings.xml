@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">StudentCompanion</string>
+    <string name="app_name">Student Companion</string>
+    <string name="fb_app_id">1047651228700413</string>
+    <string name="fb_login_protocol_scheme">fb1047651228700413</string>
 </resources>

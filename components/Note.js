@@ -204,15 +204,17 @@ class Note extends Component {
     }
 
     _renderReaderView() {
-        if (!supportsQuill()) {
-            return (
-                <ScrollView style={{flex: 1}}>
-                    <View style={{flex:1, paddingLeft:20, paddingRight: 20}}>
-                        <Text style={{fontSize: 18, paddingBottom: 50, paddingTop: 50, color: (this.state.light) ? colors.black : colors.white}}>{this.props.currentNote.text}</Text>
-                    </View>
-                </ScrollView>
-            )
-        } else {
+        if (!this.props.isImages) {
+            if (!supportsQuill()) {
+                return (
+                    <ScrollView style={{flex: 1}}>
+                        <View style={{flex:1, paddingLeft:20, paddingRight: 20}}>
+                            <Text style={{fontSize: 18, paddingBottom: 50, paddingTop: 50, color: (this.state.light) ? colors.black : colors.white}}>{this.props.currentNote.text}</Text>
+                        </View>
+                    </ScrollView>
+                );
+            }
+    
             return (
                 <View style={{flex: 1, paddingLeft:20, paddingRight: 20}}>
                     <WebView
@@ -224,7 +226,7 @@ class Note extends Component {
                         source={(Platform.OS == 'android') ? {uri: 'file:///android_asset/www/note.html'}: require('../assets/www/note.html')}>
                     </WebView>
                 </View>
-            )
+            );
         }
     }
 

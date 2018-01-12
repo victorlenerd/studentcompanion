@@ -1,9 +1,13 @@
 package com.studentcompanion;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.BuildConfig;
+import com.wix.RNCameraKit.RNCameraKitPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import net.no_mad.tts.TextToSpeechPackage;
 import cl.json.RNSharePackage;
@@ -17,6 +21,11 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.reactnativenavigation.NavigationApplication;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +49,10 @@ public class MainApplication extends NavigationApplication {
       new RNFirebaseAnalyticsPackage(),
       new RNFirebaseCrashPackage(),
       new ReactNativePushNotificationPackage(),
-      new RNDeviceInfo()
+      new RNDeviceInfo(),
+      new RNCameraKitPackage(),
+      new RNFetchBlobPackage(),
+      new ScannerPackage()
     );
   }
 

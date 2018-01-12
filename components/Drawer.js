@@ -140,6 +140,7 @@ class Drawer extends Component {
                                     content: `Hey, download the StudentCompanion app.`
                                 });
                             }}>
+                            <Image source={require('../assets/share2.png')} style={main.nav_image} />
                             <Text style={(this.state.current == 1) ? main.nav_item_active: main.nav_item}>Share This App</Text>
                         </TouchableOpacity>
                     </View>

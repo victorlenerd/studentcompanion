@@ -10,7 +10,6 @@ import {
     ActivityIndicator,
     ScrollView,
     NetInfo,
-    AsyncStorage,
     Modal,
     Alert
 } from 'react-native';
@@ -18,20 +17,19 @@ import {
 import { connect } from "react-redux";
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-
 import { main, colors } from '../shared/styles';
 import { StartRequest, FinishRequest } from '../ducks/Request';
-
 import { Button, ButtonInActive } from './Buttons';
-
-import ImagePicker from 'react-native-image-crop-picker';
-import {IndicatorViewPager, PagerDotIndicator} from 'rn-viewpager';
-
+import { IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
 import { GetCurrentUser, TransferRequest } from '../ducks/User';
 import { GetPhotoNotes, AddPhotoNote } from '../ducks/PhotoNotes';
 import { GetPricePerPhoto } from '../ducks/Price';
+import { CameraKitGalleryView } from 'react-native-camera-kit';
+const { height, width } = Dimensions.get('window');
 
-var {height, width} = Dimensions.get('window');
+import RNFetchBlob from 'react-native-fetch-blob';
+const { fs } = RNFetchBlob;
+const dirs = fs.dirs;
 
 class PhotoNotes extends Component {
     constructor(props){
@@ -40,12 +38,15 @@ class PhotoNotes extends Component {
             drawerOpen: false,
             modalVisible: false,
             type: ["Note", "Past Questions"],
+            semesters: ["First", "Second"],
             selectedType: "Note",
+            selectedSemester: "First",
             userId: "",
             school: "",
             faculty: "",
             department: "",
             level: "",
+            semester: "",
             courseName: "",
             courseCode: "",
             submitted: false,
@@ -53,6 +54,7 @@ class PhotoNotes extends Component {
             approvedPhotos: [],
             pricePerPhoto: 0,
             amountMade: 0,
+            uploadState: 0,
             photoNotes: []
         };
 
@@ -126,28 +128,54 @@ class PhotoNotes extends Component {
         });
     }
 
-    _openImageSelector() {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true,
-            includeBase64: true,
-            mediaType: 'photo'
-        }).then((image )=> {
-            let allImages = this.state.images.concat(image);
+    _openImageSelector = async () => {
+        const image = await this.camera.capture(true);
+        console.log('image', image);
 
-            this.setState({
-                images: []
-            });
+        // Scanner.scan(image.uri)
+        // .then(( result ) => {
+        //     console.log('result', result);
+        //     let allImages = this.state.images.concat(image);
+        //     this.setState({ images: [] });
+        //     this.setState({ images: allImages }, ()=> {});
+        // })
+        // .catch((err)=> {
+        //     console.error('Scanner Error', err);
+        // });
 
-            this.setState({
-                images: allImages
-            });
-        })
-        .catch(()=> {});
+        // ImagePicker.openPicker({
+        //     width: 600,
+        //     height: 800,
+        //     cropping: true,
+        //     mediaType: 'photo'
+        // }).then((image )=> {
+        //     console.log('image', image);
+        //     const fileName = image.path.slice(image.path.lastIndexOf('/')+1, image.path.length);
+        //     fs.mv(image.path, `${dirs.PictureDir}/${fileName}`)
+        //     .then(() => {
+        //         const newFile = `${dirs.PictureDir}/${fileName}`;
+        //         console.log('NEW_FILE', newFile);
+        //         Scanner.scan()
+        //         .then(( result ) => {
+        //             console.log('result', result);
+                    // let allImages = this.state.images.concat(image);
+                    // this.setState({ images: [] });
+                    // this.setState({ images: allImages }, ()=> {});
+        //         })
+        //         .catch((err)=> {
+        //             console.error('Scanner Error', err);
+        //         });
+        //     })
+        //     .catch((err) => {  
+        //         console.error('RNFetchBlob Error', err);
+        //     });
+        // })
+        // .catch((err)=> {
+        //     console.error('Camera Picker Error', err);
+        // });
     }
 
-    _done() {
+    _done = () => {
         this.setState({
             submitted: true
         });
@@ -156,13 +184,7 @@ class PhotoNotes extends Component {
             Alert.alert("Err!", "You need to upload some photos",[
                 {text: 'Cancel', style: 'cancel'},
             ]);
-        } else if (this.state.school.length < 1|| this.state.faculty.length < 1 || 
-            this.state.department.length < 1 || this.state.level.length < 1 || 
-            this.state.courseName.length < 1 || this.state.courseCode.length < 1) {
-            Alert.alert("Err!", "Some fields are empty",[
-                {text: 'Cancel', style: 'cancel'},
-            ]);
-        } else {
+        }  else {
             let newPhotoNote = {
                 userId: this.state.userId,
                 type: this.state.selectedType,
@@ -170,6 +192,7 @@ class PhotoNotes extends Component {
                 faculty: this.state.faculty,
                 department: this.state.department,
                 level: this.state.level,
+                semester: this.state.semester,
                 courseName: this.state.courseName,
                 courseCode: this.state.courseCode,
                 images: this.state.images,
@@ -191,7 +214,7 @@ class PhotoNotes extends Component {
                 this.props.finishRequest();
             })
             .catch(err=> {
-                Alert.alert("Err!", err.message,[
+                Alert.alert("Err!", err,[
                     {text: 'Cancel', style: 'cancel'},
                 ]);
                 this.props.finishRequest();
@@ -199,15 +222,37 @@ class PhotoNotes extends Component {
         }
     }
 
-    _cancel() {
+    _isFormValid = () => {
+        if (this.state.school.length < 1|| this.state.faculty.length < 1 || 
+            this.state.department.length < 1 || this.state.level.length < 1 || this.state.selectedSemester.length < 1 ||
+            this.state.courseName.length < 1 || this.state.courseCode.length < 1) {
+            Alert.alert("Err!", "Some fields are empty",[
+                {text: 'Cancel', style: 'cancel'},
+            ]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    _next = () => {
+        if (this._isFormValid()) {
+            this.setState({ uploadState: 1 });
+        }
+    }
+
+    _cancel = () => {
         this.setState({
             modalVisible: false,
             school: "",
             faculty: "",
             department: "",
             level: "",
+            semester: "",
             courseName: "",
             courseCode: "",
+            uploadState: 0,
             images: [],
             submitted: false
         });
@@ -237,9 +282,9 @@ class PhotoNotes extends Component {
                 <Text style={{fontSize: 16, color: colors.red}}>{text}</Text>
             )
         }
-     }
+    }
 
-    renderImages() {
+    renderImages = () => {
         if (this.state.images.length > 0) {
             return (
                 <IndicatorViewPager 
@@ -257,23 +302,21 @@ class PhotoNotes extends Component {
         }
     }
 
-    _renderModal() {
+    _renderModal = () => {
+        const { uploadState } = this.state;
+        
         return (
             <Modal
                 animationType={"slide"}
                 transparent={false}
                 visible={this.state.modalVisible}
                 onRequestClose={() => {alert("Modal has been closed.")}}>
-                <View style={{flex: 1, backgroundColor: colors.lightBlue}}>
+                {uploadState == 0 && <View style={{flex: 1, backgroundColor: colors.lightBlue}}>
                     <KeyboardAwareScrollView style={{flex: 0.8, flexDirection: "column", paddingTop: 50}}>
-                        {this.renderImages()}
                         <View style={{padding: 20}}>
-                            <View style={{marginTop: 25}}>
-                                <Button text="Add Photo" onPress={this._openImageSelector.bind(this)} />
-                            </View>
-
-                            <View style={{marginTop: 25}}>
-                                <Text style={{color: colors.black, fontSize: 18}}>Type</Text>
+                            <Text style={{color: colors.black, fontSize: 22}}>New Uploads</Text>
+                            <View style={{marginTop: 30}}>
+                                <Text style={{color: colors.black, fontSize: 18}}>Upload Type</Text>
                                 <Picker
                                     selectedValue={this.state.selectedType}
                                     onValueChange={(type)=> this.setState({selectedType: type})}>
@@ -317,6 +360,22 @@ class PhotoNotes extends Component {
                                     onChange={(e)=> this.setState({'level': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.level.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
+                            <View style={{marginTop: 25}}>
+                                <Text style={{color: colors.black, fontSize: 18}}>Semester</Text>
+                                <Picker
+                                    selectedValue={this.state.selectedSemester}
+                                    onValueChange={(sem)=> this.setState({selectedSemester: sem})}>
+                                    {this.state.semesters.map((type, index)=> {
+                                        return (
+                                            <Picker.Item
+                                                key={index}
+                                                value={type}
+                                                label={type}>
+                                            </Picker.Item>
+                                        )
+                                    })}
+                                </Picker>
+                            </View>
             
                             <View style={{marginTop: 25}}>
                                 <TextInput                                
@@ -336,10 +395,38 @@ class PhotoNotes extends Component {
                         </View>
                     </KeyboardAwareScrollView>
                     <View style={{width, paddingLeft: 25, paddingRight: 25, flex: 0.2, flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                        <ButtonInActive text="Cancel" onPress={this._cancel.bind(this)} />
-                        <Button text="Done" onPress={this._done.bind(this)} />
+                        <ButtonInActive text="Cancel" onPress={this._cancel} />
+                        <Button text="Next" onPress={this._next} />
                     </View>
-                </View>
+                </View>}
+                {uploadState == 1 && <View style={{flex: 1, backgroundColor: colors.lightBlue}}>
+                    <CameraKitGalleryView
+                        ref={gallery => this.gallery = gallery}
+                        style={{flex: 1, marginTop: 20}}
+                        minimumInteritemSpacing={10}
+                        minimumLineSpacing={10}
+                        columnCount={3}
+                        selectedImages={this.state.images}
+                        onTapImage={event => {
+                            if (event.nativeEvent.selected !== null) {
+                                const index = this.state.images.indexOf(event.nativeEvent.selected);
+                                if ( index === -1 ) {
+                                    this.setState({
+                                        images: this.state.images.concat(event.nativeEvent.selected)
+                                    });
+                                } else {
+                                    this.setState({
+                                        images: this.state.images.slice(index, 1)
+                                    });
+                                }
+                            }
+                        }}
+                    />
+                    <View style={{width, paddingLeft: 25, paddingRight: 25, flex: 0.2, flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                        <ButtonInActive text="Cancel" onPress={this._cancel} />
+                        <Button text="Done" onPress={this._done} />
+                    </View>
+                </View>}
                 {this._renderIndicator()}
             </Modal>
         )

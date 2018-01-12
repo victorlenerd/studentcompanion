@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { main, colors } from '../shared/styles';
 
 // var SummaryTool = require('node-summary');
-var {height, width} = Dimensions.get('window');
+var { height, width } = Dimensions.get('window');
 
 class Summarized extends Component {
     constructor(props) {

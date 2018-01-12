@@ -44,11 +44,6 @@ PushNotification.configure({
         sound: true
     },
 
-    /**
-     * (optional) default: true
-     * - Specified if permissions (ios) and token (android and ios) will requested or not,
-     * - if not, you must call PushNotificationsHandler.requestPermissions() later
-     */
     requestPermissions: true,
 });
 
@@ -64,14 +59,12 @@ class Welcome extends Component {
         };
 
         setTimeout(()=> {
-            
             NetInfo.isConnected.fetch().then().done((isConnected) => {
                 store.dispatch(SetIsConnected(isConnected));
                 this._loadData();
-                NetInfo.isConnected.addEventListener('change', dispatchConnected);
+                NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
             });
-
-        }, 5000);
+        }, 0);
     }
 
     _loadData = ()=> {

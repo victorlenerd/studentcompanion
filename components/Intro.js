@@ -67,21 +67,10 @@ class Intro extends Component {
                             </Text>
                         </View>
                     </View>
-                    <View style={intro.slide}>
-                        <View style={intro.slideTop}>
-                            <Animatable.View ref={(r)=> this.headPhoneImage = r}>
-                                <Image
-                                    resizeMode="contain"
-                                    source={require('../assets/headphones.png')}
-                                    style={intro.image}
-                                />
-                            </Animatable.View>
-                        </View>
-                        <View style={intro.slideBottom}>
-                            <Text style={intro.info}>
-                                Listen to the audio of your notes.
-                            </Text>
-                        </View>
+                    <View style={intro.slideBottom}>
+                        <Text style={intro.info}>
+                            Find notes for your courses.
+                        </Text>
                     </View>
                     <View style={intro.slide}>
                         <View style={intro.slideTop}>

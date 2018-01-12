@@ -28,16 +28,17 @@ class Feedback extends Component {
         super(props);
         this.state = {
             feedback: "",
+            drawerOpen: false,
             submitted: false  
         }
         
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
 
-    onNavigatorEvent(event) {
+    onNavigatorEvent(event) { 
         if (event.id === 'sideMenu') {
             //Do nothing
-        }  else if (event.id === "menu" && !this.state.drawerOpen) {
+        } else if (event.id === "menu" && !this.state.drawerOpen) {
             this.props.navigator.toggleDrawer({
                 side: 'left',
                 animated: true,
@@ -122,6 +123,7 @@ class Feedback extends Component {
                         autoCapitalize='none'
                         placeholder="Type your feedback here"
                         multiline={true}
+                        textAlignVertical="top"
                         underlineColorAndroid="rgba(0, 0, 0, 0)"
                         blurOnSubmit={false}
                         editable={true}

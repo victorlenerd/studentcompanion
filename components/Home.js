@@ -81,7 +81,7 @@ class Home extends Component {
                     }} style={{flex: .6, borderWidth: 1, borderColor: "#eee", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
                         <Image resizeMode="contain" source={require('../assets/file-picture-accent.png')} style={{width: 32, height: 32}} />
                         <Text style={{fontSize: 18, fontWeight: "bold", color: colors.black, marginTop: 20}}>Upload Photos</Text>
-                        <Text style={{fontSize: 14, fontWeight: "bold", color: colors.gray, textAlign: "center", marginTop: 20}}>Upload photos of your notes to help us grow.</Text>
+                        <Text style={{fontSize: 14, fontWeight: "bold", color: colors.gray, textAlign: "center", marginTop: 20}}>Earn from uploading photos of your notes.</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flex: .5, flexDirection: "column"}}>

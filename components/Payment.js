@@ -40,6 +40,8 @@ class Payment extends Component {
     }
 
     onLoad(e) {
+        console.log('e', e);
+        this.setState({ loaded: true }, () => this.webView.injectJavaScript('window.onLoad()'));
         this.webView.postMessage(JSON.stringify({
             email: this.state.email,
             price: this.props.price
@@ -58,7 +60,7 @@ class Payment extends Component {
 
     _Message(event) {
         let data = JSON.parse(event.nativeEvent.data);
-
+        console.log('data', data);
         if (data.success) {
             Alert.alert("Success", "Your payment was successful you can now access all the courses you want.",[
                 {text: 'Ok'},

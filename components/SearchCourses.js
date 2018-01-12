@@ -76,7 +76,7 @@ class SearchCourses extends Component {
         NetInfo.isConnected.fetch().then().done((isConnected) => {
             this.props.setIsConnected(isConnected);
 
-            NetInfo.isConnected.addEventListener('change', dispatchConnected);
+            NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
             if (isConnected) {
                 this._loadData();
             }

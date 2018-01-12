@@ -65,7 +65,7 @@ class Course extends Component {
 
         NetInfo.isConnected.fetch().then().done((isConnected)=> {
             this.setState({isConnected});
-            NetInfo.isConnected.addEventListener('change', dispatchConnected);
+            NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
         });
 
         this.props.getCoursesOffline()
