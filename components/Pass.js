@@ -19,15 +19,22 @@ import { UpdateUserDeviceId } from '../ducks/User';
 import { StartRequest, FinishRequest } from '../ducks/Request';
 import { addKey, clearKeys, deleteKey } from '../ducks/Pass';
 
+
+import { Button } from './Buttons';
+
 class Pass extends Component {
     constructor(props){
         super(props);
+
+        this.state = {
+            code: '',
+        };
     }
 
-    done() {
+    done = () => {
         this.props.startRequest();
 
-        this.props.updateDeviceId(this.props.pass)
+        this.props.updateDeviceId(this.state.code)
         .then(()=> {
             this.props.finishRequest()
             navigator.searchCourses();
@@ -54,81 +61,20 @@ class Pass extends Component {
         }
     }
 
-    _render () {
-        return(
-            <View style={{flex: 1}}>
-                <View style={pass.passDisplay}>
-                    <TextInput
-                        value={this.props.pass}
-                        editable={false}
-                        style={pass.passDisplayTxt}
-                    />
-                    <TouchableOpacity
-                        onPress={()=> {
-                            this.props.deleteKey();
-                        }}>
-                        <View>
-                            <Image
-                                resizeMode="contain"
-                                source={require('../assets/backspace.png')}
-                                style={{width: 32, height: 32}} />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={pass.passBtns}>
-                    {[["1","2","3"],
-                        ["4","5","6"],
-                        ["7","8","9"],
-                        ["0","CLEAR","DONE"]
-                    ].map((row, rowIndex)=> {
-                            return (
-                            <View key={rowIndex} style={pass.passBtnsRow}>
-                                {row.map((key, index) => {
-                                    let action;
-
-                                    if (key == "DONE") {
-                                        action =()=> {
-                                            if  (this.props.pass.length < 1) {
-                                                Alert.alert("Invalid Reset Code", "You must enter a correct reset code.",[
-                                                    {text: 'Cancel', style: 'cancel'},
-                                                ]);
-                                                
-                                            } else {
-                                                this.done();
-                                            }
-                                        };
-                                    } else if (key == "CLEAR") {
-                                        action = () => { this.props.clearKeys() };
-                                    } else {
-                                        action = () => {
-                                            return ((k)=>{ this.props.addKey(k) })(key)
-                                        };
-                                    }
-
-                                    return (
-                                        <View key={index} style={pass.passBtn}>
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={[{flex: 1}, pass.passBtn]}
-                                                onPress={action}>
-                                                    <Text style={pass.passBtnTxt}>{key}</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                        )
-                    })}
-                    {this.renderIndicator()}
-                </View>
-            </View>
-        )
-    }
-
     render() {
         return (
             <View style={main.container}>
-                { this._render() }
+                <View style={{ padding: 20 }}>
+                    <Text style={{ marginVertical: 50, fontSize: 20 }}>Enter Your Code</Text>
+                    <TextInput
+                        autoFocus={true}
+                        onChangeText={code => this.setState({ code })}
+                        editable={true}
+                        style={{ height: 50 }}
+                    />
+                    <View style={{ marginVertical: 50 }} />
+                    <Button text="DONE" onPress={this.done} />
+                </View>
             </View>
         )
     }

@@ -232,7 +232,6 @@ export const pass = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        height: 80
     },
     passBtns: {
         flex: 1,

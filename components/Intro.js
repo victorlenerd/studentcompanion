@@ -29,7 +29,7 @@ class Intro extends Component {
         setTimeout(this.bookImage.zoomIn, 1000);
     }
 
-    onSlideChangeHandle (index, total) {
+    onSlideChangeHandle = (index, total) => {
         if (index == 0) {   
             this.bookImage.zoomIn();
         }
@@ -50,7 +50,11 @@ class Intro extends Component {
     render () {
         return (
             <View style={{flex: 1}}>
-                <Swiper style={{flex: 1}} loop={false} activeDotColor="#fff">
+                <Swiper 
+                    style={{flex: 1}}
+                    loop={false}
+                    activeDotColor="#fff"
+                    onIndexChanged={this.onSlideChangeHandle}>
                     <View style={intro.slide}>
                         <View style={intro.slideTop}>
                             <Animatable.View ref={(r)=> this.bookImage = r}>
@@ -67,10 +71,21 @@ class Intro extends Component {
                             </Text>
                         </View>
                     </View>
-                    <View style={intro.slideBottom}>
-                        <Text style={intro.info}>
-                            Find notes for your courses.
-                        </Text>
+                    <View style={intro.slide}>
+                        <View style={intro.slideTop}>
+                            <Animatable.View ref={(r)=> this.headPhoneImage = r}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../assets/headphones.png')}
+                                    style={intro.image}
+                                />
+                            </Animatable.View>
+                        </View>
+                        <View style={intro.slideBottom}>
+                            <Text style={intro.info}>
+                                Listen to the audio of your notes.
+                            </Text>
+                        </View>
                     </View>
                     <View style={intro.slide}>
                         <View style={intro.slideTop}>
@@ -102,6 +117,10 @@ class Intro extends Component {
                             <Text style={intro.info}>
                                 Earn from uploads of notes & P.Qs
                             </Text>
+                        </View>
+                    </View>
+                    <View style={intro.slide}>
+                        <View style={[intro.slideTop, { flex: 1, justifyCotent: 'center', alignItems: 'center' }]}>
                             <Button text="Get Started" onPress={this.done} />
                         </View>
                     </View>
