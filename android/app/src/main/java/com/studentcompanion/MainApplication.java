@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.wix.RNCameraKit.RNCameraKitPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -42,7 +43,8 @@ public class MainApplication extends NavigationApplication {
       new ReactNativePushNotificationPackage(),
       new RNDeviceInfo(),
       new RNCameraKitPackage(),
-      new RNFetchBlobPackage()
+      new RNFetchBlobPackage(),
+      new ImagePickerPackage()
     );
   }
 

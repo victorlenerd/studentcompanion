@@ -26,7 +26,7 @@ export const AddPhotoNote = ( photoNote ) => {
                 let mime = 'image/jpeg';
                 let uploadBlob = null;
             
-                const uploadUri = Platform.OS === 'ios' ? image.replace('file://', '') : image;
+                const uploadUri = Platform.OS === 'ios' ? image.path.replace('file://', '') : image.path;
 
                 fs.readFile(uploadUri, 'base64')
                 .then((data) => {

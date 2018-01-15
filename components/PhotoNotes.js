@@ -15,21 +15,19 @@ import {
 } from 'react-native';
 
 import { connect } from "react-redux";
-
+import { find } from 'lodash';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { main, colors } from '../shared/styles';
 import { StartRequest, FinishRequest } from '../ducks/Request';
 import { Button, ButtonInActive } from './Buttons';
 import { IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
+import ImagePicker from 'react-native-image-picker';
 import { GetCurrentUser, TransferRequest } from '../ducks/User';
 import { GetPhotoNotes, AddPhotoNote } from '../ducks/PhotoNotes';
 import { GetPricePerPhoto } from '../ducks/Price';
-import { CameraKitGalleryView } from 'react-native-camera-kit';
+
 const { height, width } = Dimensions.get('window');
 
-import RNFetchBlob from 'react-native-fetch-blob';
-const { fs } = RNFetchBlob;
-const dirs = fs.dirs;
 
 class PhotoNotes extends Component {
     constructor(props){
@@ -89,27 +87,27 @@ class PhotoNotes extends Component {
             });
 
             Promise.all([
-                this.props.getPhotoNotes(user.$id), 
+                this.props.getPhotoNotes(user.$id),
                 this.props.getPricePerPhoto()
             ])
             .then(( results )=>{
                 let photoNotes = results[0];
                 let pricePerPhoto = results[1];
-                let approvedPhotos = []; 
+                let approvedPhotos = [];
 
                 photoNotes.forEach(( photoNote )=> {
                     if (photoNote.status.toLowerCase() === 'approved') {
                         approvedPhotos.push(photoNote);
                     };
                 });
-                
+
                 let total = 0;
 
                 approvedPhotos.forEach((upload, i)=> {
                     total += upload.images.length * pricePerPhoto
                 });
 
-                this.setState({ 
+                this.setState({
                     photoNotes,
                     approvedPhotos,
                     amountMade: total
@@ -166,7 +164,7 @@ class PhotoNotes extends Component {
         //             console.error('Scanner Error', err);
         //         });
         //     })
-        //     .catch((err) => {  
+        //     .catch((err) => {
         //         console.error('RNFetchBlob Error', err);
         //     });
         // })
@@ -179,7 +177,7 @@ class PhotoNotes extends Component {
         this.setState({
             submitted: true
         });
-        
+
         if (this.state.images.length < 1) {
             Alert.alert("Err!", "You need to upload some photos",[
                 {text: 'Cancel', style: 'cancel'},
@@ -223,7 +221,7 @@ class PhotoNotes extends Component {
     }
 
     _isFormValid = () => {
-        if (this.state.school.length < 1|| this.state.faculty.length < 1 || 
+        if (this.state.school.length < 1|| this.state.faculty.length < 1 ||
             this.state.department.length < 1 || this.state.level.length < 1 || this.state.selectedSemester.length < 1 ||
             this.state.courseName.length < 1 || this.state.courseCode.length < 1) {
             Alert.alert("Err!", "Some fields are empty",[
@@ -241,6 +239,21 @@ class PhotoNotes extends Component {
             this.setState({ uploadState: 1 });
         }
     }
+
+    _addPhoto = () => {
+        ImagePicker.launchImageLibrary({ storageOptions: { path: 'studentcompanion' } }, (response)  => {
+            const { fileName: name, path, data } = response;
+            const img = find(this.state.images, ["name", name]);
+            if (img) return Alert.alert("Image Added Before", "You already added this image", [{ text: 'ok' }]);
+            this.setState({
+                images: this.state.images.concat({
+                    name,
+                    path,
+                    data
+                })
+            });
+        });
+    } 
 
     _cancel = () => {
         this.setState({
@@ -277,23 +290,23 @@ class PhotoNotes extends Component {
     }
 
     _renderError (condition, text) {
-        if (condition) { 
+        if (condition) {
             return (
                 <Text style={{fontSize: 16, color: colors.red}}>{text}</Text>
             )
         }
     }
 
-    renderImages = () => {
+    _renderImages = () => {
         if (this.state.images.length > 0) {
             return (
-                <IndicatorViewPager 
+                <IndicatorViewPager
                     indicator={this._renderDotIndicator()}
-                    style={{width, height: 200, backgroundColor: colors.gray}}>
+                    style={{width, flex: 1, backgroundColor: colors.gray}}>
                     {this.state.images.map((img, i)=> {
                         return (
                             <View key={i} style={{flex: 1}}>
-                                <Image source={{uri: `data:image/jpg;base64,${img.data}`}} resizeMode="center" style={{width, height: 200}}  />
+                                <Image source={{uri: `data:image/jpg;base64,${img.data}`}} resizeMode="center" style={{flex: 1}}  />
                             </View>
                         )
                     })}
@@ -304,7 +317,7 @@ class PhotoNotes extends Component {
 
     _renderModal = () => {
         const { uploadState } = this.state;
-        
+
         return (
             <Modal
                 animationType={"slide"}
@@ -332,21 +345,21 @@ class PhotoNotes extends Component {
                                 </Picker>
                             </View>
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="School"
                                     onChange={(e)=> this.setState({'school': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.school.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="Faculty"
                                     onChange={(e)=> this.setState({'faculty': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.faculty.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="Department"
                                     onChange={(e)=> this.setState({'department': e.nativeEvent.text}) }
@@ -354,7 +367,7 @@ class PhotoNotes extends Component {
                             </View>
 
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="Level"
                                     onChange={(e)=> this.setState({'level': e.nativeEvent.text}) }
@@ -376,22 +389,22 @@ class PhotoNotes extends Component {
                                     })}
                                 </Picker>
                             </View>
-            
+
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="Course Name"
                                     onChange={(e)=> this.setState({'courseName': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.courseName.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
-                
+
                             <View style={{marginTop: 25}}>
-                                <TextInput                                
+                                <TextInput
                                     autoCapitalize='none'
                                     placeholder="Course Code"
                                     onChange={(e)=> this.setState({'courseCode': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.courseCode.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
-                            </View>                    
+                            </View>
                         </View>
                     </KeyboardAwareScrollView>
                     <View style={{width, paddingLeft: 25, paddingRight: 25, flex: 0.2, flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
@@ -400,28 +413,12 @@ class PhotoNotes extends Component {
                     </View>
                 </View>}
                 {uploadState == 1 && <View style={{flex: 1, backgroundColor: colors.lightBlue}}>
-                    <CameraKitGalleryView
-                        ref={gallery => this.gallery = gallery}
-                        style={{flex: 1, marginTop: 20}}
-                        minimumInteritemSpacing={10}
-                        minimumLineSpacing={10}
-                        columnCount={3}
-                        selectedImages={this.state.images}
-                        onTapImage={event => {
-                            if (event.nativeEvent.selected !== null) {
-                                const index = this.state.images.indexOf(event.nativeEvent.selected);
-                                if ( index === -1 ) {
-                                    this.setState({
-                                        images: this.state.images.concat(event.nativeEvent.selected)
-                                    });
-                                } else {
-                                    this.setState({
-                                        images: this.state.images.slice(index, 1)
-                                    });
-                                }
-                            }
-                        }}
-                    />
+                    <View style={{ flexDirection: 'row', width, marginVertical: 25, paddingLeft: 25, paddingRight: 25, height: 50, alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{fontSize: 20, fontWeight: "300"}}>{this.state.images.length} Photos</Text>
+                        <Button text="Add Photo" onPress={this._addPhoto} />
+                    </View>
+                    {this.state.images.length > 0 && this._renderImages()}
+                    {this.state.images.length < 1 && <View style={{flex: 1}} />}
                     <View style={{width, paddingLeft: 25, paddingRight: 25, flex: 0.2, flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
                         <ButtonInActive text="Cancel" onPress={this._cancel} />
                         <Button text="Done" onPress={this._done} />
@@ -449,7 +446,7 @@ class PhotoNotes extends Component {
         } else {
             Alert.alert("Sorry", "You can't get paid until you've made about a ₦100",[
                 {text: 'Cancel', style: 'cancel'},
-            ]);            
+            ]);
         }
     }
 
@@ -467,11 +464,11 @@ class PhotoNotes extends Component {
                     </View>
                     {this.state.photoNotes.map((photoNote, index)=> {
                         let statusColor;
-                        
+
                         if  (photoNote.status.toLowerCase() === "pending") {
                             statusColor = colors.yellow
                         } else if (photoNote.status.toLowerCase() === "approved")  {
-                            statusColor = colors.green                         
+                            statusColor = colors.green
                         } else {
                             statusColor = colors.red
                         }
