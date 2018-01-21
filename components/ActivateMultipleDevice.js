@@ -139,7 +139,7 @@ class ActivateMultipleDevice extends Component {
 
 }
 
-const mapDispatchToProps =(dispatch)=> {
+const mapDispatchToProps = (dispatch) => {
     return {
         getCurrentUser:()=> {
             return dispatch(GetCurrentUser());

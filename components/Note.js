@@ -310,20 +310,6 @@ class Note extends Component {
                         style={{
                             width: 50,
                             height: 50,
-                            backgroundColor: colors.black,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: 25
-                        }}
-                        onPress={this.summarised.bind(this)}>
-                        <View>
-                            <Image source={require('../assets/file-text.png')} style={{width: 22, height: 32}} resizeMode="contain" />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={{
-                            width: 50,
-                            height: 50,
                             backgroundColor: colors.gray,
                             justifyContent: "center",
                             alignItems: "center",

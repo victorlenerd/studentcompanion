@@ -11,23 +11,25 @@ import {
     ScrollView,
     NetInfo,
     Modal,
-    Alert
+    Alert,
+    ViewPagerAndroid
 } from 'react-native';
 
 import { connect } from "react-redux";
-import { find } from 'lodash';
+import { find, capitalize } from 'lodash';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import { main, colors } from '../shared/styles';
-import { StartRequest, FinishRequest } from '../ducks/Request';
-import { Button, ButtonInActive } from './Buttons';
-import { IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
 import ImagePicker from 'react-native-image-picker';
+import Swiper from 'react-native-swiper';
+
+
 import { GetCurrentUser, TransferRequest } from '../ducks/User';
 import { GetPhotoNotes, AddPhotoNote } from '../ducks/PhotoNotes';
 import { GetPricePerPhoto } from '../ducks/Price';
+import { main, colors } from '../shared/styles';
+import { StartRequest, FinishRequest } from '../ducks/Request';
+import { Button, ButtonInActive } from './Buttons';
 
 const { height, width } = Dimensions.get('window');
-
 
 class PhotoNotes extends Component {
     constructor(props){
@@ -53,7 +55,8 @@ class PhotoNotes extends Component {
             pricePerPhoto: 0,
             amountMade: 0,
             uploadState: 0,
-            photoNotes: []
+            photoNotes: [],
+            ready: false
         };
 
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -124,53 +127,6 @@ class PhotoNotes extends Component {
                 {text: 'Cancel', style: 'cancel'},
             ]);
         });
-    }
-
-    _openImageSelector = async () => {
-        const image = await this.camera.capture(true);
-        console.log('image', image);
-
-        // Scanner.scan(image.uri)
-        // .then(( result ) => {
-        //     console.log('result', result);
-        //     let allImages = this.state.images.concat(image);
-        //     this.setState({ images: [] });
-        //     this.setState({ images: allImages }, ()=> {});
-        // })
-        // .catch((err)=> {
-        //     console.error('Scanner Error', err);
-        // });
-
-        // ImagePicker.openPicker({
-        //     width: 600,
-        //     height: 800,
-        //     cropping: true,
-        //     mediaType: 'photo'
-        // }).then((image )=> {
-        //     console.log('image', image);
-        //     const fileName = image.path.slice(image.path.lastIndexOf('/')+1, image.path.length);
-        //     fs.mv(image.path, `${dirs.PictureDir}/${fileName}`)
-        //     .then(() => {
-        //         const newFile = `${dirs.PictureDir}/${fileName}`;
-        //         console.log('NEW_FILE', newFile);
-        //         Scanner.scan()
-        //         .then(( result ) => {
-        //             console.log('result', result);
-                    // let allImages = this.state.images.concat(image);
-                    // this.setState({ images: [] });
-                    // this.setState({ images: allImages }, ()=> {});
-        //         })
-        //         .catch((err)=> {
-        //             console.error('Scanner Error', err);
-        //         });
-        //     })
-        //     .catch((err) => {
-        //         console.error('RNFetchBlob Error', err);
-        //     });
-        // })
-        // .catch((err)=> {
-        //     console.error('Camera Picker Error', err);
-        // });
     }
 
     _done = () => {
@@ -267,7 +223,8 @@ class PhotoNotes extends Component {
             courseCode: "",
             uploadState: 0,
             images: [],
-            submitted: false
+            submitted: false,
+            ready: false,
         });
     }
 
@@ -300,19 +257,27 @@ class PhotoNotes extends Component {
     _renderImages = () => {
         if (this.state.images.length > 0) {
             return (
-                <IndicatorViewPager
-                    indicator={this._renderDotIndicator()}
-                    style={{width, flex: 1, backgroundColor: colors.gray}}>
+                <Swiper style={{flex: 1}}>
                     {this.state.images.map((img, i)=> {
-                        return (
-                            <View key={i} style={{flex: 1}}>
-                                <Image source={{uri: `data:image/jpg;base64,${img.data}`}} resizeMode="center" style={{flex: 1}}  />
-                            </View>
-                        )
+                        if (img.data) { 
+                            return (
+                                <View key={i} style={{flex: 1}}>
+                                    <Image source={{uri: `data:image/jpg;base64,${img.data}`, cache: true}} resizeMode="center" style={{flex: 1}}  />
+                                </View>
+                            );
+                        }
                     })}
-                </IndicatorViewPager>
-            )
+                </Swiper>
+            );
         }
+
+        return (
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={[main.emptyState]}>
+                    <Text style={main.emptyStateText}>You have not uploaded any photos.</Text>
+                </View>
+            </View>
+        );
     }
 
     _renderModal = () => {
@@ -365,7 +330,6 @@ class PhotoNotes extends Component {
                                     onChange={(e)=> this.setState({'department': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.department.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
-
                             <View style={{marginTop: 25}}>
                                 <TextInput
                                     autoCapitalize='none'
@@ -389,7 +353,6 @@ class PhotoNotes extends Component {
                                     })}
                                 </Picker>
                             </View>
-
                             <View style={{marginTop: 25}}>
                                 <TextInput
                                     autoCapitalize='none'
@@ -397,7 +360,6 @@ class PhotoNotes extends Component {
                                     onChange={(e)=> this.setState({'courseName': e.nativeEvent.text}) }
                                     style={[main.textInput, {backgroundColor: (this.state.submitted && this.state.courseName.length < 1) ? colors.red : colors.white, paddingLeft: 10}]} />
                             </View>
-
                             <View style={{marginTop: 25}}>
                                 <TextInput
                                     autoCapitalize='none'
@@ -429,39 +391,10 @@ class PhotoNotes extends Component {
         )
     }
 
-    _getPaid () {
-        if (this.state.amountMade >= 100) {
-            this.props.transferRequest(this.state.userId, this.state.amountMade, this.state.approvedPhotos)
-            .then(( newPhotoNotes)=> {
-                this.setState({ photoNotes: newPhotoNotes, amountMade: 0 });
-                Alert.alert("Payment Succesfull", "A payment request has been sent your phone will be recharged very soon.", [
-                    {text: 'Cancel', style: 'cancel'},
-                ]);
-            })
-            .catch(err=> {
-                Alert.alert("Error!", err.message,[
-                    {text: 'Cancel', style: 'cancel'},
-                ]);
-            });
-        } else {
-            Alert.alert("Sorry", "You can't get paid until you've made about a ₦100",[
-                {text: 'Cancel', style: 'cancel'},
-            ]);
-        }
-    }
-
     _renderSection() {
         if (this.state.photoNotes.length > 0) {
             return (
                 <ScrollView style={{flex:1}}>
-                    <View style={{width, height: 80, flexDirection:"row", paddingLeft: 20, paddingRight: 20, backgroundColor: colors.accent}}>
-                        <View style={{flex: 0.6, justifyContent:"center"}}>
-                            <Text style={{color: colors.white, fontSize: 18, fontWeight: "300"}}>Amount Made ₦{this.state.amountMade}</Text>
-                        </View>
-                        <View style={{flex: 0.4, justifyContent:"center", alignItems: "flex-end"}}>
-                            <Button text="Get Paid" onPress={this._getPaid.bind(this)} />
-                        </View>
-                    </View>
                     {this.state.photoNotes.map((photoNote, index)=> {
                         let statusColor;
 
@@ -474,23 +407,35 @@ class PhotoNotes extends Component {
                         }
 
                         return (
-                            <View key={index} style={{flex: 1, marginBottom: 2, backgroundColor: colors.white, flexDirection:"row"}}>
-                                <View style={{flex: .8, alignItems: "flex-start", justifyContent: "center", height: 80, flexDirection: "column", paddingLeft: 20}}>
+                            <TouchableOpacity onPress={()=> {
+                                this.setState({
+                                    modalVisible: true,
+                                    school: photoNote.school,
+                                    faculty: photoNote.faculty,
+                                    department: photoNote.department,
+                                    level: photoNote.level,
+                                    semester: photoNote.semester,
+                                    courseName: photoNote.courseName,
+                                    courseCode: photoNote.courseCode,
+                                    uploadState: 1
+                                });
+                            }} key={index} style={{flex: 1, marginBottom: 2, backgroundColor: colors.white, flexDirection:"row"}}>
+                                <View style={{flex: .8, alignItems: "flex-start", justifyContent: "center", paddingVertical: 10, flexDirection: "column", paddingLeft: 20}}>
                                     <View>
-                                        <Text style={{fontSize: 20}}>{photoNote.images.length} {(photoNote.images.length > 1) ? "Photos" : "Photo"}</Text>
+                                        <Text style={{fontSize: 20, color: '#000'}}>{photoNote.images.length} {photoNote.type} {(photoNote.images.length > 1) ? "Photos" : "Photo"}</Text>
                                     </View>
                                     <View>
-                                        <Text style={{fontSize: 16, marginTop: 5, fontWeight: "200"}}>{photoNote.type}</Text>
+                                        <Text style={{fontSize: 16, marginTop: 5, fontWeight: "200", color: '#000'}}>{capitalize(photoNote.faculty)} - {capitalize(photoNote.department)}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={{fontSize: 16, marginTop: 5, fontWeight: "200", color: '#000'}}>{capitalize(photoNote.courseCode)} - {capitalize(photoNote.courseName)}</Text>
                                     </View>
                                 </View>
-                                <View style={{flex: .2, alignItems: "center", justifyContent: "center",  paddingRight: 20}}>
-                                    <Text style={{color: statusColor, fontSize: 10, fontWeight: "bold"}}>{photoNote.status.toUpperCase()}</Text>
-                                </View>
-                            </View>
+                            </TouchableOpacity>
                         )
                     })}
                 </ScrollView>
-            )
+            );
         } else {
             return (
                 <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
