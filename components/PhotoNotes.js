@@ -90,31 +90,20 @@ class PhotoNotes extends Component {
             });
 
             Promise.all([
-                this.props.getPhotoNotes(user.$id),
-                this.props.getPricePerPhoto()
+                this.props.getPhotoNotes(user.$id)
             ])
             .then(( results )=>{
                 let photoNotes = results[0];
-                let pricePerPhoto = results[1];
-                let approvedPhotos = [];
+                let cCodes = [];
+                let notesPhotos = [];
 
-                photoNotes.forEach(( photoNote )=> {
-                    if (photoNote.status.toLowerCase() === 'approved') {
-                        approvedPhotos.push(photoNote);
-                    };
+                photoNotes.forEach(photoNote => {
+                    if (cCodes.indexOf(photoNote.courseCode) !== -1) return false;
+                    cCodes.push(photoNote.courseCode);
+                    notesPhotos.push(photoNote);
                 });
 
-                let total = 0;
-
-                approvedPhotos.forEach((upload, i)=> {
-                    total += upload.images.length * pricePerPhoto
-                });
-
-                this.setState({
-                    photoNotes,
-                    approvedPhotos,
-                    amountMade: total
-                });
+                this.setState({ photoNotes: notesPhotos });
             })
             .catch(()=> {
                 Alert.alert("Err!", err.message,[
@@ -158,13 +147,6 @@ class PhotoNotes extends Component {
             this.props.addPhotoNote(newPhotoNote)
             .then(()=> {
                 this._cancel();
-                let updatedPhotoNotes = this.state.photoNotes;
-                updatedPhotoNotes.unshift(newPhotoNote);
-
-                this.setState({
-                    photoNotes: updatedPhotoNotes
-                });
-
                 this.props.finishRequest();
             })
             .catch(err=> {
@@ -201,6 +183,9 @@ class PhotoNotes extends Component {
             const { fileName: name, path, data } = response;
             const img = find(this.state.images, ["name", name]);
             if (img) return Alert.alert("Image Added Before", "You already added this image", [{ text: 'ok' }]);
+
+            if (!img && !response) return false;
+            
             this.setState({
                 images: this.state.images.concat({
                     name,
@@ -422,7 +407,7 @@ class PhotoNotes extends Component {
                             }} key={index} style={{flex: 1, marginBottom: 2, backgroundColor: colors.white, flexDirection:"row"}}>
                                 <View style={{flex: .8, alignItems: "flex-start", justifyContent: "center", paddingVertical: 10, flexDirection: "column", paddingLeft: 20}}>
                                     <View>
-                                        <Text style={{fontSize: 20, color: '#000'}}>{photoNote.images.length} {photoNote.type} {(photoNote.images.length > 1) ? "Photos" : "Photo"}</Text>
+                                        <Text style={{fontSize: 20, color: '#000'}}>{photoNote.type}</Text>
                                     </View>
                                     <View>
                                         <Text style={{fontSize: 16, marginTop: 5, fontWeight: "200", color: '#000'}}>{capitalize(photoNote.faculty)} - {capitalize(photoNote.department)}</Text>
