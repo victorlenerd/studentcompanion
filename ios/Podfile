@@ -1,0 +1,32 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+target 'StudentCompanion' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for StudentCompanion
+  pod 'Google'
+  pod 'Firebase/Core'
+  pod 'Firebase/Crash'
+  pod 'Firebase/Messaging'	
+  
+  target 'StudentCompanionTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'StudentCompanion-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for StudentCompanion-tvOS
+
+  target 'StudentCompanion-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
