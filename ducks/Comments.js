@@ -4,7 +4,7 @@ export const GetComments = (type, typeId) => {
   return (dispatch)=> {
       return new Promise((resolve, reject)=> {
         let typeCommentsRef = app.database().ref('comments/').equalTo(typeId).orderByChild(`${type}Id`);
-        typeCommentsRef.on("value", (snapshot)=> {
+        typeCommentsRef.once("value", (snapshot)=> {
             let comments = toArray(snapshot.val());
             resolve(comments);
         }, (err)=>{

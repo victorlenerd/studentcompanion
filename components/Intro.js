@@ -51,7 +51,7 @@ class Intro extends Component {
         return (
             <View style={{flex: 1}}>
                 <Swiper 
-                    style={{flex: 1}}
+                    containerStyle={{flex: 1}}
                     loop={false}
                     activeDotColor="#fff"
                     onIndexChanged={this.onSlideChangeHandle}>
@@ -120,7 +120,10 @@ class Intro extends Component {
                         </View>
                     </View>
                     <View style={intro.slide}>
-                        <View style={[intro.slideTop, { flex: 1, justifyCotent: 'center', alignItems: 'center' }]}>
+                        <View style={[intro.slideTop, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+                            <Text style={[intro.info, { fontSize: 60 }]}>
+                                What Are You Waiting For?
+                            </Text>
                             <Button text="Get Started" onPress={this.done} />
                         </View>
                     </View>
@@ -136,4 +139,4 @@ let mapStateToProps = (store) => {
     }
 }
 
-export default  connect(mapStateToProps)(Intro);
+export default connect(mapStateToProps)(Intro);

@@ -32,6 +32,7 @@ export const GetUniversities = () => {
         return new Promise((resolve, reject)=> {
             let universitiesRef = app.database().ref("/universities");
             universitiesRef.on("value", (snapshot)=> {
+                universitiesRef.off();
                 dispatch(SetUniversities(toArray(snapshot.val())));
                 resolve(toArray(snapshot.val()));
             });

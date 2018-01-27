@@ -85,6 +85,9 @@ export const Login = (data)=>  {
     	return new Promise((resolve, reject)=>{
             app.auth().signInWithEmailAndPassword(data.email, data.password)
             .then((usr)=> {
+
+                console.log("usr", usr);
+
                 dispatch(SetCurrentUser({
                     userId: usr.uid,
                     name: data.name,
@@ -206,7 +209,7 @@ export const UserExist = (email)=> {
         return new Promise((resolve, reject)=> {
             let usersRefs = app.database().ref('/users');
             usersRefs.orderByChild("email").equalTo(email)
-            .on("value", ( snapshot )=> {
+            .once("value", ( snapshot )=> {
                 let value = toArray(snapshot.val());
                 if (value.length < 1) {
                     reject();
@@ -221,17 +224,32 @@ export const UserExist = (email)=> {
 
 export const SetCurrentUser = (data) => {
     return (dispatch)=> {
+
+        console.log('SetCurrentUser::data', data);
+
         return new Promise((resolve, reject)=> {
             usersRefs.orderByChild("email").equalTo(data.email)
-            .on("value", ( snapshot )=> {
+            .once("value", ( snapshot )=> {
+
+                console.log('snapshot.val()', snapshot.val());
+
                 let user = toArray(snapshot.val())[0];
-                AsyncStorage.setItem("@UPQ:CURRENT_USER", JSON.stringify(user))
-                .then(()=> {
-                    resolve();
-                })
-                .catch((err)=> {
-                    reject(err);
-                });
+
+
+                console.log('SetCurrentUser::user', user);
+
+                if (user !== null) {
+                    AsyncStorage.setItem("@UPQ:CURRENT_USER", JSON.stringify(user))
+                    .then(()=> {
+                        resolve();
+                    })
+                    .catch((err)=> {
+                        console.log('Save Error AsyncStorage.setItem');
+                        reject(err);
+                    });
+                } else {
+                    reject({ message: "User does exist" });
+                }
             });
         });
     }
@@ -246,10 +264,11 @@ export const GetCurrentUser = () => {
                 let user = JSON.parse(saved_data);
 
                 usersRefs.orderByChild("email").equalTo(user.email)
-                .on("value", ( snapshot )=> {
+                .once("value", ( snapshot )=> {
                     let user = toArray(snapshot.val())[0];
-
+                    console.log('user', user);
                     if (user !== null) {
+                        console.log('JSON.stringify(user)', JSON.stringify(user));
                         AsyncStorage.setItem("@UPQ:CURRENT_USER", JSON.stringify(user))
                         .then(()=> {
                             resolve(user);
@@ -260,7 +279,7 @@ export const GetCurrentUser = () => {
                     } else {
                         dispatch(DeleteCurrentUser())
                         .then(()=> {
-                             navigator.welcome();
+                            navigator.welcome();
                         });
                     }
                 });
@@ -327,6 +346,9 @@ export const SignOut = () => {
 
 export const SendDeviceActivationCode = (email) => {
     return (dispatch)=> {
+
+        console.log('SendDeviceActivationCode', email);
+
         return new Promise((resolve, reject)=> {
             fetch('https://victor-com-ng.appspot.com/send_device_activate_code_upq',{
                 method: "POST",
@@ -339,14 +361,23 @@ export const SendDeviceActivationCode = (email) => {
             })
             .then((response) => response.json())
             .then((json) => {
+
+                console.log('json', json);                
+
                 let ref = usersRefs.orderByChild("email").equalTo(email);
+
+                
                 ref.once("value", (snapshot) => {
                     var usr = toArray(snapshot.val())[0];
-                    userRef = app.database().ref(`/users/${usr.$id}`)
-                    userRef.update({"deviceActivationCode": json.code}, (err)=> {
+
+                    console.log('usr', usr);
+
+                    usersRefs = app.database().ref(`/users/${usr.$id}`)
+                    usersRefs.update({"deviceActivationCode": json.code}, (err)=> {
                         if (err !== null) reject(err);
                         dispatch(SetCurrentUser({email}))
                         .then(()=> {
+                            
                             resolve();
                         })
                         .catch((err)=> {
@@ -356,6 +387,9 @@ export const SendDeviceActivationCode = (email) => {
                 });
             })
             .catch((err)=> {
+
+                console.log('err', err);
+
                 reject(err);
             });
         });
@@ -367,9 +401,9 @@ export const UpdateUserDeviceId = (code)=> {
         return new Promise((resolve, reject)=> {
             dispatch(GetCurrentUser())
             .then((user)=> {
-                userRef = app.database().ref(`/users/${user.$id}`)
+                usersRefs = app.database().ref(`/users/${user.$id}`)
                 if (user.deviceActivationCode == code) {
-                    userRef.update({"deviceId": DeviceInfo.getUniqueID(), "deviceActivationCode": null}, (err)=> {
+                    usersRefs.update({"deviceId": DeviceInfo.getUniqueID(), "deviceActivationCode": null}, (err)=> {
                         if (err !== null) reject(err);
                             dispatch(SetCurrentUser(user))
                             .then(()=> {
@@ -395,22 +429,15 @@ export const SetAcademicInfo = (userId, academicInfo)=> {
         return new Promise((resolve, reject)=> {
             dispatch(GetCurrentUser())
             .then((user)=> {
-                userRef = app.database().ref(`/users/${userId}`)
-
-                userRef.update({
+                usersRefs = app.database().ref(`/users/${userId}`)
+                usersRefs.update({
                     universityId: academicInfo.universityId,
                     facultyId: academicInfo.facultyId,
                     departmentId: academicInfo.departmentId,
                     levelId: academicInfo.levelId
                 }, (err)=> {
                     if (err !== null) reject(err);
-                    dispatch(SetCurrentUser(user))
-                    .then(()=> {
-                        resolve();
-                    })
-                    .catch((err)=> {
-                        reject(err);
-                    });
+                    resolve();
                 });
             })
             .catch(reject);
@@ -423,7 +450,6 @@ export const TransferRequest = (userId, amount, approvedPhotoNotes) => {
         return new Promise((resolve, reject)=> {
             let photoNotesRef =  app.database().ref(`/photos/`);
             let tRef = app.database().ref('/transferRequest');
-
             approvedPhotoNotes.map(( photoNote )=>{
                 return new Promise((resolve, reject)=> {
                     let photoNoteRef = photoNotesRef.child(photoNote.$id);
@@ -442,7 +468,7 @@ export const TransferRequest = (userId, amount, approvedPhotoNotes) => {
                 })
                 .then(()=> {
                     let userPhotoRef = app.database().ref(`/photos/`).equalTo(userId).orderByChild("userId");
-                    photoNotesRef.on('value', (snapshot)=> {                        
+                    photoNotesRef.once('value', (snapshot)=> {                        
                         let photos =  toArray(snapshot.val());
                         resolve(photos);
                     });

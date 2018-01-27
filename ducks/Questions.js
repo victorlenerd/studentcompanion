@@ -26,6 +26,7 @@ export const GetQuestions = (paperId)=> {
         return new Promise((resolve, reject)=> {
             let questionsRef = app.database().ref("/questions").equalTo(paperId).orderByChild("paperId");
             questionsRef.on("value", (snapshot)=> {
+                questionsRef.off();
                 dispatch(SetQuestions(toArray(snapshot.val())));
                 dispatch(FinishRequest());
                 resolve();
@@ -62,6 +63,7 @@ export const SaveQuestionsOffline = (courseId)=> {
             let questionsRef = app.database().ref("/questions").equalTo(courseId).orderByChild("courseId");
             questionsRef.on("value", (snapshot)=> {
                 let questions =  JSON.stringify(toArray(snapshot.val()));
+                questionsRef.off();
                 AsyncStorage.setItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`, questions)
                 .then(()=> {
                     resolve(questions);

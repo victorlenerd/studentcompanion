@@ -5,6 +5,8 @@ import {
     ActivityIndicator,
     StatusBar,
     ScrollView,
+    Linking,
+    Alert,
     TouchableHighlight
 } from 'react-native';
 
@@ -14,17 +16,33 @@ import { main, colors } from '../shared/styles';
 import { navigator } from '../shared/Navigation';
 import { Button, ButtonInActive } from './Buttons';
 
+import { GetCurrentUser } from '../ducks/User';
 import { GetPrice } from '../ducks/Price';
 
 class ActivateAccount extends Component {
     constructor(props){
         super(props);
         this.state = {
-            price: 0
+            price: 0,
+            email: '',
+            name: ''
         }
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.props.getCurrentUser()
+        .then((user)=> {
+            this.setState({
+                email: user.email,
+                name: user.name
+            });
+        })
+        .catch((err)=> {
+            Alert.alert("An Error Occured", err.message,[
+                {text: 'Cancel', style: 'cancel'},
+            ]);
+        });
+    }
 
     renderIndicator() {
         if (this.props.isLoading) {
@@ -54,8 +72,13 @@ class ActivateAccount extends Component {
 
                             <Text style={{color: colors.white, fontSize: 18, textAlign:"center", marginTop: 50, marginBottom: 50}}>Sorry your subscription has expired. Renew your subscription and get unlimited acces to resources.</Text>
                     
-                            <Button onPress={()=> {navigator.payment(this.props, 10000);}} text="₦100 For A Month" />
-                            <Button onPress={()=> {navigator.payment(this.props, 100000);}} text="₦1000 For A Year" />
+                            <Button onPress={()=> {
+                                //https://paystack.com/pay/09a7m9phd3
+                                Linking.openURL(`https://paystack.com/pay/6n9b-1ng8g?email=${this.state.email}&name=${this.state.name}`);
+                            }} text="₦100 For A Month" />
+                            <Button onPress={()=> {
+                                Linking.openURL(`https://paystack.com/pay/2d28enjfhd?email=${this.state.email}&first name=${this.state.firstName}&last name=${this.state.lastName}`);
+                            }} text="₦1000 For A Year" />
                         </View>
                     </View>
                     {this.renderIndicator()}
@@ -69,6 +92,9 @@ let mapDispatchToProps =(dispatch)=> {
     return {
         getPrice: ()=> {
             dispatch(GetPrice());
+        },
+        getCurrentUser:()=> {
+            return dispatch(GetCurrentUser());
         }
     }
 }

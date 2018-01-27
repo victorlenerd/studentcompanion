@@ -55,7 +55,7 @@ export const GetPrice = () => {
         return new Promise((resolve, reject)=> {
             let priceRef = app.database().ref("/price");
 
-            priceRef.on("value", (snapshot)=> {
+            priceRef.once("value", (snapshot)=> {
                 dispatch(SetPrice(snapshot.val()));
                 dispatch(FinishRequest());
                 resolve();
@@ -69,10 +69,8 @@ export const GetPricePerPhoto = () => {
         return new Promise((resolve, reject)=> {
             let pricePerPhotoRef = app.database().ref("/pricePerPhoto");
 
-            pricePerPhotoRef.on("value", (snapshot)=> {
+            pricePerPhotoRef.once("value", (snapshot)=> {
                 dispatch(SetPricePerPhoto(snapshot.val()));
-
-                console.log();
                 resolve(snapshot.val());
             });
         });
@@ -90,7 +88,7 @@ export const MakePayment = (email, amount) => {
                 var usr = toArray(snapshot.val())[0];
                 var now = moment(), numberOfDays, newNextPaymentDate;
                 var userRef = app.database().ref(`/users/${usr.$id}`);
-                
+                ref.off();
                 if (amount === 10000) {
                     numberOfDays = 31;
                 } 
@@ -104,6 +102,7 @@ export const MakePayment = (email, amount) => {
                 userRef.update({
                     nextPaymentDate: newNextPaymentDate.toISOString()
                 }, (err)=> {
+                    userRef.off();
                     if (err !== null) reject(err);
                     dispatch(SetCurrentUser({email}))
                     .then(()=> {

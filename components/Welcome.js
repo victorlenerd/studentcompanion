@@ -21,7 +21,7 @@ import { GetCurrentUser, GetCurrentUserOffline, DeleteCurrentUser } from '../duc
 import { StartRequest, FinishRequest } from '../ducks/Request';
 import { SetIsConnected } from '../ducks/IsConnected';
 
-import  PushNotification from 'react-native-push-notification';
+import PushNotification from 'react-native-push-notification';
 
 PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
@@ -77,7 +77,9 @@ class Welcome extends Component {
                 let paymentDate = moment(user.nextPaymentDate);
                 let diffDays = paymentDate.diff(now, 'days');
                 this.props.finishRequest();
-                    
+                        
+                console.log('user', user);
+
                 if (user !== null) {
                     if (diffDays >= 0) {
                         navigator.searchCourses();

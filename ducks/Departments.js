@@ -31,7 +31,7 @@ export const GetDepartments = () => {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let departmentsRef = app.database().ref("/departments");
-            departmentsRef.on("value", (snapshot)=> {
+            departmentsRef.once("value", (snapshot)=> {
                 dispatch(SetDepartments(toArray(snapshot.val())));
                 resolve(snapshot.val());
             });
@@ -44,7 +44,7 @@ export const GetDepartmentsByFacultyId = (facultyId) => {
         return new Promise((resolve, reject)=> {
             let departmentsRef = app.database().ref("/departments").orderByChild("facultyId").equalTo(facultyId);        
 
-            departmentsRef.on("value", (snapshot)=> {
+            departmentsRef.once("value", (snapshot)=> {
                 resolve(toArray(snapshot.val()));
             });
         });

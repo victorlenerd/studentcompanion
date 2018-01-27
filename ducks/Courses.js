@@ -18,7 +18,7 @@ export const GetCourses = ()=> {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let coursesRef = app.database().ref("/courses");
-            coursesRef.on("value", (snapshot)=> {
+            coursesRef.once("value", (snapshot)=> {
                 dispatch(SetCourses(toArray(snapshot.val())));
                 resolve();
             });
@@ -31,7 +31,7 @@ export const GetCoursesByDepartmentId = (departmentId)=> {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let coursesRef = app.database().ref("/courses").orderByChild("departmentId").equalTo(departmentId);
-            coursesRef.on("value", (snapshot)=> {
+            coursesRef.once("value", (snapshot)=> {
                 resolve(toArray(snapshot.val()));
             });
         });
@@ -42,7 +42,7 @@ export const GetCoursesByOtherId = (idName, dbId)=> {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let coursesRef = app.database().ref("/courses").orderByChild(idName).equalTo(dbId);
-            coursesRef.on("value", (snapshot)=> {
+            coursesRef.once("value", (snapshot)=> {
                 resolve(toArray(snapshot.val()));
             });
         });

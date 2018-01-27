@@ -30,6 +30,7 @@ class ActivateMultipleDevice extends Component {
     componentDidMount() {
         this.props.getCurrentUser()
         .then((user)=> {
+            console.log('ActivateMultipleDevice', user.email);
             this.setState({
                 email: user.email
             });
@@ -68,7 +69,7 @@ class ActivateMultipleDevice extends Component {
 
     sendActivationCode() {
         this.props.startRequest();
-
+        console.log('sendActivationCode()');
         this.props.sendCode(this.state.email)
         .then(()=> {
             this.props.finishRequest();

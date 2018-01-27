@@ -31,7 +31,7 @@ export const GetLevels = () => {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let levelsRef = app.database().ref("/levels");
-            levelsRef.on("value", (snapshot)=> {
+            levelsRef.once("value", (snapshot)=> {
                 dispatch(SetLevels(toArray(snapshot.val())));
                 resolve(snapshot.val());
             });
@@ -44,7 +44,7 @@ export const GetLevelsByDepartmentId = (departmentId) => {
         return new Promise((resolve, reject)=> {
             let levelsRef = app.database().ref("/levels").orderByChild("departmentId").equalTo(departmentId);     
 
-            levelsRef.on("value", (snapshot)=> {
+            levelsRef.once("value", (snapshot)=> {
                 resolve(toArray(snapshot.val()));
             });
         });

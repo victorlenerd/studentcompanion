@@ -22,7 +22,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		247C9D09EDAA4C33A559A010 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D00640E5E284550A2F11219 /* libRNFirebase.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -36,21 +35,48 @@
 		2D02E4C91E0B4AEC006451C7 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* StudentCompanionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* StudentCompanionTests.m */; };
 		506B7CBCDE1F639EA4B6825D /* libPods-StudentCompanionTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CAF2C5A3C7D5DFF21002CD /* libPods-StudentCompanionTests.a */; };
-		51F2BAE74E0740EFB995B364 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365205327A764B9CB2765251 /* libimageCropPicker.a */; };
-		5DB2D2CE0F694FC9B053848D /* libRNPhotoView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D06A1932167D4520B2BB00BD /* libRNPhotoView.a */; };
-		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
-		62BCB03F7FE346CC92D767F3 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD99F10E96F4894BC4D302C /* libReactNativeNavigation.a */; };
-		6675AEF552C644CD97D335F2 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E82E846088F349BD882E9833 /* libRNFetchBlob.a */; };
-		6CCFE5E8F1474BC9B1678039 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C98EB659526149588C1B6E98 /* libRNDeviceInfo.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B4638D055531CBC4E28BAB9F /* libPods-StudentCompanion.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7393E76CC3F47365B3D5F330 /* libPods-StudentCompanion.a */; };
-		C1A69DF182E84AE8A0319F1F /* libTextToSpeech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2916C391647D4CB4AC7093BB /* libTextToSpeech.a */; };
 		CCF1069AB781426C4CC697F1 /* libPods-StudentCompanion-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC942B9F3D5C7E947F13B85 /* libPods-StudentCompanion-tvOS.a */; };
-		D595C1FE0F864D00B38B0C09 /* libReactNativeCameraKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D18252AD47F04487990E22A5 /* libReactNativeCameraKit.a */; };
-		DCB921BB432247ECADB3D7BA /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B0EFE571C584B4F9151B85E /* libRNImagePicker.a */; };
 		F0EE9AA2D7AA665D4E6EC433 /* libPods-StudentCompanion-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA710D1353571805EAEC45A7 /* libPods-StudentCompanion-tvOSTests.a */; };
-		F5F99AF1132540FE8EC06E10 /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3067E9997F00424BAC014A53 /* libRNShare.a */; };
+		F3C4171F201A76BC000BEAE1 /* libTextToSpeech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3AE58391FF407E600773607 /* libTextToSpeech.a */; };
+		F3C41720201A76CF000BEAE1 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3AE58301FF407E600773607 /* libRNDeviceInfo.a */; };
+		F3C41734201A8D64000BEAE1 /* PushNotificationIOS.js in Resources */ = {isa = PBXBuildFile; fileRef = F3C41731201A8D64000BEAE1 /* PushNotificationIOS.js */; };
+		F3C41735201A8D64000BEAE1 /* RCTPushNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C41733201A8D64000BEAE1 /* RCTPushNotificationManager.m */; };
+		F3C4174A201A9B65000BEAE1 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F388E9012009CBFF000609D2 /* libRNFetchBlob.a */; };
+		F3C5B7102017FBB90000D6F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F3C5B70F2017FBB80000D6F0 /* GoogleService-Info.plist */; };
+		F3C5B75D2017FD9A0000D6F0 /* RCCTitleViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7142017FD990000D6F0 /* RCCTitleViewHelper.m */; };
+		F3C5B75E2017FD9A0000D6F0 /* RCTConvert+UIBarButtonSystemItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7162017FD990000D6F0 /* RCTConvert+UIBarButtonSystemItem.m */; };
+		F3C5B75F2017FD9A0000D6F0 /* RCTHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7182017FD990000D6F0 /* RCTHelpers.m */; };
+		F3C5B7602017FD9A0000D6F0 /* RCCCustomBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B71A2017FD990000D6F0 /* RCCCustomBarButtonItem.m */; };
+		F3C5B7612017FD9A0000D6F0 /* RCCCustomTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B71C2017FD990000D6F0 /* RCCCustomTitleView.m */; };
+		F3C5B7622017FD9A0000D6F0 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7202017FD990000D6F0 /* MMDrawerBarButtonItem.m */; };
+		F3C5B7632017FD9A0000D6F0 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7232017FD990000D6F0 /* MMDrawerController.m */; };
+		F3C5B7642017FD9A0000D6F0 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7252017FD990000D6F0 /* MMDrawerVisualState.m */; };
+		F3C5B7652017FD9A0000D6F0 /* MMExampleDrawerVisualStateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7272017FD990000D6F0 /* MMExampleDrawerVisualStateManager.m */; };
+		F3C5B7662017FD9A0000D6F0 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7292017FD990000D6F0 /* UIViewController+MMDrawerController.m */; };
+		F3C5B7672017FD9A0000D6F0 /* RCCDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B72B2017FD990000D6F0 /* RCCDrawerController.m */; };
+		F3C5B7682017FD9A0000D6F0 /* RCCDrawerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B72D2017FD990000D6F0 /* RCCDrawerHelper.m */; };
+		F3C5B7692017FD9A0000D6F0 /* RCCTheSideBarManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7302017FD990000D6F0 /* RCCTheSideBarManagerViewController.m */; };
+		F3C5B76A2017FD9A0000D6F0 /* SidebarAirbnbAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7342017FD990000D6F0 /* SidebarAirbnbAnimation.m */; };
+		F3C5B76B2017FD9A0000D6F0 /* SidebarAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7362017FD990000D6F0 /* SidebarAnimation.m */; };
+		F3C5B76C2017FD9A0000D6F0 /* SidebarFacebookAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7382017FD990000D6F0 /* SidebarFacebookAnimation.m */; };
+		F3C5B76D2017FD9A0000D6F0 /* SidebarFeedlyAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B73A2017FD990000D6F0 /* SidebarFeedlyAnimation.m */; };
+		F3C5B76E2017FD9A0000D6F0 /* SidebarFlipboardAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B73C2017FD990000D6F0 /* SidebarFlipboardAnimation.m */; };
+		F3C5B76F2017FD9A0000D6F0 /* SidebarLuvocracyAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B73E2017FD990000D6F0 /* SidebarLuvocracyAnimation.m */; };
+		F3C5B7702017FD9A0000D6F0 /* SidebarWunderlistAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7402017FD990000D6F0 /* SidebarWunderlistAnimation.m */; };
+		F3C5B7712017FD9A0000D6F0 /* TheSidebarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7422017FD990000D6F0 /* TheSidebarController.m */; };
+		F3C5B7722017FD9A0000D6F0 /* RCCLightBox.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7452017FD990000D6F0 /* RCCLightBox.m */; };
+		F3C5B7732017FD9A0000D6F0 /* RCCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7472017FD990000D6F0 /* RCCManager.m */; };
+		F3C5B7742017FD9A0000D6F0 /* RCCManagerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7492017FD990000D6F0 /* RCCManagerModule.m */; };
+		F3C5B7752017FD9A0000D6F0 /* RCCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B74B2017FD990000D6F0 /* RCCNavigationController.m */; };
+		F3C5B7762017FD9A0000D6F0 /* RCCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B74D2017FD990000D6F0 /* RCCNotification.m */; };
+		F3C5B7772017FD9A0000D6F0 /* RCCTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B74F2017FD990000D6F0 /* RCCTabBarController.m */; };
+		F3C5B7782017FD9A0000D6F0 /* RCCToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7522017FD990000D6F0 /* RCCToolBar.m */; };
+		F3C5B7792017FD9A0000D6F0 /* RCCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7542017FD990000D6F0 /* RCCViewController.m */; };
+		F3C5B77A2017FD9A0000D6F0 /* UIViewController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C5B7592017FD990000D6F0 /* UIViewController+Rotation.m */; };
+		F3E0E690201B342C00199E2F /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3CF26B620168DA60021E9BC /* libRNImagePicker.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -292,13 +318,6 @@
 			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
 			remoteInfo = "privatedata-tvOS";
 		};
-		F388E8FD2009CBFF000609D2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 51676D3B78DD4DA58C3D4FD7 /* ReactNativeCameraKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2646934E1CFB2A6B00F3A740;
-			remoteInfo = ReactNativeCameraKit;
-		};
 		F388E9002009CBFF000609D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B29F648AF3B04C9FA7B97222 /* RNFetchBlob.xcodeproj */;
@@ -327,13 +346,6 @@
 			remoteGlobalIDString = 3DBE0D0D1F3B181C0099AA32;
 			remoteInfo = "fishhook-tvOS";
 		};
-		F3AE582C1FF407E600773607 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 884BBB52BA5E40339699E1F8 /* ReactNativeNavigation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D8AFADBD1BEE6F3F00A4592D;
-			remoteInfo = ReactNativeNavigation;
-		};
 		F3AE582F1FF407E600773607 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A6EDA977412A4FCAA232D48B /* RNDeviceInfo.xcodeproj */;
@@ -361,6 +373,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 3A6FB2081D99E12200593599;
 			remoteInfo = TextToSpeech;
+		};
+		F3C5B75B2017FD990000D6F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3C5B7552017FD990000D6F0 /* ReactNativeNavigation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D8AFADBD1BEE6F3F00A4592D;
+			remoteInfo = ReactNativeNavigation;
 		};
 		F3CF26B520168DA60021E9BC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -403,7 +422,6 @@
 		4837C1DD29D2BF0C427D31EA /* Pods-StudentCompanionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-StudentCompanionTests/Pods-StudentCompanionTests.release.xcconfig"; sourceTree = "<group>"; };
 		4CD99F10E96F4894BC4D302C /* libReactNativeNavigation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeNavigation.a; sourceTree = "<group>"; };
 		4FC24D00F2D0848BD9540732 /* Pods-StudentCompanion-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanion-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-StudentCompanion-tvOS/Pods-StudentCompanion-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		51676D3B78DD4DA58C3D4FD7 /* ReactNativeCameraKit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeCameraKit.xcodeproj; path = "../node_modules/react-native-camera-kit/ios/lib/ReactNativeCameraKit.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		64F9166EC1886CA8C465E1A2 /* Pods-StudentCompanion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StudentCompanion/Pods-StudentCompanion.debug.xcconfig"; sourceTree = "<group>"; };
 		651B6DD644498FB032417C00 /* Pods-StudentCompanion-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanion-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-StudentCompanion-tvOS/Pods-StudentCompanion-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -413,7 +431,6 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		85C65D8D21CE4471A7CD23B7 /* TextToSpeech.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TextToSpeech.xcodeproj; path = "../node_modules/react-native-tts/ios/TextToSpeech.xcodeproj"; sourceTree = "<group>"; };
-		884BBB52BA5E40339699E1F8 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 		9105E3F941B6BA6E12AEA482 /* Pods-StudentCompanion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanion.release.xcconfig"; path = "Pods/Target Support Files/Pods-StudentCompanion/Pods-StudentCompanion.release.xcconfig"; sourceTree = "<group>"; };
 		A1CAF2C5A3C7D5DFF21002CD /* libPods-StudentCompanionTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StudentCompanionTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6EDA977412A4FCAA232D48B /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
@@ -434,6 +451,79 @@
 		F3794FCC2017ED2A008E5483 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F3794FF92017ED8C008E5483 /* GTMNSData+zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSData+zlib.h"; sourceTree = "<group>"; };
 		F3794FFA2017ED8C008E5483 /* GTMNSData+zlib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSData+zlib.m"; sourceTree = "<group>"; };
+		F3C4172B201A7B33000BEAE1 /* libRCTPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRCTPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C4172D201A7EB0000BEAE1 /* libRCTPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRCTPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C4172F201A8AAB000BEAE1 /* libRCTPushNotification.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRCTPushNotification.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C41731201A8D64000BEAE1 /* PushNotificationIOS.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PushNotificationIOS.js; sourceTree = "<group>"; };
+		F3C41732201A8D64000BEAE1 /* RCTPushNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTPushNotificationManager.h; sourceTree = "<group>"; };
+		F3C41733201A8D64000BEAE1 /* RCTPushNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTPushNotificationManager.m; sourceTree = "<group>"; };
+		F3C5B6A02017F1EE0000D6F0 /* QBImagePicker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QBImagePicker.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/QBImagePicker.framework"; sourceTree = "<group>"; };
+		F3C5B6CD2017F26F0000D6F0 /* RSKImageCropper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RSKImageCropper.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/RSKImageCropper.framework"; sourceTree = "<group>"; };
+		F3C5B70F2017FBB80000D6F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F3C5B7132017FD990000D6F0 /* RCCTitleViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCTitleViewHelper.h; sourceTree = "<group>"; };
+		F3C5B7142017FD990000D6F0 /* RCCTitleViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCTitleViewHelper.m; sourceTree = "<group>"; };
+		F3C5B7152017FD990000D6F0 /* RCTConvert+UIBarButtonSystemItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+UIBarButtonSystemItem.h"; sourceTree = "<group>"; };
+		F3C5B7162017FD990000D6F0 /* RCTConvert+UIBarButtonSystemItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+UIBarButtonSystemItem.m"; sourceTree = "<group>"; };
+		F3C5B7172017FD990000D6F0 /* RCTHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTHelpers.h; sourceTree = "<group>"; };
+		F3C5B7182017FD990000D6F0 /* RCTHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTHelpers.m; sourceTree = "<group>"; };
+		F3C5B7192017FD990000D6F0 /* RCCCustomBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCCustomBarButtonItem.h; sourceTree = "<group>"; };
+		F3C5B71A2017FD990000D6F0 /* RCCCustomBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCCustomBarButtonItem.m; sourceTree = "<group>"; };
+		F3C5B71B2017FD990000D6F0 /* RCCCustomTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCCustomTitleView.h; sourceTree = "<group>"; };
+		F3C5B71C2017FD990000D6F0 /* RCCCustomTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCCustomTitleView.m; sourceTree = "<group>"; };
+		F3C5B71F2017FD990000D6F0 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
+		F3C5B7202017FD990000D6F0 /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
+		F3C5B7212017FD990000D6F0 /* MMDrawerController+Subclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMDrawerController+Subclass.h"; sourceTree = "<group>"; };
+		F3C5B7222017FD990000D6F0 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
+		F3C5B7232017FD990000D6F0 /* MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerController.m; sourceTree = "<group>"; };
+		F3C5B7242017FD990000D6F0 /* MMDrawerVisualState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerVisualState.h; sourceTree = "<group>"; };
+		F3C5B7252017FD990000D6F0 /* MMDrawerVisualState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerVisualState.m; sourceTree = "<group>"; };
+		F3C5B7262017FD990000D6F0 /* MMExampleDrawerVisualStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMExampleDrawerVisualStateManager.h; sourceTree = "<group>"; };
+		F3C5B7272017FD990000D6F0 /* MMExampleDrawerVisualStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMExampleDrawerVisualStateManager.m; sourceTree = "<group>"; };
+		F3C5B7282017FD990000D6F0 /* UIViewController+MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMDrawerController.h"; sourceTree = "<group>"; };
+		F3C5B7292017FD990000D6F0 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
+		F3C5B72A2017FD990000D6F0 /* RCCDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCDrawerController.h; sourceTree = "<group>"; };
+		F3C5B72B2017FD990000D6F0 /* RCCDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCDrawerController.m; sourceTree = "<group>"; };
+		F3C5B72C2017FD990000D6F0 /* RCCDrawerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCDrawerHelper.h; sourceTree = "<group>"; };
+		F3C5B72D2017FD990000D6F0 /* RCCDrawerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCDrawerHelper.m; sourceTree = "<group>"; };
+		F3C5B72E2017FD990000D6F0 /* RCCDrawerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCDrawerProtocol.h; sourceTree = "<group>"; };
+		F3C5B72F2017FD990000D6F0 /* RCCTheSideBarManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCTheSideBarManagerViewController.h; sourceTree = "<group>"; };
+		F3C5B7302017FD990000D6F0 /* RCCTheSideBarManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCTheSideBarManagerViewController.m; sourceTree = "<group>"; };
+		F3C5B7332017FD990000D6F0 /* SidebarAirbnbAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarAirbnbAnimation.h; sourceTree = "<group>"; };
+		F3C5B7342017FD990000D6F0 /* SidebarAirbnbAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarAirbnbAnimation.m; sourceTree = "<group>"; };
+		F3C5B7352017FD990000D6F0 /* SidebarAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarAnimation.h; sourceTree = "<group>"; };
+		F3C5B7362017FD990000D6F0 /* SidebarAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarAnimation.m; sourceTree = "<group>"; };
+		F3C5B7372017FD990000D6F0 /* SidebarFacebookAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarFacebookAnimation.h; sourceTree = "<group>"; };
+		F3C5B7382017FD990000D6F0 /* SidebarFacebookAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarFacebookAnimation.m; sourceTree = "<group>"; };
+		F3C5B7392017FD990000D6F0 /* SidebarFeedlyAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarFeedlyAnimation.h; sourceTree = "<group>"; };
+		F3C5B73A2017FD990000D6F0 /* SidebarFeedlyAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarFeedlyAnimation.m; sourceTree = "<group>"; };
+		F3C5B73B2017FD990000D6F0 /* SidebarFlipboardAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarFlipboardAnimation.h; sourceTree = "<group>"; };
+		F3C5B73C2017FD990000D6F0 /* SidebarFlipboardAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarFlipboardAnimation.m; sourceTree = "<group>"; };
+		F3C5B73D2017FD990000D6F0 /* SidebarLuvocracyAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarLuvocracyAnimation.h; sourceTree = "<group>"; };
+		F3C5B73E2017FD990000D6F0 /* SidebarLuvocracyAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarLuvocracyAnimation.m; sourceTree = "<group>"; };
+		F3C5B73F2017FD990000D6F0 /* SidebarWunderlistAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarWunderlistAnimation.h; sourceTree = "<group>"; };
+		F3C5B7402017FD990000D6F0 /* SidebarWunderlistAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarWunderlistAnimation.m; sourceTree = "<group>"; };
+		F3C5B7412017FD990000D6F0 /* TheSidebarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheSidebarController.h; sourceTree = "<group>"; };
+		F3C5B7422017FD990000D6F0 /* TheSidebarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheSidebarController.m; sourceTree = "<group>"; };
+		F3C5B7432017FD990000D6F0 /* RCCExternalViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCExternalViewControllerProtocol.h; sourceTree = "<group>"; };
+		F3C5B7442017FD990000D6F0 /* RCCLightBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCLightBox.h; sourceTree = "<group>"; };
+		F3C5B7452017FD990000D6F0 /* RCCLightBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCLightBox.m; sourceTree = "<group>"; };
+		F3C5B7462017FD990000D6F0 /* RCCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCManager.h; sourceTree = "<group>"; };
+		F3C5B7472017FD990000D6F0 /* RCCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCManager.m; sourceTree = "<group>"; };
+		F3C5B7482017FD990000D6F0 /* RCCManagerModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCManagerModule.h; sourceTree = "<group>"; };
+		F3C5B7492017FD990000D6F0 /* RCCManagerModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCManagerModule.m; sourceTree = "<group>"; };
+		F3C5B74A2017FD990000D6F0 /* RCCNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCNavigationController.h; sourceTree = "<group>"; };
+		F3C5B74B2017FD990000D6F0 /* RCCNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCNavigationController.m; sourceTree = "<group>"; };
+		F3C5B74C2017FD990000D6F0 /* RCCNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCNotification.h; sourceTree = "<group>"; };
+		F3C5B74D2017FD990000D6F0 /* RCCNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCNotification.m; sourceTree = "<group>"; };
+		F3C5B74E2017FD990000D6F0 /* RCCTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCTabBarController.h; sourceTree = "<group>"; };
+		F3C5B74F2017FD990000D6F0 /* RCCTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCTabBarController.m; sourceTree = "<group>"; };
+		F3C5B7512017FD990000D6F0 /* RCCToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCToolBar.h; sourceTree = "<group>"; };
+		F3C5B7522017FD990000D6F0 /* RCCToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCToolBar.m; sourceTree = "<group>"; };
+		F3C5B7532017FD990000D6F0 /* RCCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCViewController.h; sourceTree = "<group>"; };
+		F3C5B7542017FD990000D6F0 /* RCCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCViewController.m; sourceTree = "<group>"; };
+		F3C5B7552017FD990000D6F0 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ReactNativeNavigation.xcodeproj; sourceTree = "<group>"; };
+		F3C5B7582017FD990000D6F0 /* UIViewController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Rotation.h"; sourceTree = "<group>"; };
+		F3C5B7592017FD990000D6F0 /* UIViewController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Rotation.m"; sourceTree = "<group>"; };
 		F3CF279B20175F1B0021E9BC /* GTMNSData+zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSData+zlib.h"; sourceTree = "<group>"; };
 		F3CF279C20175F1B0021E9BC /* GTMNSData+zlib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSData+zlib.m"; sourceTree = "<group>"; };
 		F3CF279D20175F1B0021E9BC /* GTMDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -465,10 +555,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3E0E690201B342C00199E2F /* libRNImagePicker.a in Frameworks */,
+				F3C4174A201A9B65000BEAE1 /* libRNFetchBlob.a in Frameworks */,
+				F3C41720201A76CF000BEAE1 /* libRNDeviceInfo.a in Frameworks */,
+				F3C4171F201A76BC000BEAE1 /* libTextToSpeech.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -478,16 +570,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				6CCFE5E8F1474BC9B1678039 /* libRNDeviceInfo.a in Frameworks */,
-				51F2BAE74E0740EFB995B364 /* libimageCropPicker.a in Frameworks */,
-				62BCB03F7FE346CC92D767F3 /* libReactNativeNavigation.a in Frameworks */,
-				F5F99AF1132540FE8EC06E10 /* libRNShare.a in Frameworks */,
-				C1A69DF182E84AE8A0319F1F /* libTextToSpeech.a in Frameworks */,
-				247C9D09EDAA4C33A559A010 /* libRNFirebase.a in Frameworks */,
-				6675AEF552C644CD97D335F2 /* libRNFetchBlob.a in Frameworks */,
-				5DB2D2CE0F694FC9B053848D /* libRNPhotoView.a in Frameworks */,
-				D595C1FE0F864D00B38B0C09 /* libReactNativeCameraKit.a in Frameworks */,
-				DCB921BB432247ECADB3D7BA /* libRNImagePicker.a in Frameworks */,
 				B4638D055531CBC4E28BAB9F /* libPods-StudentCompanion.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,6 +683,7 @@
 		13B07FAE1A68108700A75B9A /* StudentCompanion */ = {
 			isa = PBXGroup;
 			children = (
+				F3C5B70F2017FBB80000D6F0 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -645,6 +728,11 @@
 		660B0850A6BA3EA5C25B4AA6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F3C4172F201A8AAB000BEAE1 /* libRCTPushNotification.a */,
+				F3C4172D201A7EB0000BEAE1 /* libRCTPushNotification.a */,
+				F3C4172B201A7B33000BEAE1 /* libRCTPushNotification.a */,
+				F3C5B6CD2017F26F0000D6F0 /* RSKImageCropper.framework */,
+				F3C5B6A02017F1EE0000D6F0 /* QBImagePicker.framework */,
 				F3794FF82017ED8C008E5483 /* Foundation */,
 				F3CF279920175F1B0021E9BC /* GoogleToolboxForMac */,
 				F3CF27CB201769D20021E9BC /* GoogleToolboxForMac */,
@@ -670,6 +758,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F3C41730201A8D64000BEAE1 /* PushNotificationIOS */,
+				F3C5B7112017FD990000D6F0 /* ios */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -683,12 +773,10 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				A6EDA977412A4FCAA232D48B /* RNDeviceInfo.xcodeproj */,
-				884BBB52BA5E40339699E1F8 /* ReactNativeNavigation.xcodeproj */,
 				3DD49EE32B1449AEAFB01B47 /* RNShare.xcodeproj */,
 				85C65D8D21CE4471A7CD23B7 /* TextToSpeech.xcodeproj */,
 				E7D7D8824722451AAD0C61AF /* RNFirebase.xcodeproj */,
 				B29F648AF3B04C9FA7B97222 /* RNFetchBlob.xcodeproj */,
-				51676D3B78DD4DA58C3D4FD7 /* ReactNativeCameraKit.xcodeproj */,
 				0314B05B85D8498E89763068 /* RNImagePicker.xcodeproj */,
 			);
 			name = Libraries;
@@ -793,14 +881,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F388E8FA2009CBFF000609D2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F388E8FE2009CBFF000609D2 /* libReactNativeCameraKit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F3AE57FE1FF407DC00773607 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -834,14 +914,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F3AE58221FF407E300773607 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F3AE582D1FF407E600773607 /* libReactNativeNavigation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F3AE58241FF407E300773607 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -854,6 +926,145 @@
 			isa = PBXGroup;
 			children = (
 				F3AE58391FF407E600773607 /* libTextToSpeech.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F3C41730201A8D64000BEAE1 /* PushNotificationIOS */ = {
+			isa = PBXGroup;
+			children = (
+				F3C41731201A8D64000BEAE1 /* PushNotificationIOS.js */,
+				F3C41732201A8D64000BEAE1 /* RCTPushNotificationManager.h */,
+				F3C41733201A8D64000BEAE1 /* RCTPushNotificationManager.m */,
+			);
+			name = PushNotificationIOS;
+			path = "../node_modules/react-native/Libraries/PushNotificationIOS";
+			sourceTree = "<group>";
+		};
+		F3C5B7112017FD990000D6F0 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B7122017FD990000D6F0 /* Helpers */,
+				F3C5B7192017FD990000D6F0 /* RCCCustomBarButtonItem.h */,
+				F3C5B71A2017FD990000D6F0 /* RCCCustomBarButtonItem.m */,
+				F3C5B71B2017FD990000D6F0 /* RCCCustomTitleView.h */,
+				F3C5B71C2017FD990000D6F0 /* RCCCustomTitleView.m */,
+				F3C5B71D2017FD990000D6F0 /* RCCDrawerController */,
+				F3C5B7432017FD990000D6F0 /* RCCExternalViewControllerProtocol.h */,
+				F3C5B7442017FD990000D6F0 /* RCCLightBox.h */,
+				F3C5B7452017FD990000D6F0 /* RCCLightBox.m */,
+				F3C5B7462017FD990000D6F0 /* RCCManager.h */,
+				F3C5B7472017FD990000D6F0 /* RCCManager.m */,
+				F3C5B7482017FD990000D6F0 /* RCCManagerModule.h */,
+				F3C5B7492017FD990000D6F0 /* RCCManagerModule.m */,
+				F3C5B74A2017FD990000D6F0 /* RCCNavigationController.h */,
+				F3C5B74B2017FD990000D6F0 /* RCCNavigationController.m */,
+				F3C5B74C2017FD990000D6F0 /* RCCNotification.h */,
+				F3C5B74D2017FD990000D6F0 /* RCCNotification.m */,
+				F3C5B74E2017FD990000D6F0 /* RCCTabBarController.h */,
+				F3C5B74F2017FD990000D6F0 /* RCCTabBarController.m */,
+				F3C5B7502017FD990000D6F0 /* RCCToolBar */,
+				F3C5B7532017FD990000D6F0 /* RCCViewController.h */,
+				F3C5B7542017FD990000D6F0 /* RCCViewController.m */,
+				F3C5B7552017FD990000D6F0 /* ReactNativeNavigation.xcodeproj */,
+				F3C5B7582017FD990000D6F0 /* UIViewController+Rotation.h */,
+				F3C5B7592017FD990000D6F0 /* UIViewController+Rotation.m */,
+			);
+			name = ios;
+			path = "../node_modules/react-native-navigation/ios";
+			sourceTree = "<group>";
+		};
+		F3C5B7122017FD990000D6F0 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B7132017FD990000D6F0 /* RCCTitleViewHelper.h */,
+				F3C5B7142017FD990000D6F0 /* RCCTitleViewHelper.m */,
+				F3C5B7152017FD990000D6F0 /* RCTConvert+UIBarButtonSystemItem.h */,
+				F3C5B7162017FD990000D6F0 /* RCTConvert+UIBarButtonSystemItem.m */,
+				F3C5B7172017FD990000D6F0 /* RCTHelpers.h */,
+				F3C5B7182017FD990000D6F0 /* RCTHelpers.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		F3C5B71D2017FD990000D6F0 /* RCCDrawerController */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B71E2017FD990000D6F0 /* MMDrawerController */,
+				F3C5B72A2017FD990000D6F0 /* RCCDrawerController.h */,
+				F3C5B72B2017FD990000D6F0 /* RCCDrawerController.m */,
+				F3C5B72C2017FD990000D6F0 /* RCCDrawerHelper.h */,
+				F3C5B72D2017FD990000D6F0 /* RCCDrawerHelper.m */,
+				F3C5B72E2017FD990000D6F0 /* RCCDrawerProtocol.h */,
+				F3C5B72F2017FD990000D6F0 /* RCCTheSideBarManagerViewController.h */,
+				F3C5B7302017FD990000D6F0 /* RCCTheSideBarManagerViewController.m */,
+				F3C5B7312017FD990000D6F0 /* TheSidebarController */,
+			);
+			path = RCCDrawerController;
+			sourceTree = "<group>";
+		};
+		F3C5B71E2017FD990000D6F0 /* MMDrawerController */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B71F2017FD990000D6F0 /* MMDrawerBarButtonItem.h */,
+				F3C5B7202017FD990000D6F0 /* MMDrawerBarButtonItem.m */,
+				F3C5B7212017FD990000D6F0 /* MMDrawerController+Subclass.h */,
+				F3C5B7222017FD990000D6F0 /* MMDrawerController.h */,
+				F3C5B7232017FD990000D6F0 /* MMDrawerController.m */,
+				F3C5B7242017FD990000D6F0 /* MMDrawerVisualState.h */,
+				F3C5B7252017FD990000D6F0 /* MMDrawerVisualState.m */,
+				F3C5B7262017FD990000D6F0 /* MMExampleDrawerVisualStateManager.h */,
+				F3C5B7272017FD990000D6F0 /* MMExampleDrawerVisualStateManager.m */,
+				F3C5B7282017FD990000D6F0 /* UIViewController+MMDrawerController.h */,
+				F3C5B7292017FD990000D6F0 /* UIViewController+MMDrawerController.m */,
+			);
+			path = MMDrawerController;
+			sourceTree = "<group>";
+		};
+		F3C5B7312017FD990000D6F0 /* TheSidebarController */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B7322017FD990000D6F0 /* Animations */,
+				F3C5B7412017FD990000D6F0 /* TheSidebarController.h */,
+				F3C5B7422017FD990000D6F0 /* TheSidebarController.m */,
+			);
+			path = TheSidebarController;
+			sourceTree = "<group>";
+		};
+		F3C5B7322017FD990000D6F0 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B7332017FD990000D6F0 /* SidebarAirbnbAnimation.h */,
+				F3C5B7342017FD990000D6F0 /* SidebarAirbnbAnimation.m */,
+				F3C5B7352017FD990000D6F0 /* SidebarAnimation.h */,
+				F3C5B7362017FD990000D6F0 /* SidebarAnimation.m */,
+				F3C5B7372017FD990000D6F0 /* SidebarFacebookAnimation.h */,
+				F3C5B7382017FD990000D6F0 /* SidebarFacebookAnimation.m */,
+				F3C5B7392017FD990000D6F0 /* SidebarFeedlyAnimation.h */,
+				F3C5B73A2017FD990000D6F0 /* SidebarFeedlyAnimation.m */,
+				F3C5B73B2017FD990000D6F0 /* SidebarFlipboardAnimation.h */,
+				F3C5B73C2017FD990000D6F0 /* SidebarFlipboardAnimation.m */,
+				F3C5B73D2017FD990000D6F0 /* SidebarLuvocracyAnimation.h */,
+				F3C5B73E2017FD990000D6F0 /* SidebarLuvocracyAnimation.m */,
+				F3C5B73F2017FD990000D6F0 /* SidebarWunderlistAnimation.h */,
+				F3C5B7402017FD990000D6F0 /* SidebarWunderlistAnimation.m */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		F3C5B7502017FD990000D6F0 /* RCCToolBar */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B7512017FD990000D6F0 /* RCCToolBar.h */,
+				F3C5B7522017FD990000D6F0 /* RCCToolBar.m */,
+			);
+			path = RCCToolBar;
+			sourceTree = "<group>";
+		};
+		F3C5B7562017FD990000D6F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3C5B75C2017FD990000D6F0 /* libReactNativeNavigation.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1027,6 +1238,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = RV75X33TAB;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -1034,10 +1246,12 @@
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = RV75X33TAB;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = RV75X33TAB;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
@@ -1104,12 +1318,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = F388E8FA2009CBFF000609D2 /* Products */;
-					ProjectRef = 51676D3B78DD4DA58C3D4FD7 /* ReactNativeCameraKit.xcodeproj */;
-				},
-				{
-					ProductGroup = F3AE58221FF407E300773607 /* Products */;
-					ProjectRef = 884BBB52BA5E40339699E1F8 /* ReactNativeNavigation.xcodeproj */;
+					ProductGroup = F3C5B7562017FD990000D6F0 /* Products */;
+					ProjectRef = F3C5B7552017FD990000D6F0 /* ReactNativeNavigation.xcodeproj */;
 				},
 				{
 					ProductGroup = F3AE581E1FF407E300773607 /* Products */;
@@ -1371,13 +1581,6 @@
 			remoteRef = F388E8F12009CBFF000609D2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F388E8FE2009CBFF000609D2 /* libReactNativeCameraKit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReactNativeCameraKit.a;
-			remoteRef = F388E8FD2009CBFF000609D2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		F388E9012009CBFF000609D2 /* libRNFetchBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1404,13 +1607,6 @@
 			fileType = archive.ar;
 			path = "libfishhook-tvOS.a";
 			remoteRef = F3AE581A1FF407E300773607 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F3AE582D1FF407E600773607 /* libReactNativeNavigation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReactNativeNavigation.a;
-			remoteRef = F3AE582C1FF407E600773607 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F3AE58301FF407E600773607 /* libRNDeviceInfo.a */ = {
@@ -1441,6 +1637,13 @@
 			remoteRef = F3AE58381FF407E600773607 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		F3C5B75C2017FD990000D6F0 /* libReactNativeNavigation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeNavigation.a;
+			remoteRef = F3C5B75B2017FD990000D6F0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		F3CF26B620168DA60021E9BC /* libRNImagePicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1464,6 +1667,8 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				F3C5B7102017FBB90000D6F0 /* GoogleService-Info.plist in Resources */,
+				F3C41734201A8D64000BEAE1 /* PushNotificationIOS.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1708,8 +1913,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3C5B7642017FD9A0000D6F0 /* MMDrawerVisualState.m in Sources */,
+				F3C5B75D2017FD9A0000D6F0 /* RCCTitleViewHelper.m in Sources */,
+				F3C5B7622017FD9A0000D6F0 /* MMDrawerBarButtonItem.m in Sources */,
+				F3C5B7762017FD9A0000D6F0 /* RCCNotification.m in Sources */,
+				F3C5B76E2017FD9A0000D6F0 /* SidebarFlipboardAnimation.m in Sources */,
+				F3C5B7662017FD9A0000D6F0 /* UIViewController+MMDrawerController.m in Sources */,
+				F3C5B7612017FD9A0000D6F0 /* RCCCustomTitleView.m in Sources */,
+				F3C5B76C2017FD9A0000D6F0 /* SidebarFacebookAnimation.m in Sources */,
+				F3C5B7782017FD9A0000D6F0 /* RCCToolBar.m in Sources */,
+				F3C5B7792017FD9A0000D6F0 /* RCCViewController.m in Sources */,
+				F3C5B7692017FD9A0000D6F0 /* RCCTheSideBarManagerViewController.m in Sources */,
+				F3C5B7732017FD9A0000D6F0 /* RCCManager.m in Sources */,
+				F3C5B75F2017FD9A0000D6F0 /* RCTHelpers.m in Sources */,
+				F3C5B7602017FD9A0000D6F0 /* RCCCustomBarButtonItem.m in Sources */,
+				F3C5B77A2017FD9A0000D6F0 /* UIViewController+Rotation.m in Sources */,
+				F3C5B7752017FD9A0000D6F0 /* RCCNavigationController.m in Sources */,
+				F3C5B75E2017FD9A0000D6F0 /* RCTConvert+UIBarButtonSystemItem.m in Sources */,
+				F3C5B7742017FD9A0000D6F0 /* RCCManagerModule.m in Sources */,
+				F3C5B76B2017FD9A0000D6F0 /* SidebarAnimation.m in Sources */,
+				F3C5B7712017FD9A0000D6F0 /* TheSidebarController.m in Sources */,
+				F3C5B7702017FD9A0000D6F0 /* SidebarWunderlistAnimation.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				F3C5B7772017FD9A0000D6F0 /* RCCTabBarController.m in Sources */,
+				F3C5B7632017FD9A0000D6F0 /* MMDrawerController.m in Sources */,
+				F3C41735201A8D64000BEAE1 /* RCTPushNotificationManager.m in Sources */,
+				F3C5B76A2017FD9A0000D6F0 /* SidebarAirbnbAnimation.m in Sources */,
+				F3C5B7722017FD9A0000D6F0 /* RCCLightBox.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				F3C5B76F2017FD9A0000D6F0 /* SidebarLuvocracyAnimation.m in Sources */,
+				F3C5B76D2017FD9A0000D6F0 /* SidebarFeedlyAnimation.m in Sources */,
+				F3C5B7652017FD9A0000D6F0 /* MMExampleDrawerVisualStateManager.m in Sources */,
+				F3C5B7672017FD9A0000D6F0 /* RCCDrawerController.m in Sources */,
+				F3C5B7682017FD9A0000D6F0 /* RCCDrawerHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1763,6 +1999,7 @@
 			baseConfigurationReference = 2B4EEB7355A2A5B35A2F4815 /* Pods-StudentCompanionTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1812,6 +2049,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1927,6 +2165,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1982,6 +2221,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2034,6 +2274,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "StudentCompanion-tvOSTests/Info.plist";
@@ -2070,6 +2311,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = RV75X33TAB;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "StudentCompanion-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

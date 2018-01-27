@@ -25,7 +25,7 @@ export const GetNotes = (courseId)=> {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let notesRef = app.database().ref("/notes").equalTo(courseId).orderByChild("courseId");
-            notesRef.on("value", (snapshot)=> {
+            notesRef.once("value", (snapshot)=> {
                 dispatch(SetNotes(toArray(snapshot.val())));
                 resolve(toArray(snapshot.val()));
             });

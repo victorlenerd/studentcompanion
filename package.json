@@ -6,6 +6,9 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "android": "react-native bundle --dev false  --assets-dest ./android/app/src/main/res/ --entry-file ./index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android",
     "ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
+    "clean:ios": "cd ios && xcodebuild -workspace 'StudentCompanion.xcworkspace' -scheme 'StudentCompanion' clean",
+    "build:ios": "cd ios && xcodebuild -workspace 'StudentCompanion.xcworkspace' -scheme 'StudentCompanion' build",
+    "apk": "cd android && ./gradlew assembleRelease",
     "test": "jest"
   },
   "dependencies": {

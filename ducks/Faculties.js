@@ -31,7 +31,7 @@ export const GetFaculties = () => {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let facultiesRef = app.database().ref("/faculties");
-            facultiesRef.on("value", (snapshot)=> {
+            facultiesRef.once("value", (snapshot)=> {
                 dispatch(SetFaculties(toArray(snapshot.val())));
                 resolve(snapshot.val());
             });
@@ -45,7 +45,7 @@ export const GetFacultiesByUniversityId = (universityId) => {
         return new Promise((resolve, reject)=> {
             let facultiesRef = app.database().ref("/faculties").orderByChild("universityId").equalTo(universityId);        
 
-            facultiesRef.on("value", (snapshot)=> {
+            facultiesRef.once("value", (snapshot)=> {
                 resolve(toArray(snapshot.val()));
             });
         });

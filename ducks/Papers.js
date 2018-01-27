@@ -25,7 +25,7 @@ export const GetPapers = (courseId)=> {
     return (dispatch)=> {
         return new Promise((resolve, reject)=> {
             let papersRef = app.database().ref("/papers").equalTo(courseId).orderByChild("courseId");
-            papersRef.on("value", (snapshot)=> {
+            papersRef.once("value", (snapshot)=> {
                 dispatch(SetPapers(toArray(snapshot.val())));
                 resolve(toArray(snapshot.val()));
             });

@@ -93,17 +93,7 @@ class PhotoNotes extends Component {
                 this.props.getPhotoNotes(user.$id)
             ])
             .then(( results )=>{
-                let photoNotes = results[0];
-                let cCodes = [];
-                let notesPhotos = [];
-
-                photoNotes.forEach(photoNote => {
-                    if (cCodes.indexOf(photoNote.courseCode) !== -1) return false;
-                    cCodes.push(photoNote.courseCode);
-                    notesPhotos.push(photoNote);
-                });
-
-                this.setState({ photoNotes: notesPhotos });
+                this._setPhotoNotes(results[0]);
             })
             .catch(()=> {
                 Alert.alert("Err!", err.message,[
@@ -116,6 +106,19 @@ class PhotoNotes extends Component {
                 {text: 'Cancel', style: 'cancel'},
             ]);
         });
+    }
+
+    _setPhotoNotes = (photoNotes) => {
+        let cCodes = [];
+        let notesPhotos = [];
+
+        photoNotes.forEach(photoNote => {
+            if (cCodes.indexOf(photoNote.courseCode) !== -1) return false;
+            cCodes.push(photoNote.courseCode);
+            notesPhotos.push(photoNote);
+        });
+
+        this.setState({ photoNotes: notesPhotos });
     }
 
     _done = () => {
@@ -146,8 +149,13 @@ class PhotoNotes extends Component {
             this.props.startRequest();
             this.props.addPhotoNote(newPhotoNote)
             .then(()=> {
-                this._cancel();
-                this.props.finishRequest();
+                Alert.alert("Successful", "Your Upload Was Successful",[
+                    {text: 'Ok', onPress: () => {
+                        this._setPhotoNotes(this.state.photoNotes.concat(newPhotoNote));
+                        this.props.finishRequest();
+                        this._cancel();
+                    }},
+                ]);
             })
             .catch(err=> {
                 Alert.alert("Err!", err,[
@@ -180,7 +188,7 @@ class PhotoNotes extends Component {
 
     _addPhoto = () => {
         ImagePicker.launchImageLibrary({ storageOptions: { path: 'studentcompanion' } }, (response)  => {
-            const { fileName: name, path, data } = response;
+            const { fileName: name, path, data, uri } = response;
             const img = find(this.state.images, ["name", name]);
             if (img) return Alert.alert("Image Added Before", "You already added this image", [{ text: 'ok' }]);
 
@@ -190,6 +198,7 @@ class PhotoNotes extends Component {
                 images: this.state.images.concat({
                     name,
                     path,
+                    uri,
                     data
                 })
             });
@@ -242,7 +251,7 @@ class PhotoNotes extends Component {
     _renderImages = () => {
         if (this.state.images.length > 0) {
             return (
-                <Swiper style={{flex: 1}}>
+                <Swiper containerStyle={{flex: 1}}>
                     {this.state.images.map((img, i)=> {
                         if (img.data) { 
                             return (
@@ -379,7 +388,7 @@ class PhotoNotes extends Component {
     _renderSection() {
         if (this.state.photoNotes.length > 0) {
             return (
-                <ScrollView style={{flex:1}}>
+                <ScrollView style={{ flex:1 }}>
                     {this.state.photoNotes.map((photoNote, index)=> {
                         let statusColor;
 
@@ -419,6 +428,7 @@ class PhotoNotes extends Component {
                             </TouchableOpacity>
                         )
                     })}
+                    <View style={{height: 200}} />
                 </ScrollView>
             );
         } else {
