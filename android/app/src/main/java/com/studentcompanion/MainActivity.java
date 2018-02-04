@@ -1,7 +1,11 @@
 package com.studentcompanion;
 
-import com.reactnativenavigation.controllers.SplashActivity;
+import com.facebook.react.ReactActivity;
 
-
-
-public class MainActivity extends SplashActivity {}
+public class MainActivity extends ReactActivity {
+    
+    @Override
+    protected String getMainComponentName() {
+        return "StudentCompanion";
+    }
+}

@@ -11,8 +11,8 @@ target 'StudentCompanion' do
   pod 'Firebase/Crash'
   pod 'Firebase/Messaging'	
   
-  pod 'react-native-fetch-blob',
-  :path => '../node_modules/react-native-fetch-blob'
+#  pod 'react-native-fetch-blob',
+#  :path => '../node_modules/react-native-fetch-blob'
 
   target 'StudentCompanionTests' do
     inherit! :search_paths

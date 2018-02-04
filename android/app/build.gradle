@@ -152,17 +152,19 @@ android {
 
 dependencies {
     compile project(':react-native-image-picker')
-    compile project(':react-native-camera-kit')
-    compile project(':react-native-fetch-blob')
+//    compile project(':react-native-fetch-blob')
     compile(project(':react-native-firebase')) {
         transitive = false
     }
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:answers:1.4.1@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:multidex:1.0.0'
     compile project(':react-native-tts')
-    compile project(':react-native-share')
-    compile project(':react-native-image-crop-picker')
     compile project(':react-native-device-info')
-    compile project(':react-native-navigation')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.facebook.react:react-native:+'
