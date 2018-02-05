@@ -1,10 +1,16 @@
-import { Text, AppRegistry } from 'react-native';
-import React,{ Component } from 'react';
+import React from 'react';
+import { Text, View, AppRegistry } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-class App extends Component {
-    render () {
-        return (<Text>Fuck</Text>)
+class HomeScreen extends React.Component {
+    render() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Home Screen</Text>
+            </View>
+        );
     }
 }
+  
 
-AppRegistry.registerComponent('StudentCompanion', () => App);
+AppRegistry.registerComponent('StudentCompanion', () => HomeScreen);
