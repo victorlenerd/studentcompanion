@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetCurrentUser, GetCurrentUserOffline, DeleteCurrentUser } from 'ducks/User';
+import { GetCurrentUser, GetCurrentUserOffline, DeleteCurrentUser } from 'ducks/user';
 
 const mapDispatchToProps = dispatch => {
   return {
