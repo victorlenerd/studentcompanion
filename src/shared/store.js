@@ -1,11 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
-import reducers from '../ducks/index';
+import reducers from 'ducks/index';
 
-const loggerMiddleware = createLogger();
+import logger from 'redux-logger';
 
-const middleware = [thunkMiddleware];
+const middleware = [thunkMiddleware, logger];
 
 const store = compose(applyMiddleware(...middleware))(createStore)(reducers);
 

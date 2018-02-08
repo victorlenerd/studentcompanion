@@ -4,6 +4,7 @@ export const colors = {
   primary: '#02709c',
   accent: '#ff8d10',
   white: '#ffffff',
+  brightBlue: '#39A9D7',
   gray: '#cccccc',
   red: 'rgba(236,12,12, 0.8)',
   yellow: '#f1c40f',
@@ -289,4 +290,28 @@ export const Toolbar = StyleSheet.create({
   statusBar: {
     backgroundColor: colors.accent,
   },
+});
+
+export const LoadingIndicator = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  loader: {
+    width: 60,
+    height: 60,
+    backgroundColor: colors.black,
+    borderRadius: 6,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+
 });

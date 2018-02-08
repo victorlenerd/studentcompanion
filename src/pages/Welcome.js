@@ -1,185 +1,76 @@
 import React, { Component } from 'react';
-import { View, Text, Image, NetInfo, StatusBar, Alert, ActivityIndicator } from 'react-native';
+import { View, Image, NetInfo, StatusBar } from 'react-native';
 
 import moment from 'moment';
 
-import { connect } from 'react-redux';
+import connection from 'containers/connection';
+import users from 'containers/users';
+import Loader from 'components/loader';
+import { colors } from 'shared/styles';
+import * as Animatable from 'react-native-animatable';
 
-import { navigator } from '../shared/Navigation';
-import { colors } from '../shared/styles';
-import store from '../shared/store';
-
-import { GetCurrentUser, GetCurrentUserOffline, DeleteCurrentUser } from '../ducks/User';
-import { StartRequest, FinishRequest } from '../ducks/Request';
-import { SetIsConnected } from '../ducks/IsConnected';
-
-import PushNotification from 'react-native-push-notification';
-
-PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
-  // onRegister: function(token) {
-  //     console.log( 'TOKEN:', token );
-  // },
-
-  // (required) Called when a remote or local notification is opened or received
-  // onNotification: function(notification) {
-  //     console.log( 'NOTIFICATION:', notification );
-  // },
-
-  // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-  // senderID: "YOUR GCM SENDER ID",
-
-  // IOS ONLY (optional): default: all - Permissions to register.
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-
-  requestPermissions: true,
-});
-
+@users
+@connection
 class Welcome extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
+  componentWillMount() {
+    const { setConnection } = this.props;
     const dispatchConnected = isConnected => {
-      store.dispatch(SetIsConnected(isConnected));
+      setConnection(isConnected);
       this._loadData();
     };
 
-    setTimeout(() => {
-      NetInfo.isConnected
-        .fetch()
-        .then()
-        .done(isConnected => {
-          store.dispatch(SetIsConnected(isConnected));
-          this._loadData();
-          NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
-        });
+    setTimeout(async () => {
+      const connected = await NetInfo.getConnectionInfo();
+      setConnection((connected !== 'none') && (connected !== 'unknown'));
+      this._loadData();
+      NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
     }, 0);
   }
 
-  _loadData = () => {
-    this.props.startRequest();
+  _loadData = async () => {
+    const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser } = this.props;
 
-    if (this.props.isConnected) {
-      this.props
-        .getCurrentUser()
-        .then(user => {
-          let now = moment();
-          let paymentDate = moment(user.nextPaymentDate);
-          let diffDays = paymentDate.diff(now, 'days');
-          this.props.finishRequest();
+  //   try {
+  //     if (this.props.isConnected) {
+  //       const user = await getCurrentUser();
+  //       const now = moment();
+  //       const paymentDate = moment(user.nextPaymentDate);
+  //       const diffDays = paymentDate.diff(now, 'days');
 
-          console.log('user', user);
+  //       if (user !== null) {
+  //         if (diffDays >= 0) {
+  //           navigate('SearchCourses');
+  //         } else {
+  //           navigate('ActivateAccount');
+  //         }
+  //       } else {
+  //         deleteCurrentUser();
+  //       }
+  //     } else {
+  //       const user = await getCurrentUserOffline();
+  //       if (user !== null) navigate('SearchCourses');
+  //     }
+  //   } catch (err) {
+  //     navigate('Intro');
+  //   }
 
-          if (user !== null) {
-            if (diffDays >= 0) {
-              navigator.searchCourses();
-            } else {
-              navigator.activateAccount();
-            }
-          } else {
-            this.props.deleteCurrentUser().then(() => {
-              this.props.finishRequest();
-              navigator.intro();
-            });
-          }
-        })
-        .catch(err => {
-          this.props.finishRequest();
-          navigator.intro();
-        });
-    } else {
-      this.props
-        .getCurrentUserOffline()
-        .then(user => {
-          this.props.finishRequest();
-          if (user !== null) {
-            navigator.searchCourses();
-          }
-        })
-        .catch(err => {
-          this.props.finishRequest();
-          navigator.intro();
-        });
-    }
-  };
-
-  renderIndicator() {
-    if (this.props.isLoading) {
-      return (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator
-            color="#fff"
-            size="large"
-            style={{
-              width: 60,
-              height: 60,
-              backgroundColor: colors.black,
-              borderRadius: 6,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          />
-        </View>
-      );
-    }
+    navigate('Intro');
   }
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.white }}>
-        <StatusBar backgroundColor={'#ffffff'} barStyle="light-content" />
+      <View style={{ flex: 1, backgroundColor: colors.brightBlue }}>
+        <StatusBar backgroundColor={colors.brightBlue} barStyle="light-content" />
+        <Image resizeMode="contain" source={require('../assets/things.png')} style={{ position: 'absolute', top: 0, left: 0 }} />
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Image resizeMode="contain" source={require('../assets/logo.png')} style={{ height: 150, width: 200 }} />
+          <View style={{ height: 150, width: 200, elevation: 15 }}>
+            <Animatable.Image animation="fadeIn" duration={3500} resizeMode="contain" source={require('../assets/logo-lshw.png')} style={{ height: 150, width: 200 }} />
+          </View>
         </View>
-        {this.renderIndicator()}
+        <Loader />
       </View>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    startRequest: () => {
-      dispatch(StartRequest());
-    },
-    finishRequest: () => {
-      dispatch(FinishRequest());
-    },
-    getCurrentUser: () => {
-      return dispatch(GetCurrentUser());
-    },
-    getCurrentUserOffline: () => {
-      return dispatch(GetCurrentUserOffline());
-    },
-    deleteCurrentUser: () => {
-      return dispatch(DeleteCurrentUser());
-    },
-  };
-};
-
-const mapStateToProps = store => {
-  return {
-    isLoading: store.requestState.status,
-    isConnected: store.isConnectedState.isConnected,
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Welcome);
+export default Welcome;

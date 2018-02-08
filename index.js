@@ -1,12 +1,18 @@
+import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
 
+import store from 'shared/store';
+import Navigation from 'shared/navigation';
 
-
-const App = StackNavigator({
-    Welcome: {
-
-    }
-});
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
+    );
+  }
+}
 
 AppRegistry.registerComponent('StudentCompanion', () => App);

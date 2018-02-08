@@ -11,15 +11,15 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 
 export const toArray = obj => {
-  let data = [];
-
   if (obj === null) return data;
 
-  for (let o in obj) {
-    let entity = obj[o];
-    entity.$id = o;
-    data.push(entity);
-  }
+  const keys = Object.keys(obj);
+
+  const data = keys.map(k => {
+    const entity = obj[k];
+    entity.$id = k;
+    return entity;
+  });
 
   return data;
 };
