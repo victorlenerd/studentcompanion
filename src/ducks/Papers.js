@@ -1,12 +1,12 @@
-import { NetInfo, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
+
 
 const PAPERS = 'PAPERS';
 const SET_CURRENT_PAPER = 'SET_CURRENT_PAPER';
 
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
-
-let initialState = {
+const initialState = {
   currentPaper: {},
   papers: [],
 };
@@ -18,50 +18,47 @@ export const SetPapers = papers => {
   };
 };
 
-export const GetPapers = courseId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let papersRef = app
-        .database()
-        .ref('/papers')
-        .equalTo(courseId)
-        .orderByChild('courseId');
-      papersRef.once('value', snapshot => {
-        dispatch(SetPapers(toArray(snapshot.val())));
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+export const GetPapers = courseId => dispatch => new Promise((resolve, reject) => {
+  const papersRef = app
+    .database()
+    .ref('/papers')
+    .equalTo(courseId)
+    .orderByChild('courseId');
 
-export const GetPapersOffline = courseId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem(`@UPQ:OFFLINE_PAPERS:ID_${courseId}`).then(saved_courses => {
-        if (saved_courses !== null) {
-          dispatch(SetPapers(JSON.parse(saved_courses)));
-          resolve(JSON.parse(saved_courses));
-        } else {
-          resolve([]);
-        }
-      });
-    });
-  };
-};
+  dispatch(StartRequest());
 
-export const SavePapersOffline = (courseId, papers) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.setItem(`@UPQ:OFFLINE_PAPERS:ID_${courseId}`, JSON.stringify(papers))
-        .then(() => {
-          resolve(papers);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  };
-};
+  papersRef.once('value', snapshot => {
+    dispatch(SetPapers(toArray(snapshot.val())));
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});
+
+export const GetPapersOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+
+  try {
+    const saved_courses = await AsyncStorage.getItem(`@UPQ:OFFLINE_PAPERS:ID_${courseId}`);
+    if (saved_courses !== null) {
+      dispatch(SetPapers(JSON.parse(saved_courses)));
+      resolve(JSON.parse(saved_courses));
+    }
+    resolve([]);
+  } catch (err) {
+    resolve([]);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SavePapersOffline = (courseId, papers) => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    await AsyncStorage.setItem(`@UPQ:OFFLINE_PAPERS:ID_${courseId}`, JSON.stringify(papers));
+    resolve(papers);
+  } catch (err) {
+    reject(err);
+  }
+});
 
 export const SetCurrentPaper = paper => {
   return {

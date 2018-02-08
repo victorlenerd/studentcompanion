@@ -1,39 +1,40 @@
-import app, { toArray } from '../shared/Firebase';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
-export const GetComments = (type, typeId) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let typeCommentsRef = app
-        .database()
-        .ref('comments/')
-        .equalTo(typeId)
-        .orderByChild(`${type}Id`);
-      typeCommentsRef.once(
-        'value',
-        snapshot => {
-          let comments = toArray(snapshot.val());
-          resolve(comments);
-        },
-        err => {
-          reject(err);
-        }
-      );
-    });
-  };
-};
+export const GetComments = (type, typeId) => dispatch => new Promise((resolve, reject) => {
+  const typeCommentsRef = app
+    .database()
+    .ref('comments/')
+    .equalTo(typeId)
+    .orderByChild(`${type}Id`);
 
-export const PostComments = comment => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      var commentsRef = app.database().ref('comments/');
-      commentsRef
-        .push(comment)
-        .then(() => {
-          resolve(comment);
-        })
-        .catch(err => {
-          reject(err);
-        });
+  dispatch(StartRequest());
+
+  typeCommentsRef.once(
+    'value',
+    snapshot => {
+      dispatch(FinishRequest());
+      resolve(toArray(snapshot.val()));
+    },
+    err => {
+      dispatch(FinishRequest());
+      reject(err);
     });
-  };
-};
+});
+
+export const PostComments = comment => dispatch => new Promise((resolve, reject) => {
+  const commentsRef = app.database().ref('comments/');
+  dispatch(StartRequest());
+
+  commentsRef
+    .push(comment)
+    .then(() => {
+      resolve(comment);
+      dispatch(FinishRequest());
+    })
+    .catch(err => {
+      reject(err);
+      dispatch(FinishRequest());
+    });
+});
+

@@ -1,11 +1,13 @@
-import { NetInfo, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
+import app, { toArray } from 'shared/firebase';
+import filter from 'lodash/filter';
+
+import { StartRequest, FinishRequest } from './request';
 
 const QUESTIONS = 'QUESTIONS';
 const SET_CURRENT_QUESTION = 'SET_CURRENT_QUESTION';
-import { StartRequest, FinishRequest } from '../ducks/Request';
-import app, { toArray } from '../shared/Firebase';
 
-let initialState = {
+const initialState = {
   currentQuestion: {},
   questions: [],
 };
@@ -17,73 +19,59 @@ export const SetQuestions = questions => {
   };
 };
 
-export const GetQuestions = paperId => {
-  return dispatch => {
-    dispatch(StartRequest());
-    return new Promise((resolve, reject) => {
-      let questionsRef = app
-        .database()
-        .ref('/questions')
-        .equalTo(paperId)
-        .orderByChild('paperId');
-      questionsRef.on('value', snapshot => {
-        questionsRef.off();
-        dispatch(SetQuestions(toArray(snapshot.val())));
-        dispatch(FinishRequest());
-        resolve();
-      });
-    });
-  };
-};
+export const GetQuestions = paperId => dispatch => new Promise((resolve, reject) => {
+  const questionsRef = app
+    .database()
+    .ref('/questions')
+    .equalTo(paperId)
+    .orderByChild('paperId');
 
-export const GetQuestionsOffline = (courseId, paperId) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`)
-        .then(saved_questions => {
-          if (saved_questions !== null) {
-            let questions = JSON.parse(saved_questions);
-            dispatch(
-              SetQuestions(
-                questions.filter(question => {
-                  if (question.paperId == paperId) return question;
-                })
-              )
-            );
-            resolve(JSON.parse(saved_questions));
-          } else {
-            resolve([]);
-          }
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  };
-};
+  dispatch(StartRequest());
+  questionsRef.on('value', snapshot => {
+    questionsRef.off();
+    dispatch(SetQuestions(toArray(snapshot.val())));
+    dispatch(FinishRequest());
+    resolve();
+  });
+});
 
-export const SaveQuestionsOffline = courseId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let questionsRef = app
-        .database()
-        .ref('/questions')
-        .equalTo(courseId)
-        .orderByChild('courseId');
-      questionsRef.on('value', snapshot => {
-        let questions = JSON.stringify(toArray(snapshot.val()));
-        questionsRef.off();
-        AsyncStorage.setItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`, questions)
-          .then(() => {
-            resolve(questions);
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
-    });
-  };
-};
+export const GetQuestionsOffline = (courseId, paperId) => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const saved_questions = await AsyncStorage.getItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`);
+    if (saved_questions !== null) {
+      const questions = JSON.parse(saved_questions);
+      dispatch(SetQuestions(filter(questions, question => (question.paperId === paperId))));
+      resolve(JSON.parse(saved_questions));
+    } else {
+      resolve([]);
+    }
+  } catch (err) {
+    resolve([]);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SaveQuestionsOffline = courseId => dispatch => new Promise((resolve, reject) => {
+  const questionsRef = app
+    .database()
+    .ref('/questions')
+    .equalTo(courseId)
+    .orderByChild('courseId');
+
+  dispatch(StartRequest());
+  questionsRef.once('value', async snapshot => {
+    const questions = JSON.stringify(toArray(snapshot.val()));
+    try {
+      await AsyncStorage.setItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`, questions);
+      resolve(questions);
+    } catch (err) {
+      reject(err);
+    }
+    dispatch(FinishRequest());
+  });
+});
 
 export const SetCurrentQuestion = question => {
   return {

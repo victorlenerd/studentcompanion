@@ -1,9 +1,9 @@
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
 const LEVELS = 'LEVELS';
 
-let initialState = {
+const initialState = {
   levels: [],
 };
 
@@ -27,30 +27,27 @@ export const SetLevels = data => {
   };
 };
 
-export const GetLevels = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let levelsRef = app.database().ref('/levels');
-      levelsRef.once('value', snapshot => {
-        dispatch(SetLevels(toArray(snapshot.val())));
-        resolve(snapshot.val());
-      });
-    });
-  };
-};
+export const GetLevels = () => dispatch => new Promise((resolve, reject) => {
+  const levelsRef = app.database().ref('/levels');
+  dispatch(StartRequest());
+  levelsRef.once('value', snapshot => {
+    dispatch(SetLevels(toArray(snapshot.val())));
+    resolve(snapshot.val());
+    dispatch(FinishRequest());
+  });
+});
 
-export const GetLevelsByDepartmentId = departmentId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let levelsRef = app
-        .database()
-        .ref('/levels')
-        .orderByChild('departmentId')
-        .equalTo(departmentId);
+export const GetLevelsByDepartmentId = departmentId => dispatch => new Promise((resolve, reject) => {
+  const levelsRef = app
+    .database()
+    .ref('/levels')
+    .orderByChild('departmentId')
+    .equalTo(departmentId);
 
-      levelsRef.once('value', snapshot => {
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+  dispatch(StartRequest());
+
+  levelsRef.once('value', snapshot => {
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});

@@ -1,9 +1,9 @@
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
 const DEPARTMENTS = 'DEPARTMENTS';
 
-let initialState = {
+const initialState = {
   departments: [],
 };
 
@@ -27,30 +27,26 @@ export const SetDepartments = data => {
   };
 };
 
-export const GetDepartments = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let departmentsRef = app.database().ref('/departments');
-      departmentsRef.once('value', snapshot => {
-        dispatch(SetDepartments(toArray(snapshot.val())));
-        resolve(snapshot.val());
-      });
-    });
-  };
-};
+export const GetDepartments = () => dispatch => new Promise((resolve, reject) => {
+  const departmentsRef = app.database().ref('/departments');
+  dispatch(StartRequest());
+  departmentsRef.once('value', snapshot => {
+    dispatch(SetDepartments(toArray(snapshot.val())));
+    resolve(snapshot.val());
+    dispatch(FinishRequest());
+  });
+});
 
-export const GetDepartmentsByFacultyId = facultyId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let departmentsRef = app
-        .database()
-        .ref('/departments')
-        .orderByChild('facultyId')
-        .equalTo(facultyId);
+export const GetDepartmentsByFacultyId = facultyId => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+  const departmentsRef = app
+    .database()
+    .ref('/departments')
+    .orderByChild('facultyId')
+    .equalTo(facultyId);
 
-      departmentsRef.once('value', snapshot => {
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+  departmentsRef.once('value', snapshot => {
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});

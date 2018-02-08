@@ -1,19 +1,18 @@
 import { combineReducers } from 'redux';
 
-import { CourseReducer } from './Courses';
-import { PapersReducer } from './Papers';
-import { UniversitiesReducer } from './Universities';
-import { FacultiesReducer } from './Faculties';
-import { DepartmentsReducer } from './Departments';
-import { LevelsReducer } from './Levels';
-import { QuestionsReducer } from './Questions';
-import { RequestReducer } from './Request';
-import { NotesReducer } from './Notes';
-import { IsConnectedReducer } from './IsConnected';
-import { PriceReducer } from './Price';
-import { passReducer } from './Pass';
+import { CourseReducer } from './courses';
+import { PapersReducer } from './papers';
+import { UniversitiesReducer } from './universities';
+import { FacultiesReducer } from './faculties';
+import { DepartmentsReducer } from './departments';
+import { LevelsReducer } from './levels';
+import { QuestionsReducer } from './questions';
+import { RequestReducer } from './request';
+import { NotesReducer } from './notes';
+import { IsConnectedReducer } from './connection';
+import { PriceReducer } from './price';
 
-var reducers = combineReducers({
+const reducers = combineReducers({
   courseState: CourseReducer,
   paperState: PapersReducer,
   universitiesState: UniversitiesReducer,
@@ -24,8 +23,7 @@ var reducers = combineReducers({
   requestState: RequestReducer,
   notesState: NotesReducer,
   isConnectedState: IsConnectedReducer,
-  priceState: PriceReducer,
-  passState: passReducer,
+  priceState: PriceReducer
 });
 
 export default reducers;

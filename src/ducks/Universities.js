@@ -1,9 +1,9 @@
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
 const UNIVERSITIES = 'UNIVERSITIES';
 
-let initialState = {
+const initialState = {
   universities: [],
 };
 
@@ -27,15 +27,12 @@ export const SetUniversities = data => {
   };
 };
 
-export const GetUniversities = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let universitiesRef = app.database().ref('/universities');
-      universitiesRef.on('value', snapshot => {
-        universitiesRef.off();
-        dispatch(SetUniversities(toArray(snapshot.val())));
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+export const GetUniversities = () => dispatch => new Promise((resolve, reject) => {
+  const universitiesRef = app.database().ref('/universities');
+  dispatch(StartRequest());
+  universitiesRef.once('value', snapshot => {
+    dispatch(SetUniversities(toArray(snapshot.val())));
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});

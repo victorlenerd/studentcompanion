@@ -1,7 +1,7 @@
 const START_REQUEST = 'START_REQUEST';
 const FINISH_REQUEST = 'FINISH_REQUEST';
 
-let initialState = {
+const initialState = {
   status: false,
 };
 
@@ -21,13 +21,9 @@ export const RequestReducer = (state = initialState, action) => {
   switch (action.type) {
     case START_REQUEST:
       return { status: true };
-      break;
     case FINISH_REQUEST:
       return { status: false };
-      break;
     default:
       return state;
   }
-
-  return state;
 };

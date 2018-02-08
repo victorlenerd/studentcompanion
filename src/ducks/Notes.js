@@ -1,12 +1,11 @@
-import { NetInfo, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
 const NOTES = 'NOTES';
 const SET_CURRENT_NOTE = 'SET_CURRENT_NOTE';
 
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
-
-let initialState = {
+const initialState = {
   currentNote: {},
   notes: [],
 };
@@ -18,50 +17,46 @@ export const SetNotes = notes => {
   };
 };
 
-export const GetNotes = courseId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let notesRef = app
-        .database()
-        .ref('/notes')
-        .equalTo(courseId)
-        .orderByChild('courseId');
-      notesRef.once('value', snapshot => {
-        dispatch(SetNotes(toArray(snapshot.val())));
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+export const GetNotes = courseId => dispatch => new Promise((resolve, reject) => {
+  const notesRef = app
+    .database()
+    .ref('/notes')
+    .equalTo(courseId)
+    .orderByChild('courseId');
 
-export const GetNotesOffline = courseId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`).then(saved_notes => {
-        if (saved_notes !== null) {
-          dispatch(SetNotes(JSON.parse(saved_notes)));
-          resolve(JSON.parse(saved_notes));
-        } else {
-          resolve([]);
-        }
-      });
-    });
-  };
-};
+  dispatch(StartRequest());
+  notesRef.once('value', snapshot => {
+    dispatch(SetNotes(toArray(snapshot.val())));
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});
 
-export const SaveNotesOffline = (courseId, notes) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.setItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`, JSON.stringify(notes))
-        .then(() => {
-          resolve(notes);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  };
-};
+export const GetNotesOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const saved_notes = await AsyncStorage.getItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`);
+    if (saved_notes !== null) {
+      dispatch(SetNotes(JSON.parse(saved_notes)));
+      resolve(JSON.parse(saved_notes));
+    }
+  } catch (err) {
+    resolve([]);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SaveNotesOffline = (courseId, notes) => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    await AsyncStorage.setItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`, JSON.stringify(notes));
+    resolve(notes);
+  } catch (err) {
+    reject(err);
+  }
+  dispatch(FinishRequest());
+});
 
 export const SetCurrentNote = note => {
   return {

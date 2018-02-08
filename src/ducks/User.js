@@ -1,500 +1,242 @@
 import { AsyncStorage } from 'react-native';
-
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
-
-import firebase from 'firebase';
-import moment from 'moment';
 import DeviceInfo from 'react-native-device-info';
 
-const GET_CURRENT_USER = 'GET_CURRENT_USER';
+import moment from 'moment';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from 'request';
 
-const initialState = {
-  currentUser: null,
+const _reject = (reject, dispatch) => err => {
+  reject(err);
+  dispatch(FinishRequest());
 };
 
-let usersRefs = app.database().ref('/users');
+const _resolve = (resolve, dispatch) => data => {
+  resolve(data);
+  dispatch(FinishRequest());
+};
 
-import { navigator } from '../shared/Navigation';
+export const Register = data => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
 
-let _reject = (reject, dispatch) => {
-  return err => {
-    reject(err);
+  try {
+    const usr = await app.auth().createUserWithEmailAndPassword(data.email, data.password);
+    const usersRefs = app.database().ref('/users');
+    const trialPeriodRefs = app.database().ref('/trialPeriod');
+
+    trialPeriodRefs.once('value', async snapshot => {
+      const trialPeriod = snapshot.val();
+      const nextPaymentDate = moment().add(trialPeriod, 'days');
+
+      try {
+        await usr.sendEmailVerification();
+
+        await usersRefs.push({
+          userId: usr.uid,
+          name: data.name,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          dateAdded: new Date().toISOString(),
+          deviceId: DeviceInfo.getUniqueID(),
+          nextPaymentDate: nextPaymentDate.toISOString(),
+        });
+
+        await dispatch(SetCurrentUser({
+          userId: usr.uid,
+          name: data.name,
+          email: data.email,
+        }));
+
+        _resolve(resolve, dispatch)();
+      } catch (err) {
+        _reject(reject, dispatch)(err);
+      }
+    });
+  } catch (err) {
+    _reject(reject, dispatch)(err);
+  }
+});
+
+export const Login = data => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    dispatch(StartRequest());
+    const { uid: userId, name, email } = await app.auth().signInWithEmailAndPassword(data.email, data.password);
+    dispatch(SetCurrentUser({
+      userId,
+      name,
+      email
+    }));
+  } catch (err) {
     dispatch(FinishRequest());
-  };
-};
+    _reject(reject, dispatch)(err);
+  }
+});
 
-let _resolve = (resolve, dispatch) => {
-  return data => {
+export const SendResetPasswordEmail = email => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    dispatch(StartRequest());
+    const data = app.auth().sendPasswordResetEmail(email);
     resolve(data);
     dispatch(FinishRequest());
-  };
-};
+  } catch (err) {
+    dispatch(FinishRequest());
+    reject(err);
+  }
+});
 
-export const Register = data => {
-  return dispatch => {
-    dispatch(StartRequest());
-
-    return new Promise((resolve, reject) => {
-      app
-        .auth()
-        .createUserWithEmailAndPassword(data.email, data.password)
-        .then(usr => {
-          let usersRefs = app.database().ref('/users');
-          let trialPeriod = app.database().ref('/trialPeriod');
-
-          trialPeriod.once('value', snapshot => {
-            let trialPeriod = snapshot.val();
-            let nextPaymentDate = moment().add(trialPeriod, 'days');
-
-            usr
-              .sendEmailVerification()
-              .then(() => {
-                usersRefs
-                  .push({
-                    userId: usr.uid,
-                    name: data.name,
-                    email: data.email,
-                    phoneNumber: data.phoneNumber,
-                    dateAdded: new Date().toISOString(),
-                    deviceId: DeviceInfo.getUniqueID(),
-                    nextPaymentDate: nextPaymentDate.toISOString(),
-                  })
-                  .then(() => {
-                    dispatch(
-                      SetCurrentUser({
-                        userId: usr.uid,
-                        name: data.name,
-                        email: data.email,
-                      })
-                    )
-                      .then(_resolve(resolve, dispatch))
-                      .catch(_reject(reject, dispatch));
-                  })
-                  .catch(_reject(reject, dispatch));
-              })
-              .catch(_reject(reject, dispatch));
-          });
-        })
-        .catch(_reject(reject, dispatch));
+export const UserExist = email => dispatch => new Promise((resolve, reject) => {
+  const usersRefs = app.database().ref('/users');
+  usersRefs
+    .orderByChild('email')
+    .equalTo(email)
+    .once('value', snapshot => {
+      const value = toArray(snapshot.val());
+      if (value.length < 1) {
+        reject();
+      } else {
+        resolve(value);
+      }
     });
-  };
-};
+});
 
-export const Login = data => {
-  return dispatch => {
-    dispatch(StartRequest());
+export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, reject) => {
+  const usersRefs = app.database().ref('/users');
 
-    return new Promise((resolve, reject) => {
-      app
-        .auth()
-        .signInWithEmailAndPassword(data.email, data.password)
-        .then(usr => {
-          console.log('usr', usr);
+  usersRefs
+    .orderByChild('email')
+    .equalTo(email)
+    .once('value', async snapshot => {
+      const user = toArray(snapshot.val())[0];
 
-          dispatch(
-            SetCurrentUser({
-              userId: usr.uid,
-              name: data.name,
-              email: data.email,
-            })
-          )
-            .then(_resolve(resolve, dispatch))
-            .catch(_reject(reject, dispatch));
-        })
-        .catch(_reject(reject, dispatch));
+      if (user !== null) {
+        try {
+          await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        resolve({ error: true, message: 'User does exist' });
+      }
     });
-  };
-};
+});
 
-// export const LoginWithFB = () => {
-//     return (dispatch)=> {
-//         return new Promise((resolve, reject)=> {
-//             //Open FB Dialog
-//             console.log("Open FB Dialog");
-//             FBLoginManager.loginWithPermissions(["email"], function(error, data){
-//                 console.log("FB-ERROR", error);
-//                 if (!error) {
-//                     dispatch(StartRequest());
-//                     console.log("FB-DATA", data);
-//                     //Get User Info From Graph
-//                     fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + data.credentials.token)
-//                     .then((response) => response.json())
-//                     .then((json) => {
-//                         console.log("FB-JSON", json);
-//                         //Check If User Exist
-//                         dispatch(UserExist(json.email))
-//                         .then(()=> {
-//                             console.log(" User Exist");
-//                             //Login If User Exist
-//                             dispatch(SignInWithCredential(data.credentials.token))
-//                             .then((usr)=> {
-//                                 //Set Current User
-//                                 console.log("Current User");
-//                                 dispatch(SetCurrentUser({
-//                                     userId: usr.uid,
-//                                     name: usr.displayName,
-//                                     email: usr.email
-//                                 }))
-//                                 .then(_resolve(resolve, dispatch))
-//                                 .catch(_reject(reject, dispatch));
-//                             })
-//                             .catch(_reject(reject, dispatch));
 
-//                         })
-//                         .catch(()=> {
-//                             console.log("User does not exist");
-//                             dispatch(SignInWithCredential(data.credentials.token))
-//                             .then((usr)=> {
-//                                 usersRefs.push({
-//                                     userId: usr.uid,
-//                                     name: usr.displayName,
-//                                     email: usr.email,
-//                                     paid: false,
-//                                     deviceId: DeviceInfo.getUniqueID()
-//                                 })
-//                                 .then((usr)=> {
-//                                     //Set Current User
-//                                     dispatch(SetCurrentUser({
-//                                         userId: usr.uid,
-//                                         name: usr.displayName,
-//                                         email: usr.email
-//                                     }))
-//                                     .then(_resolve(resolve, dispatch))
-//                                     .catch(_reject(reject, dispatch));
-//                                 })
-//                                 .catch(_reject(reject, dispatch));
-//                             });
+export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
+  const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
+  const { email } = JSON.parse(saved_data);
+  const usersRefs = app.database().ref('/users');
 
-//                         });
-//                     })
-//                     .catch(_reject(reject, dispatch));
-//                 } else {
-//                     reject(error);
-//                 }
-//             });
-//         });
-//     }
-// }
-
-// export const SignInWithCredential =(token)=> {
-//     return (dispatch)=> {
-//         return new Promise((resolve, reject)=> {
-//             let credential = new firebase.auth.FacebookAuthProvider.credential(token);
-
-//             app.auth().signInWithCredential(credential)
-//             .then((data)=> {
-//                 resolve(data);
-//             })
-//             .catch((error)=> {
-//                 reject(error);
-//             });
-//         });
-//     }
-// }
-
-export const SendResetPasswordEmail = email => {
-  return dispatch => {
-    dispatch(StartRequest());
-    return new Promise((resolve, reject) => {
-      app
-        .auth()
-        .sendPasswordResetEmail(email)
-        .then(data => {
-          resolve(data);
-          dispatch(FinishRequest());
-        })
-        .catch(error => {
-          reject(error);
-          dispatch(FinishRequest());
-        });
-    });
-  };
-};
-
-export const UserExist = email => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let usersRefs = app.database().ref('/users');
-      usersRefs
-        .orderByChild('email')
-        .equalTo(email)
-        .once('value', snapshot => {
-          let value = toArray(snapshot.val());
-          if (value.length < 1) {
-            reject();
-          } else {
-            resolve(value);
-          }
-        });
-    });
-  };
-};
-
-export const SetCurrentUser = data => {
-  return dispatch => {
-    console.log('SetCurrentUser::data', data);
-
-    return new Promise((resolve, reject) => {
-      usersRefs
-        .orderByChild('email')
-        .equalTo(data.email)
-        .once('value', snapshot => {
-          console.log('snapshot.val()', snapshot.val());
-
-          let user = toArray(snapshot.val())[0];
-
-          console.log('SetCurrentUser::user', user);
-
-          if (user !== null) {
-            AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user))
-              .then(() => {
-                resolve();
-              })
-              .catch(err => {
-                console.log('Save Error AsyncStorage.setItem');
-                reject(err);
-              });
-          } else {
-            reject({ message: 'User does exist' });
-          }
-        });
-    });
-  };
-};
-
-export const GetCurrentUser = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem('@UPQ:CURRENT_USER')
-        .then(saved_data => {
-          let user = JSON.parse(saved_data);
-
-          usersRefs
-            .orderByChild('email')
-            .equalTo(user.email)
-            .once('value', snapshot => {
-              let user = toArray(snapshot.val())[0];
-              console.log('user', user);
-              if (user !== null) {
-                console.log('JSON.stringify(user)', JSON.stringify(user));
-                AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user))
-                  .then(() => {
-                    resolve(user);
-                  })
-                  .catch(err => {
-                    reject(err);
-                  });
-              } else {
-                dispatch(DeleteCurrentUser()).then(() => {
-                  navigator.welcome();
-                });
-              }
-            });
-        })
-        .catch(err => {
-          reject({ message: 'No user' });
-        });
-    });
-  };
-};
-
-export const GetCurrentUserOffline = data => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem('@UPQ:CURRENT_USER')
-        .then(saved_data => {
-          let user = JSON.parse(saved_data);
+  usersRefs
+    .orderByChild('email')
+    .equalTo(email)
+    .once('value', async snapshot => {
+      const user = toArray(snapshot.val())[0];
+      if (user !== null) {
+        try {
+          await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user))
           resolve(user);
-        })
-        .catch(err => {
-          reject({ message: 'No Logged In User' });
-        });
-    });
-  };
-};
-
-export const DeleteCurrentUser = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.removeItem('@UPQ:CURRENT_USER')
-        .then(saved_data => {
-          resolve(true);
-        })
-        .catch(err => {
+        } catch (err) {
           reject(err);
-        });
+        }
+      } else {
+        // dispatch(DeleteCurrentUser()).then(() => {
+        //   navigator.welcome();
+        // });
+      }
     });
-  };
-};
+});
 
-export const SignOut = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      app
-        .auth()
-        .signOut()
-        .then(
-          () => {
-            dispatch(DeleteCurrentUser()).then(
-              () => {
-                AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES')
-                  .then(() => {
-                    resolve();
-                  })
-                  .catch(err => {
-                    reject(err);
-                  });
-              },
-              err => {
-                reject(err);
-              }
-            );
-          },
-          err => {
-            reject(err);
-          }
-        );
-    });
-  };
-};
+export const GetCurrentUserOffline = data => dispatch => new Promise(async (resolve, reject) => {
+  const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
+  try {
+    const user = JSON.parse(saved_data);
+    resolve(user);
+  } catch (err) {
+    resolve({ error: true, message: 'No Logged In User' });
+  }
+});
 
-export const SendDeviceActivationCode = email => {
-  return dispatch => {
-    console.log('SendDeviceActivationCode', email);
+export const DeleteCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    await AsyncStorage.removeItem('@UPQ:CURRENT_USER');
+    resolve(true);
+  } catch (err) {
+    reject(err);
+  }
+});
 
-    return new Promise((resolve, reject) => {
-      fetch('https://victor-com-ng.appspot.com/send_device_activate_code_upq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to_email: email,
-        }),
-      })
-        .then(response => response.json())
-        .then(json => {
-          console.log('json', json);
+export const SignOut = () => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    await app.auth().signOut();
+    await dispatch(DeleteCurrentUser());
+    await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES')
+    resolve();
+  } catch (err) {
+    reject(err);
+  }
+});
 
-          let ref = usersRefs.orderByChild('email').equalTo(email);
+export const SendDeviceActivationCode = email => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    const { code } = await fetch('https://victor-com-ng.appspot.com/send_device_activate_code_upq', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to_email: email,
+      }),
+    }).then(response => response.json());
 
-          ref.once('value', snapshot => {
-            var usr = toArray(snapshot.val())[0];
+    const usersRefs = app.database().ref('/users');
+    const ref = usersRefs.orderByChild('email').equalTo(email);
 
-            console.log('usr', usr);
-
-            usersRefs = app.database().ref(`/users/${usr.$id}`);
-            usersRefs.update({ deviceActivationCode: json.code }, err => {
-              if (err !== null) reject(err);
-              dispatch(SetCurrentUser({ email }))
-                .then(() => {
-                  resolve();
-                })
-                .catch(err => {
-                  reject(err);
-                });
-            });
-          });
-        })
-        .catch(err => {
-          console.log('err', err);
-
-          reject(err);
-        });
-    });
-  };
-};
-
-export const UpdateUserDeviceId = code => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      dispatch(GetCurrentUser())
-        .then(user => {
-          usersRefs = app.database().ref(`/users/${user.$id}`);
-          if (user.deviceActivationCode == code) {
-            usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, err => {
-              if (err !== null) reject(err);
-              dispatch(SetCurrentUser(user))
-                .then(() => {
-                  resolve();
-                })
-                .catch(err => {
-                  reject(err);
-                });
-            });
-          } else {
-            reject({
-              message: 'Code is incorrect.',
-            });
-          }
-        })
-        .catch(reject);
-    });
-  };
-};
-
-export const SetAcademicInfo = (userId, academicInfo) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      dispatch(GetCurrentUser())
-        .then(user => {
-          usersRefs = app.database().ref(`/users/${userId}`);
-          usersRefs.update(
-            {
-              universityId: academicInfo.universityId,
-              facultyId: academicInfo.facultyId,
-              departmentId: academicInfo.departmentId,
-              levelId: academicInfo.levelId,
-            },
-            err => {
-              if (err !== null) reject(err);
-              resolve();
-            }
-          );
-        })
-        .catch(reject);
-    });
-  };
-};
-
-export const TransferRequest = (userId, amount, approvedPhotoNotes) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let photoNotesRef = app.database().ref(`/photos/`);
-      let tRef = app.database().ref('/transferRequest');
-      approvedPhotoNotes.map(photoNote => {
-        return new Promise((resolve, reject) => {
-          let photoNoteRef = photoNotesRef.child(photoNote.$id);
-          photoNoteRef
-            .remove()
-            .then(resolve)
-            .catch(reject);
-        });
+    ref.once('value', snapshot => {
+      const usr = toArray(snapshot.val())[0];
+      const userRef = app.database().ref(`/users/${usr.$id}`);
+      userRef.update({ deviceActivationCode: code }, async err => {
+        if (err !== null) reject(err);
+        await dispatch(SetCurrentUser({ email }));
+        resolve();
       });
-
-      Promise.all(approvedPhotoNotes)
-        .then(() => {
-          tRef
-            .push({
-              userId,
-              amount,
-              dateAdded: new Date().toISOString(),
-            })
-            .then(() => {
-              let userPhotoRef = app
-                .database()
-                .ref(`/photos/`)
-                .equalTo(userId)
-                .orderByChild('userId');
-              photoNotesRef.once('value', snapshot => {
-                let photos = toArray(snapshot.val());
-                resolve(photos);
-              });
-            })
-            .catch(reject);
-        })
-        .catch(reject);
     });
-  };
-};
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    const { deviceActivationCode, $id } = await dispatch(GetCurrentUser());
+    const usersRefs = app.database().ref(`/users/${$id}`);
+    if (deviceActivationCode === code) {
+      usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, async err => {
+        if (err !== null) reject(err);
+        const newUser = await dispatch(GetCurrentUser());
+        await dispatch(SetCurrentUser(newUser));
+        resolve();
+      });
+    } else {
+      resolve({ error: true, message: 'Code is incorrect.' });
+    }
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId, levelId }) => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    const usersRefs = app.database().ref(`/users/${userId}`);
+
+    usersRefs.update({
+      universityId,
+      facultyId,
+      departmentId,
+      levelId
+    }, err => {
+      if (err !== null) reject(err);
+      resolve();
+    });
+  } catch (err) {
+    reject(err);
+  }
+});

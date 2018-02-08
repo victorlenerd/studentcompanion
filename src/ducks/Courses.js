@@ -1,105 +1,93 @@
-import { NetInfo, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
 
-import app, { toArray } from '../shared/Firebase';
-import { StartRequest, FinishRequest } from './Request';
+import find from 'lodash/find';
+import app, { toArray } from 'shared/firebase';
+import { StartRequest, FinishRequest } from './request';
 
 const COURSES = 'COURSES';
 const SET_CURRENT_COURSE = 'SET_CURRENT_COURSE';
 
-let initialState = {
+const initialState = {
   currentCourse: {},
   courses: [],
 };
 
-export const GetCourses = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let coursesRef = app.database().ref('/courses');
-      coursesRef.once('value', snapshot => {
-        dispatch(SetCourses(toArray(snapshot.val())));
-        resolve();
-      });
-    });
-  };
-};
+export const GetCourses = () => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+  const coursesRef = app.database().ref('/courses');
+  coursesRef.once('value', snapshot => {
+    dispatch(SetCourses(toArray(snapshot.val())));
+    resolve();
+    dispatch(FinishRequest());
+  });
+});
 
-export const GetCoursesByDepartmentId = departmentId => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let coursesRef = app
-        .database()
-        .ref('/courses')
-        .orderByChild('departmentId')
-        .equalTo(departmentId);
-      coursesRef.once('value', snapshot => {
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+export const GetCoursesByDepartmentId = departmentId => dispatch => new Promise((resolve, reject) => {
+  const coursesRef = app
+    .database()
+    .ref('/courses')
+    .orderByChild('departmentId')
+    .equalTo(departmentId);
 
-export const GetCoursesByOtherId = (idName, dbId) => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let coursesRef = app
-        .database()
-        .ref('/courses')
-        .orderByChild(idName)
-        .equalTo(dbId);
-      coursesRef.once('value', snapshot => {
-        resolve(toArray(snapshot.val()));
-      });
-    });
-  };
-};
+  dispatch(StartRequest());
 
-export const GetCoursesOffline = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      AsyncStorage.getItem('@UPQ:OFFLINE_COURSES')
-        .then(function(saved_courses) {
-          if (saved_courses !== null) {
-            resolve(JSON.parse(saved_courses));
-          } else {
-            resolve([]);
-          }
-        })
-        .catch(function(err) {
-          reject(err.message);
-        });
-    });
-  };
-};
+  coursesRef.once('value', snapshot => {
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});
 
-export const SaveCourseOffline = course => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      dispatch(GetCoursesOffline()).then(courses => {
-        var matchIndex;
-        let match = courses.filter((c, index) => {
-          if (c.$id == course.$id) {
-            matchIndex = index;
-            return c;
-          }
-        });
+export const GetCoursesByOtherId = (idName, dbId) => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+  const coursesRef = app
+    .database()
+    .ref('/courses')
+    .orderByChild(idName)
+    .equalTo(dbId);
 
-        if (match.length < 1) {
-          courses.push(course);
-        } else {
-          courses[matchIndex] = course;
-        }
+  coursesRef.once('value', snapshot => {
+    resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
+  });
+});
 
-        AsyncStorage.setItem(`@UPQ:OFFLINE_COURSES`, JSON.stringify(courses))
-          .then(function() {
-            resolve(course);
-          })
-          .catch(function(err) {
-            reject(err.message);
-          });
-      });
-    });
-  };
-};
+export const GetCoursesOffline = () => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const saved_courses = await AsyncStorage.getItem('@UPQ:OFFLINE_COURSES');
+    if (saved_courses !== null) {
+      resolve(JSON.parse(saved_courses));
+    } else {
+      resolve([]);
+    }
+  } catch (err) {
+    reject(err.message);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SaveCourseOffline = course => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+  dispatch(GetCoursesOffline()).then(async courses => {
+    const match = find(courses, (c, index) => (c.$id === course.$id));
+
+    if (match.length < 1) {
+      courses.push(course);
+    } else {
+      courses[Object.keys(course)[0]] = course;
+    }
+
+    try {
+      await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(courses));
+      resolve(course);
+    } catch (err) {
+      reject(err.message);
+    }
+
+    dispatch(FinishRequest());
+  });
+});
 
 export const SetCourses = courses => {
   return {
