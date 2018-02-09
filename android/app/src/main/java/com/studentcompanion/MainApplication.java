@@ -11,6 +11,7 @@ import net.no_mad.tts.TextToSpeechPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.crash.RNFirebaseCrashPackage;
 import com.facebook.react.ReactApplication;
+import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.soloader.SoLoader;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RandomBytesPackage(),
           new RNFirebasePackage(),
           new TextToSpeechPackage(),
           new RNFirebaseAnalyticsPackage(),

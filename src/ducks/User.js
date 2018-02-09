@@ -3,7 +3,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import moment from 'moment';
 import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from 'request';
+import { StartRequest, FinishRequest } from './request';
 
 const _reject = (reject, dispatch) => err => {
   reject(err);

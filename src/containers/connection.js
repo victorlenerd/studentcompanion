@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { StartRequest, FinishRequest } from 'ducks/request';
-import { SetIsConnected } from 'ducks/connecton';
+import { SetIsConnected } from 'ducks/connection';
 
 const mapDispatchToProps = dispatch => {
   return {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Alert, TextInput } from 'react-native';
+import { View, Text, Image, Alert, TextInput, StatusBar } from 'react-native';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { Button, ButtonInActive } from 'components/buttons';
@@ -33,7 +33,7 @@ class SignUp extends Component {
       try {
         const isExistingUser = await userExist(this.state.email);
         if (isExistingUser) Alert.alert('Registration', 'Another user is registerred with this email', [{ text: 'Cancel', style: 'cancel' }]);
-        await signUp(this.state.name, this.state.email, this.state.phoneNumber, this.state.password);
+        await signUp(`${firstName} ${lastName}`, email, phoneNumber, password);
         navigate('AcademicInfo');
       } catch (err) {
         Alert.alert('Registration Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
@@ -51,6 +51,7 @@ class SignUp extends Component {
 
     return (
       <View style={[main.container, { paddingTop: 50 }]}>
+        <StatusBar backgroundColor={colors.lightBlue} barStyle="light-content" />
         <KeyboardAwareScrollView>
           <View style={[main.content, { flex: 1, flexDirection: 'column' }]}>
             <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>
@@ -63,7 +64,7 @@ class SignUp extends Component {
 
               {this.renderError(submitted && firstName.length < 3, 'Your first name is required')}
               <TextInput
-                placeholder="Name"
+                placeholder="First Name"
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 style={[
                   main.textInput,
@@ -77,7 +78,7 @@ class SignUp extends Component {
 
               {this.renderError(submitted && lastName.length < 1, 'Your last name is required')}
               <TextInput
-                placeholder="Name"
+                placeholder="Last Name"
                 underlineColorAndroid="rgba(0, 0, 0, 0)"
                 style={[
                   main.textInput,
@@ -120,7 +121,7 @@ class SignUp extends Component {
                 onChange={e => this.setState({ phoneNumber: e.nativeEvent.text })}
               />
 
-              {this._renderError(
+              {this.renderError(
                 submitted && password.length < 6,
                 'Your password is required, it should be more than six characters.'
               )}

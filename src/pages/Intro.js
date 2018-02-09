@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StatusBar } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Swiper from 'react-native-swiper';
 
-import { intro } from 'shared/styles';
+import { intro, colors } from 'shared/styles';
 import { Button } from 'components/buttons';
 
 class Intro extends Component {
-  componentWillMount() {
-    this.done = () => this.props.navigation.navigate('SignUp');
+  componentDidMount() {
     setTimeout(this.bookImage.zoomIn, 1000);
   }
 
@@ -31,9 +30,14 @@ class Intro extends Component {
     }
   };
 
+  signUp = () => this.props.navigation.navigate('SignUp');
+
+  signIn = () => this.props.navigation.navigate('SignIn');
+
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar backgroundColor={colors.accent} barStyle="light-content" />
         <Swiper
           containerStyle={{ flex: 1 }}
           loop={false}
@@ -82,8 +86,10 @@ class Intro extends Component {
           </View>
           <View style={intro.slide}>
             <View style={[intro.slideTop, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
-              <Text style={[intro.info, { fontSize: 60 }]}>What Are You Waiting For?</Text>
-              <Button text="Get Started" onPress={this.done} />
+              <Image resizeMode="contain" source={require('../assets/things.png')} style={{ position: 'absolute', top: 0, left: 0 }} />
+              <Text style={[intro.info, { fontSize: 28 }]}>Get Started.</Text>
+              <Button text="Create A New Account" onPress={this.signUp} />
+              <Button text="Login To Existing Account" onPress={this.signIn} />
             </View>
           </View>
         </Swiper>

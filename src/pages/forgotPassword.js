@@ -44,7 +44,7 @@ class ForgotPassword extends Component {
   render() {
     return (
       <View style={[main.container, { paddingTop: 50 }]}>
-        <StatusBar backgroundColor={'#00384D'} barStyle="light-content" />
+        <StatusBar backgroundColor={colors.lightBlue} barStyle="light-content" />
         <KeyboardAwareScrollView>
           <View style={[main.content, { flex: 1, flexDirection: 'column' }]}>
             <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>

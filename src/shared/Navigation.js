@@ -10,7 +10,7 @@ import ForgotPassword from 'pages/forgotPassword';
 // import Course from 'pages/course';
 
 const NormalScreen = Screen => ({
-  screen: WelcomeScreen,
+  screen: Screen,
   navigationOptions: {
     header: null
   }

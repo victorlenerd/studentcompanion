@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import Loader from 'components/loader';
@@ -20,8 +20,8 @@ class SignIn extends Component {
   }
 
   signIn = async () => {
-    const { Login } = this.props;
-    const { email, password, validEmail } = this.state;
+    const { Login, validEmail } = this.props;
+    const { email, password } = this.state;
 
     if (validEmail(email) && password !== '') {
       try {
@@ -39,6 +39,7 @@ class SignIn extends Component {
 
     return (
       <View style={[main.container, { paddingTop: 50 }]}>
+        <StatusBar backgroundColor={colors.lightBlue} barStyle="light-content" />
         <KeyboardAwareScrollView>
           <View style={[main.content, { flex: 1, flexDirection: 'column' }]}>
             <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>
@@ -66,13 +67,13 @@ class SignIn extends Component {
               />
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Button onPress={this._signIn} text="Sign In" />
+                <Button onPress={this.signIn} text="Sign In" />
                 <TouchableOpacity onPress={() => navigate('ForgotPassword')}>
                   <Text>Forgot Password?</Text>
                 </TouchableOpacity>
               </View>
 
-              <ButtonInActive onPress={() => navigator.signUp()} text="I Am A New User" />
+              <ButtonInActive onPress={() => navigate('SignUp')} text="I Am A New User" />
             </View>
           </View>
           <Loader />

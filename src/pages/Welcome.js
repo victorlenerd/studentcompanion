@@ -14,6 +14,7 @@ import * as Animatable from 'react-native-animatable';
 class Welcome extends Component {
   componentWillMount() {
     const { setConnection } = this.props;
+
     const dispatchConnected = isConnected => {
       setConnection(isConnected);
       this._loadData();
@@ -24,7 +25,7 @@ class Welcome extends Component {
       setConnection((connected !== 'none') && (connected !== 'unknown'));
       this._loadData();
       NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
-    }, 0);
+    }, 4000);
   }
 
   _loadData = async () => {
