@@ -29,11 +29,11 @@ const NormalScreen = Screen => ({
 // });
 
 const Navigation = StackNavigator({
+  SignIn: NormalScreen(SignIn),
   Welcome: NormalScreen(WelcomeScreen),
   Intro: NormalScreen(IntroScreen),
   Pass: NormalScreen(PassScreen),
   SignUp: NormalScreen(SignUp),
-  SignIn: NormalScreen(SignIn),
   ForgotPassword: NormalScreen(ForgotPassword),
   // SearchCourses: {
   //   screen: SearchCoursesNavigator

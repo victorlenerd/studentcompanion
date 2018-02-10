@@ -5,21 +5,17 @@ import moment from 'moment';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
 
-const _reject = (reject, dispatch) => err => {
-  reject(err);
-  dispatch(FinishRequest());
+const initialState = {
+  currentUser: null
 };
 
-const _resolve = (resolve, dispatch) => data => {
-  resolve(data);
-  dispatch(FinishRequest());
-};
+const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const Register = data => dispatch => new Promise(async (resolve, reject) => {
-  dispatch(StartRequest());
-
   try {
-    const usr = await app.auth().createUserWithEmailAndPassword(data.email, data.password);
+    dispatch(StartRequest());
+    const { email, password, phoneNumber, name } = data;
+    const usr = await app.auth().createUserWithEmailAndPassword(email, password);
     const usersRefs = app.database().ref('/users');
     const trialPeriodRefs = app.database().ref('/trialPeriod');
 
@@ -32,42 +28,48 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
 
         await usersRefs.push({
           userId: usr.uid,
-          name: data.name,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
+          name,
+          email,
+          phoneNumber,
           dateAdded: new Date().toISOString(),
           deviceId: DeviceInfo.getUniqueID(),
           nextPaymentDate: nextPaymentDate.toISOString(),
         });
 
-        await dispatch(SetCurrentUser({
+        dispatch(SetCurrentUser({
           userId: usr.uid,
           name: data.name,
           email: data.email,
         }));
 
-        _resolve(resolve, dispatch)();
+        resolve(data);
+        dispatch(FinishRequest());
       } catch (err) {
-        _reject(reject, dispatch)(err);
+        reject(err);
+        dispatch(FinishRequest());
       }
     });
   } catch (err) {
-    _reject(reject, dispatch)(err);
+    reject(err);
+    dispatch(FinishRequest());
   }
 });
 
 export const Login = data => dispatch => new Promise(async (resolve, reject) => {
   try {
+    const { email, password } = data;
     dispatch(StartRequest());
-    const { uid: userId, name, email } = await app.auth().signInWithEmailAndPassword(data.email, data.password);
+    const { uid: userId, name } = await app.auth().signInWithEmailAndPassword(email, password);
     dispatch(SetCurrentUser({
       userId,
       name,
       email
     }));
-  } catch (err) {
+    resolve({ success: true, uid: userId });
     dispatch(FinishRequest());
-    _reject(reject, dispatch)(err);
+  } catch (err) {
+    reject(err);
+    dispatch(FinishRequest());
   }
 });
 
@@ -91,9 +93,9 @@ export const UserExist = email => dispatch => new Promise((resolve, reject) => {
     .once('value', snapshot => {
       const value = toArray(snapshot.val());
       if (value.length < 1) {
-        reject();
+        resolve(true);
       } else {
-        resolve(value);
+        resolve(false);
       }
     });
 });
@@ -110,6 +112,10 @@ export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, r
       if (user !== null) {
         try {
           await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
+          dispatch({
+            type: 'SET_CURRENT_USER',
+            user
+          });
         } catch (err) {
           reject(err);
         }
@@ -132,7 +138,7 @@ export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reje
       const user = toArray(snapshot.val())[0];
       if (user !== null) {
         try {
-          await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user))
+          await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
           resolve(user);
         } catch (err) {
           reject(err);
@@ -168,7 +174,7 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
   try {
     await app.auth().signOut();
     await dispatch(DeleteCurrentUser());
-    await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES')
+    await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES');
     resolve();
   } catch (err) {
     reject(err);
@@ -240,3 +246,16 @@ export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId,
     reject(err);
   }
 });
+
+export const UserReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_CURRENT_USER:
+      return Object.assign({}, state, {
+        currentUser: action.user,
+      });
+    default:
+      break;
+  }
+
+  return state;
+};

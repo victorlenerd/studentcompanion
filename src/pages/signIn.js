@@ -7,7 +7,9 @@ import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
 
 import auth from 'containers/auth';
+import user from 'containers/users';
 
+@user
 @auth
 class SignIn extends Component {
   constructor(props) {
@@ -19,18 +21,23 @@ class SignIn extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { currentUser, validEmail, navigation: { navigate } } = nextProps;
+    if (validEmail(currentUser.email)) navigate('Courses');
+  }
+
   signIn = async () => {
-    const { Login, validEmail } = this.props;
+    const { login, validEmail } = this.props;
     const { email, password } = this.state;
 
     if (validEmail(email) && password !== '') {
       try {
-        await Login(email, password);
+        await login({ email, password });
       } catch (err) {
-        Alert('Login Error', err.message);
+        Alert.alert('Login Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
       }
     } else {
-      Alert('Login Error', 'Email or password is incorrect.');
+      Alert.alert('Login Error', 'Email or password is incorrect.', [{ text: 'Cancel', style: 'cancel' }]);
     }
   }
 

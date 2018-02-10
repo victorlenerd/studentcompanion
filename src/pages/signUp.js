@@ -23,18 +23,20 @@ class SignUp extends Component {
     this.signUp = this.signUp.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { currentUser, validEmail, navigation: { navigate } } = nextProps;
+    if (validEmail(currentUser.email)) navigate('AcademicInfo');
+  }
+
   signUp = async () => {
-    const { navigation: { navigate }, signUp, userExist, validEmail, validPhone } = this.props;
+    const { register, validEmail, validPhone } = this.props;
     const { firstName, lastName, email, password, phoneNumber } = this.state;
 
     this.setState({ submitted: true });
 
     if (!(firstName.length < 1 || lastName.length < 1 || !validEmail(email) || !validPhone(phoneNumber) || password.length < 6)) {
       try {
-        const isExistingUser = await userExist(this.state.email);
-        if (isExistingUser) Alert.alert('Registration', 'Another user is registerred with this email', [{ text: 'Cancel', style: 'cancel' }]);
-        await signUp(`${firstName} ${lastName}`, email, phoneNumber, password);
-        navigate('AcademicInfo');
+        await register({ name: `${firstName} ${lastName}`, email, phoneNumber, password });
       } catch (err) {
         Alert.alert('Registration Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
       }
