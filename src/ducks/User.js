@@ -214,15 +214,16 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
   try {
     const { deviceActivationCode, $id } = await dispatch(GetCurrentUser());
     const usersRefs = app.database().ref(`/users/${$id}`);
+
     if (deviceActivationCode === code) {
       usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, async err => {
         if (err !== null) reject(err);
         const newUser = await dispatch(GetCurrentUser());
         await dispatch(SetCurrentUser(newUser));
-        resolve();
+        resolve(true);
       });
     } else {
-      resolve({ error: true, message: 'Code is incorrect.' });
+      resolve(false);
     }
   } catch (err) {
     reject(err);
