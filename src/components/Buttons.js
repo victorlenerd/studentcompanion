@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
-import { main } from '../shared/styles';
+import { main } from 'shared/styles';
 
 export class Button extends Component {
   render() {
@@ -50,16 +50,3 @@ export class BlackButton extends Component {
     );
   }
 }
-
-// export class FBButton extends Component {
-//     render () {
-//         return (
-//             <TouchableOpacity onPress={this.props.onPress}>
-//                 <View style={[main.fbButton, {flexDirection: "row",justifyContent: "space-between", alignItems: "center"}]}>
-//                     <Image source={require('../assets/facebook.png')} resizeMode="contain"  style={{width: 16, height: 16}} />
-//                     <Text style={main.blackButtonText}>{this.props.text}</Text>
-//                 </View>
-//             </TouchableOpacity>
-//         );
-//     }
-// }

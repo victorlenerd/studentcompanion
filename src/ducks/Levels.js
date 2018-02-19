@@ -48,6 +48,7 @@ export const GetLevelsByDepartmentId = departmentId => dispatch => new Promise((
 
   levelsRef.once('value', snapshot => {
     resolve(toArray(snapshot.val()));
+    dispatch(SetLevels(toArray(snapshot.val())));
     dispatch(FinishRequest());
   });
 });

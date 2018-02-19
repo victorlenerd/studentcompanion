@@ -3,11 +3,14 @@ import { View, Image, NetInfo, StatusBar } from 'react-native';
 
 import moment from 'moment';
 
+import DeviceInfo from 'react-native-device-info';
 import connection from 'containers/connection';
 import users from 'containers/users';
 import Loader from 'components/loader';
 import { colors } from 'shared/styles';
 import * as Animatable from 'react-native-animatable';
+
+let timeout = null;
 
 @users
 @connection
@@ -20,7 +23,7 @@ class Welcome extends Component {
       this._loadData();
     };
 
-    setTimeout(async () => {
+    timeout = setTimeout(async () => {
       const connected = await NetInfo.getConnectionInfo();
       setConnection((connected !== 'none') && (connected !== 'unknown'));
       this._loadData();
@@ -28,34 +31,43 @@ class Welcome extends Component {
     }, 4000);
   }
 
+  componentWillUnmount() {
+    clearTimeout(timeout);
+  }
+
   _loadData = async () => {
-    const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser } = this.props;
+    const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
 
-  //   try {
-  //     if (this.props.isConnected) {
-  //       const user = await getCurrentUser();
-  //       const now = moment();
-  //       const paymentDate = moment(user.nextPaymentDate);
-  //       const diffDays = paymentDate.diff(now, 'days');
+    try {
+      if (this.props.isConnected) {
+        const user = await getCurrentUser();
 
-  //       if (user !== null) {
-  //         if (diffDays >= 0) {
-  //           navigate('SearchCourses');
-  //         } else {
-  //           navigate('ActivateAccount');
-  //         }
-  //       } else {
-  //         deleteCurrentUser();
-  //       }
-  //     } else {
-  //       const user = await getCurrentUserOffline();
-  //       if (user !== null) navigate('SearchCourses');
-  //     }
-  //   } catch (err) {
-  //     navigate('Intro');
-  //   }
+        if (user !== null) {
+          setCurrentUser(user);
 
-    navigate('Intro');
+          const now = moment();
+          const paymentDate = moment(user.nextPaymentDate);
+          const diffDays = paymentDate.diff(now, 'days');
+
+          if (diffDays >= 0) {
+            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
+            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateDevice');
+            navigate('Main');
+          } else {
+            return navigate('ActivateAccount');
+          }
+        } else {
+          return deleteCurrentUser();
+        }
+      } else {
+        const user = await getCurrentUserOffline();
+        setCurrentUser(user);
+
+        if (user !== null) navigate('Main');
+      }
+    } catch (err) {
+      navigate('Intro');
+    }
   }
 
   render() {

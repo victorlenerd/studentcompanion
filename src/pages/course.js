@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, TouchableOpacity, Image, NetInfo, Alert } from 'react-native';
+import { View, NetInfo, Alert } from 'react-native';
 
 import { connect } from 'react-redux';
 
@@ -9,16 +9,12 @@ import CourseNotes from './CourseNotes';
 import CoursePapers from './CoursePapers';
 
 import { main, colors } from '../shared/styles';
-import { navigator } from '../shared/Navigation';
 
 import { StartRequest, FinishRequest } from '../ducks/Request';
 import { SaveCourseOffline, GetCoursesOffline } from '../ducks/Courses';
 import { SaveQuestionsOffline } from '../ducks/Questions';
 import { SavePapersOffline } from '../ducks/Papers';
 import { SaveNotesOffline } from '../ducks/Notes';
-var PushNotification = require('react-native-push-notification');
-
-var { width } = Dimensions.get('window');
 
 class Course extends Component {
   constructor(props) {
@@ -26,28 +22,6 @@ class Course extends Component {
     this.state = {
       isConnected: false,
     };
-
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-  }
-
-  onNavigatorEvent(event) {
-    if (event.id === 'sideMenu') {
-      //Do nothing
-    } else if (event.id === 'menu' && !this.state.drawerOpen) {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'open',
-      });
-      this.setState({ drawerOpen: true });
-    } else {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'closed',
-      });
-      this.setState({ drawerOpen: false });
-    }
   }
 
   componentDidMount() {
@@ -66,8 +40,8 @@ class Course extends Component {
     this.props
       .getCoursesOffline()
       .then(courses => {
-        let match = courses.filter(course => {
-          if (course.$id == this.props.currentCourse.$id) return course;
+        const match = courses.filter(course => {
+          if (course.$id === this.props.currentCourse.$id) return course;
         });
 
         if (match.length > 0) {

@@ -32,7 +32,7 @@ export const GetUniversities = () => dispatch => new Promise((resolve, reject) =
   dispatch(StartRequest());
   universitiesRef.once('value', snapshot => {
     dispatch(SetUniversities(toArray(snapshot.val())));
-    resolve(toArray(snapshot.val()));
     dispatch(FinishRequest());
+    resolve(toArray(snapshot.val()));
   });
 });

@@ -69,27 +69,6 @@ export const MakePayment = (email, amount) => dispatch => new Promise((resolve, 
   });
 });
 
-export const SetFreeCourseId = (email, courseId) => dispatch => new Promise((resolve, reject) => {
-  const ref = usersRefs.orderByChild('email').equalTo(email);
-  dispatch(StartRequest());
-
-  ref.once('value', snapshot => {
-    const usr = toArray(snapshot.val())[0];
-    const userRef = app.database().ref(`/users/${usr.$id}`);
-    userRef.update({ freeCourseId: courseId }, async err => {
-      if (err !== null) reject(err);
-      try {
-        await dispatch(SetCurrentUser({ email }));
-        resolve();
-      } catch (errr) {
-        reject(errr);
-      }
-
-      dispatch(FinishRequest());
-    });
-  });
-});
-
 export const PriceReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_PRICE:

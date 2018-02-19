@@ -47,6 +47,7 @@ export const GetDepartmentsByFacultyId = facultyId => dispatch => new Promise((r
 
   departmentsRef.once('value', snapshot => {
     resolve(toArray(snapshot.val()));
+    dispatch(SetDepartments(toArray(snapshot.val())));
     dispatch(FinishRequest());
   });
 });

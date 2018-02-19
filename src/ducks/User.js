@@ -126,6 +126,8 @@ export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, r
 });
 
 
+export const SetCurrentUserOffline = user => dispatch => dispatch({ type: 'SET_CURRENT_USER', user });
+
 export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
   const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
   const { email } = JSON.parse(saved_data);
@@ -175,7 +177,7 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
     await app.auth().signOut();
     await dispatch(DeleteCurrentUser());
     await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES');
-    resolve();
+    resolve(true);
   } catch (err) {
     reject(err);
   }

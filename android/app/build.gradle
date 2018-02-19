@@ -105,7 +105,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
+        vectorDrawables.useSupportLibrary = true
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -151,9 +151,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-randombytes')
-    compile project(':react-native-image-picker')
-//    compile project(':react-native-fetch-blob')
+    //    compile project(':react-native-fetch-blob')
     compile(project(':react-native-firebase')) {
         transitive = false
     }

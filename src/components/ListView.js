@@ -1,115 +1,61 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Dimensions, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, Dimensions, StyleSheet, StatusBar } from 'react-native';
+import { main, colors } from 'shared/styles';
+import Loader from 'components/loader';
 
-import { connect } from 'react-redux';
+import connection from 'containers/connection';
 
-import { navigator } from '../shared/Navigation';
-import { main, colors } from '../shared/styles';
+const { width } = Dimensions.get('window');
 
-import { GetUniversities } from '../ducks/Universities';
-
-import { GetCurrentUser } from '../ducks/User';
-import { SetIsConnected } from '../ducks/IsConnected';
-import { StartRequest, FinishRequest } from '../ducks/Request';
-
-var DeviceInfo = require('react-native-device-info');
-
-var { height, width } = Dimensions.get('window');
-
+@connection
 class ListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      isConnected: null
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      data: newProps.data,
-    });
+  componentWillReceiveProps(nextProps) {
+    const { data, isConnected } = nextProps;
+    this.setState({ data, isConnected });
   }
 
   _keyExtractor = (item, index) => index;
 
-  _renderItem({ item, index }) {
+  _renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={index.toString()}
-        onPress={() => {
-          this.props.openItem(item);
-        }}
-        style={{
-          width,
-          backgroundColor: colors.white,
-          flexDirection: 'row',
-          height: 60,
-          marginBottom: 1,
-          paddingLeft: 20,
-          paddingRight: 20,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
+        onPress={() => this.props.openItem(item)}
+        style={style.listItem}
       >
-        <Text style={{ fontSize: 18, color: colors.black }}>{item.name}</Text>
-        <Image resizeMode="contain" source={require('../assets/chevron-right.png')} style={{ width: 18, height: 18 }} />
+        <Text style={style.listName}>{item.name}</Text>
+        <Image resizeMode="contain" source={require('../assets/chevron-right.png')} style={style.chevronIcon} />
       </TouchableOpacity>
     );
   }
 
-  _renderListHeader() {
-    if (!this.props.isConnected) {
+  _renderListHeader = () => {
+    if (!this.state.isConnected && this.state.isConnected !== null) {
       return (
-        <View style={{ width, height: 80, paddingLeft: 20, justifyContent: 'center', backgroundColor: colors.red }}>
-          <Text style={{ color: colors.white, fontSize: 22, fontWeight: '300' }}>You are offline</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={{ width, height: 80, paddingLeft: 20, justifyContent: 'center', backgroundColor: colors.accent }}>
-          <Text style={{ color: colors.white, fontSize: 22, fontWeight: '300' }}>{this.props.title}</Text>
+        <View style={[style.listHeader, { backgroundColor: colors.red }]}>
+          <Text style={style.listHeaderText}>You are offline</Text>
         </View>
       );
     }
-  }
 
-  _renderIndicator() {
-    if (this.props.isLoading) {
-      return (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <ActivityIndicator
-            color="#fff"
-            size="large"
-            style={{
-              width: 60,
-              height: 60,
-              backgroundColor: colors.black,
-              borderRadius: 6,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          />
-        </View>
-      );
-    }
-  }
-
-  _renderEmpty() {
     return (
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={[style.listHeader, { backgroundColor: colors.accent }]}>
+        <Text style={style.listHeaderText}>{this.props.title}</Text>
+      </View>
+    );
+  }
+
+  _renderEmpty = () => {
+    return (
+      <View style={style.emptyContainer}>
         <View style={[main.emptyState, { margin: 20 }]}>
           <Text style={main.emptyStateText}>You Are Offline!</Text>
         </View>
@@ -119,18 +65,65 @@ class ListView extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.lightBlue, borderTopColor: colors.accent, borderTopWidth: 2 }}>
+      <View style={style.container}>
+        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <FlatList
           data={this.state.data}
           keyExtractor={this._keyExtractor}
-          ListHeaderComponent={this._renderListHeader.bind(this)}
-          ListEmptyComponent={this._renderEmpty()}
-          renderItem={this._renderItem.bind(this)}
+          ListHeaderComponent={this._renderListHeader}
+          ListEmptyComponent={this._renderEmpty}
+          renderItem={this._renderItem}
         />
-        {this._renderIndicator()}
+        <Loader />
       </View>
     );
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.lightBlue,
+    borderTopColor: colors.accent,
+    borderTopWidth: 2
+  },
+  emptyContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  listHeader: {
+    width,
+    height: 80,
+    paddingLeft: 20,
+    justifyContent: 'center',
+    backgroundColor: colors.red
+  },
+  listHeaderText: {
+    color: colors.white,
+    fontSize: 22,
+    fontWeight: '300'
+  },
+  chevronIcon: {
+    width: 18,
+    height: 18
+  },
+  listName: {
+    fontSize: 18,
+    color: colors.black
+  },
+  listItem: {
+    width,
+    backgroundColor: colors.white,
+    flexDirection: 'row',
+    height: 60,
+    marginBottom: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }
+});
 
 export default ListView;

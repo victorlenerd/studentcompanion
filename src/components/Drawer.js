@@ -9,85 +9,40 @@ import {
   TouchableOpacity,
   Alert,
   Platform,
-  Dimensions,
   Share,
 } from 'react-native';
 
-import { SignOut, GetCurrentUserOffline } from '../ducks/User';
-import Tts from 'react-native-tts';
+import MenuItem from 'components/menuItem';
+import { main, colors } from 'shared/styles';
 
-import { main, colors } from '../shared/styles';
-import { navigator } from '../shared/Navigation';
+import users from 'containers/users';
 
-import { connect } from 'react-redux';
-
-import { ButtonAccent } from './Buttons';
-var { width, height } = Dimensions.get('window');
-
+@users
 class Drawer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: null,
-      name: '',
-      email: '',
-      phoneNumber: '',
-      paid: true,
-    };
-  }
-
-  go(screen) {
-    navigator[screen]();
-  }
-
-  signout() {
+  signout = () => {
+    const { signOut, navigation: { navigate } } = this.props;
     Alert.alert('Are you sure you want to sign out?', 'If you sign out you will lose all your saved courses', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Yes',
-        onPress: () => {
-          this.props.signOut();
+        onPress: async () => {
+          await signOut();
+          navigate('Welcome');
         },
       },
     ]);
   }
 
-  componentDidMount() {
-    this.props
-      .getCurrentUser()
-      .then(user => {
-        this.setState({
-          name: user.name,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          paid: user.paid,
-        });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
-  _renderPaymentButton() {
-    if (!this.state.paid) {
-      return (
-        <View style={{ marginTop: 10 }}>
-          <ButtonAccent text="Activate Your Account" />
-        </View>
-      );
-    }
-  }
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.lightBlue }}>
-        <StatusBar backgroundColor={'#00384D'} barStyle="light-content" />
+        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View
           style={{
             flex: 0.3,
             padding: 20,
             paddingTop: 30,
-            backgroundColor: colors.primary,
+            backgroundColor: colors.brightBlue,
             borderBottomColor: colors.accent,
             borderBottomWidth: 2,
           }}
@@ -106,56 +61,16 @@ class Drawer extends Component {
           >
             <Image resizeMode="contain" source={require('../assets/logo.png')} style={{ height: 50, width: 50 }} />
           </View>
-          <Text style={{ fontSize: 20, color: colors.white }}>{this.state.name}</Text>
-          <Text style={{ fontSize: 15, color: colors.white, marginTop: 5 }}>{this.state.email}</Text>
+          <Text style={{ fontSize: 20, color: colors.white }}>{this.props.currentUser.name}</Text>
+          <Text style={{ fontSize: 15, color: colors.white, marginTop: 5 }}>{this.props.currentUser.email}</Text>
         </View>
         <ScrollView style={{ flex: 0.5, flexDirection: 'column' }}>
           <View style={{ flex: 0.6 }}>
-            <TouchableOpacity
-              style={main.nav}
-              onPress={() => {
-                this.go('home');
-              }}
-            >
-              <Image source={require('../assets/home.png')} style={main.nav_image} />
-              <Text style={this.state.current == 0 ? main.nav_item_active : main.nav_item}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.nav}
-              onPress={() => {
-                this.go('searchCourses');
-              }}
-            >
-              <Image source={require('../assets/search.png')} style={main.nav_image} />
-              <Text style={this.state.current == 0 ? main.nav_item_active : main.nav_item}>Search Courses</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.nav}
-              onPress={() => {
-                this.go('savedCourses');
-              }}
-            >
-              <Image source={require('../assets/open-book-black.png')} style={main.nav_image} />
-              <Text style={this.state.current == 1 ? main.nav_item_active : main.nav_item}>My Courses</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.nav}
-              onPress={() => {
-                this.go('feedback');
-              }}
-            >
-              <Image source={require('../assets/bubble.png')} style={main.nav_image} />
-              <Text style={this.state.current == 1 ? main.nav_item_active : main.nav_item}>Feedback</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.nav}
-              onPress={() => {
-                this.go('photoNotes');
-              }}
-            >
-              <Image source={require('../assets/file-picture.png')} style={main.nav_image} />
-              <Text style={this.state.current == 1 ? main.nav_item_active : main.nav_item}>Upload Photos</Text>
-            </TouchableOpacity>
+            <MenuItem label="Home" path="Home" navigation={this.props.navigation} />
+            <MenuItem label="Search Courses" path="Search" navigation={this.props.navigation} />
+            <MenuItem label="My Courses" path="SavedCourses" navigation={this.props.navigation} />
+            <MenuItem label="Feedback" path="Feedback" navigation={this.props.navigation} />
+            <MenuItem label="Upload Photos" path="UploadPhotos" navigation={this.props.navigation} />
             <TouchableOpacity
               style={main.nav}
               onPress={() => {
@@ -165,49 +80,25 @@ class Drawer extends Component {
                     Platform.OS === 'ios'
                       ? 'https://itunes.apple.com/ng/app/student-companion/id1238513973?mt=8'
                       : 'https://play.google.com/store/apps/details?id=com.courseapp',
-                  content: `Hey, download the StudentCompanion app.`,
+                  content: 'Hey, download the StudentCompanion app.',
                 });
               }}
             >
               <Image source={require('../assets/share2.png')} style={main.nav_image} />
-              <Text style={this.state.current == 1 ? main.nav_item_active : main.nav_item}>Share This App</Text>
+              <Text style={main.nav_item}>Share This App</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
         <TouchableOpacity
           style={main.nav}
-          onPress={() => {
-            this.signout();
-          }}
+          onPress={this.signout}
         >
           <Image source={require('../assets/switch.png')} style={main.nav_image} />
-          <Text style={[this.state.current == -1 ? main.nav_item_active : main.nav_item]}>Log Out</Text>
+          <Text style={main.nav_item}>Log Out</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getCurrentUser: () => {
-      return dispatch(GetCurrentUserOffline());
-    },
-    signOut: () => {
-      dispatch(SignOut()).then(
-        () => {
-          navigator.intro();
-        },
-        err => {
-          Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);
-        }
-      );
-    },
-  };
-};
-
-const mapStateToProps = store => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Drawer);
+export default Drawer;

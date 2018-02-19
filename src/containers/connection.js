@@ -19,6 +19,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = store => {
   return {
     isLoading: store.requestState.status,
+    isConnected: store.isConnectedState.isConnected
   };
 };
 

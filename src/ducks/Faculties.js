@@ -29,11 +29,11 @@ export const SetFaculties = data => {
 
 export const GetFaculties = () => dispatch => new Promise((resolve, reject) => {
   const facultiesRef = app.database().ref('/faculties');
-  dispatch(StartRequest);
+  dispatch(StartRequest());
   facultiesRef.once('value', snapshot => {
     dispatch(SetFaculties(toArray(snapshot.val())));
     resolve(snapshot.val());
-    dispatch(FinishRequest);
+    dispatch(FinishRequest());
   });
 });
 
@@ -44,11 +44,11 @@ export const GetFacultiesByUniversityId = universityId => dispatch => new Promis
     .orderByChild('universityId')
     .equalTo(universityId);
 
-  dispatch(StartRequest);
+  dispatch(StartRequest());
 
   facultiesRef.once('value', snapshot => {
+    dispatch(SetFaculties(toArray(snapshot.val())));
     resolve(toArray(snapshot.val()));
+    dispatch(FinishRequest());
   });
-
-  dispatch(FinishRequest);
 });

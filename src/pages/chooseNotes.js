@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, TextInput, StatusBar, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import notes from 'containers/notes';
 
-import { connect } from 'react-redux';
+import { main, colors } from 'shared/styles';
 
-import { main, colors } from '../shared/styles';
-import store from '../shared/store';
-import { navigator } from '../shared/Navigation';
-
-import { SetCurrentNote } from '../ducks/Notes';
-
-class CourseNotes extends Component {
-  _openNote(note) {
-    store.dispatch(SetCurrentNote(note));
-    navigator.note(this.props, note.title);
+@notes
+class ChooseNotes extends Component {
+  _openNote = note => {
+    const { navigation: { navigate }, setCurrentNote } = this.props;
+    setCurrentNote(note);
+    navigate('Note');
   }
 
   _renderSection() {
-    if (this.props.notes.length > 0) {
+    const { notes } = this.props;
+    if (notes.length > 0) {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
           <ScrollView style={{ flex: 1 }}>
-            {this.props.notes.map((note, index) => {
+            {notes.map((note, index) => {
               return (
                 <TouchableOpacity
                   style={{
@@ -32,7 +30,7 @@ class CourseNotes extends Component {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}
-                  key={index}
+                  key={note.$id}
                   onPress={() => this._openNote(note)}
                 >
                   <Text style={{ color: colors.black, fontSize: 18 }}>{note.title}</Text>
@@ -42,21 +40,21 @@ class CourseNotes extends Component {
           </ScrollView>
         </View>
       );
-    } else {
-      return (
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={[main.emptyState, { margin: 20 }]}>
-            <Text style={main.emptyStateText}>There are no notes available.</Text>
-          </View>
-        </View>
-      );
     }
+
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={[main.emptyState, { margin: 20 }]}>
+          <Text style={main.emptyStateText}>There are no notes available.</Text>
+        </View>
+      </View>
+    );
   }
 
   render() {
     return (
       <View style={main.container}>
-        <StatusBar backgroundColor={'#00384D'} barStyle="light-content" />
+        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View style={[main.content, { flex: 1, padding: 0 }]}>
           <View style={{ flex: 1, backgroundColor: colors.white, flexDirection: 'column', elevation: 2 }}>
             {this._renderSection()}
@@ -67,4 +65,4 @@ class CourseNotes extends Component {
   }
 }
 
-export default CourseNotes;
+export default ChooseNotes;

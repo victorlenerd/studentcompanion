@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, WebView, ScrollView, Platform } from 'react-native';
+import { View, WebView, Platform } from 'react-native';
 
 import { connect } from 'react-redux';
-import { main, colors } from '../shared/styles';
+import { main, colors } from 'shared/styles';
 
 class Questions extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Questions extends Component {
   }
 
   componentDidMount() {
-    let Bodify = body => {
+    const Bodify = body => {
       return JSON.parse('' + body + '', (key, value) => {
         if (typeof value === 'string') {
           return unescape(value);
@@ -71,7 +71,7 @@ class Questions extends Component {
           injectedJavaScript={`window.ContentBody(${JSON.stringify(this.props.questions)})`}
           mediaPlaybackRequiresUserAction={true}
           source={
-            Platform.OS == 'android'
+            Platform.OS === 'android'
               ? { uri: 'file:///android_asset/www/index.html' }
               : require('../assets/www/index.html')
           }
