@@ -10,8 +10,8 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     setPapers: papers => dispatch(SetPapers(papers)),
-    getPapers: () => dispatch(GetPapers()),
-    getPapersOffline: courseId => dispatch(GetPapersOffline()),
+    getPapers: courseId => dispatch(GetPapers(courseId)),
+    getPapersOffline: courseId => dispatch(GetPapersOffline(courseId)),
     savePapersOffline: (courseId, papers) => dispatch(SavePapersOffline(courseId, papers)),
     setCurrentPaper: paper => dispatch(SetCurrentPaper(paper))
   };

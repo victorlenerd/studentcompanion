@@ -8,33 +8,25 @@ import {
   Platform,
   Slider,
   Alert,
+  StyleSheet,
   AppState,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 
-import { connect } from 'react-redux';
-
-import { navigator } from '../shared/Navigation';
-import { main, colors } from '../shared/styles';
-
-import { StartRequest, FinishRequest } from '../ducks/Request';
-import { GetComments } from '../ducks/Comments';
 import Tts from 'react-native-tts';
-
-var { height, width } = Dimensions.get('window');
-var DeviceInfo = require('react-native-device-info');
-
+import DeviceInfo from 'react-native-device-info';
 import PushNotification from 'react-native-push-notification';
+import { main, colors } from 'shared/styles';
 
-let supportsQuill = () => {
-  let deviceType = DeviceInfo.getSystemName();
-  let deviceVersion = DeviceInfo.getSystemVersion();
+const { height, width } = Dimensions.get('window');
 
-  return (deviceType == 'iOS' && parseFloat(deviceVersion) >= 9.0) ||
-    (deviceType == 'Android' && parseFloat(deviceVersion) >= 5.1)
-    ? true
-    : false;
+const supportsQuill = () => {
+  const deviceType = DeviceInfo.getSystemName();
+  const deviceVersion = DeviceInfo.getSystemVersion();
+
+  return (deviceType === 'iOS' && parseFloat(deviceVersion) >= 9.0) ||
+    (deviceType === 'Android' && parseFloat(deviceVersion) >= 5.1);
 };
 
 let notificationInterval;
@@ -43,17 +35,47 @@ class Note extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      note: {},
       playing: false,
       sentences: [],
       comments: [],
       usingWebView: false,
       light: true,
-      startIndex: 0,
-      endIndex: 0,
       currentSentence: 0,
       appState: AppState.currentState,
     };
+  }
+
+  async componentWillUnmount() {
+    const { getComments, currentNote: { $id } } = this.props;
+
+    this.setState({
+      playing: false,
+      currentSentence: 0,
+      usingWebView: supportsQuill(),
+      sentences: this.props.currentNote.text.split('.'),
+    });
+
+    AppState.removeEventListener('change', this._handleAppStateChange);
+
+    Tts.addEventListener('tts-finish', event => {
+      if (this.state.currentSentence < this.state.sentences.length - 1 && this.state.playing) {
+        this.next();
+      } else {
+        this.setState({
+          playing: false,
+          currentSentence: 0,
+        });
+      }
+    });
+
+    try {
+      const comments = await getComments($id);
+      this.setState({ comments });
+    } catch (err) {
+      Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
+    }
+
+    AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   play() {
@@ -62,14 +84,13 @@ class Note extends Component {
       Tts.stop();
       if (this.state.usingWebView) this.webView.postMessage('pause.mode');
     } else {
-      let startIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence]);
-      let endIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence + 1]);
+      const startIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence]);
+      const endIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence + 1]);
 
       this.setState({ playing: true });
 
       Tts.speak(this.state.sentences[this.state.currentSentence]);
-      if (this.state.usingWebView)
-        this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
+      if (this.state.usingWebView) this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
       if (this.state.usingWebView) this.webView.postMessage('play.mode');
     }
   }
@@ -77,74 +98,24 @@ class Note extends Component {
   light() {
     if (this.state.light) {
       this.setState({ light: false });
-      if (this.state.usingWebView) this.webView.postMessage(`dark.mode`);
+      if (this.state.usingWebView) this.webView.postMessage('dark.mode');
     } else {
       this.setState({ light: true });
-      if (this.state.usingWebView) this.webView.postMessage(`light.mode`);
+      if (this.state.usingWebView) this.webView.postMessage('light.mode');
     }
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      playing: false,
-      startIndex: 0,
-      currentSentence: 0,
-      usingWebView: supportsQuill(),
-    });
-  }
-
-  componentDidMount() {
-    this.setState({
-      sentences: this.props.currentNote.text.split('.'),
-      usingWebView: supportsQuill(),
-    });
-
-    Tts.addEventListener('tts-finish', event => {
-      if (this.state.currentSentence < this.state.sentences.length - 1 && this.state.playing) {
-        this.next();
-      } else {
-        this.setState({
-          playing: false,
-          startIndex: 0,
-          endIndex: 0,
-          currentSentence: 0,
-        });
-      }
-    });
-
-    this.props
-      .getComments(this.props.currentNote.$id)
-      .then(comments => {
-        this.setState({ comments });
-        this.props.finishRequest();
-      })
-      .catch(err => {
-        Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
-        this.props.finishRequest();
-      });
-
-    AppState.addEventListener('change', this._handleAppStateChange);
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   _handleAppStateChange = nextAppState => {
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       if (notificationInterval !== undefined) clearInterval(notificationInterval);
     } else {
-      var messages = [
+      const messages = [
         'No shortcuts. Work for it.',
-        'Go Fucking Read. Your Dreams Are Dying.',
         'Difficult roads often lead to beautiful destinations.',
-        "KNOCK KNOCK. WHO'S THERE? FUCK YOU. READ",
         "Don't just dream about success work for it.",
-        'YOU LOSER. FUCKING READ',
       ];
 
-      var randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
       PushNotification.localNotification({
         title: 'Student Companion',
@@ -155,24 +126,6 @@ class Note extends Component {
     this.setState({ appState: nextAppState });
   };
 
-  onNavigatorEvent(event) {
-    if (event.id === 'menu' && !this.state.drawerOpen) {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'open',
-      });
-      this.setState({ drawerOpen: true });
-    } else {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'closed',
-      });
-      this.setState({ drawerOpen: false });
-    }
-  }
-
   _renderPlayButton() {
     if (this.state.playing) {
       return (
@@ -180,13 +133,13 @@ class Note extends Component {
           <Image source={require('../assets/pause.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
         </View>
       );
-    } else {
-      return (
-        <View>
-          <Image source={require('../assets/play.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-        </View>
-      );
     }
+
+    return (
+      <View>
+        <Image source={require('../assets/play.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
+      </View>
+    );
   }
 
   _renderNightButton() {
@@ -196,13 +149,13 @@ class Note extends Component {
           <Image source={require('../assets/moon.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
         </View>
       );
-    } else {
-      return (
-        <View>
-          <Image source={require('../assets/sun.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-        </View>
-      );
     }
+
+    return (
+      <View>
+        <Image source={require('../assets/sun.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
+      </View>
+    );
   }
 
   _renderReaderView() {
@@ -237,7 +190,7 @@ class Note extends Component {
             injectedJavaScript={`window.ContentBody(${JSON.stringify(this.props.currentNote)})`}
             mediaPlaybackRequiresUserAction={true}
             source={
-              Platform.OS == 'android'
+              Platform.OS === 'android'
                 ? { uri: 'file:///android_asset/www/note.html' }
                 : require('../assets/www/note.html')
             }
@@ -247,91 +200,76 @@ class Note extends Component {
     }
   }
 
-  rateChange(v) {
+  rateChange = v => {
     if (this.state.playing) this.play();
     Tts.setDefaultRate(v);
   }
 
-  next() {
+  next = () => {
     if (this.state.currentSentence < this.state.sentences.length - 1 && this.state.playing) {
       Tts.stop();
-      let currentSentence = this.state.currentSentence + 1;
-      let startIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence]);
-      let endIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence + 1]);
+      const currentSentence = this.state.currentSentence + 1;
+      const startIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence]);
+      const endIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence + 1]);
 
       this.setState({ currentSentence });
 
       Tts.speak(this.state.sentences[currentSentence]);
-      if (this.state.usingWebView)
-        this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
+      if (this.state.usingWebView) this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
     }
   }
 
-  prev() {
+  prev = () => {
     if (
       this.state.currentSentence >= 1 &&
       this.state.currentSentence < this.state.sentences.length - 1 &&
       this.state.playing
     ) {
       Tts.stop();
-      let currentSentence = this.state.currentSentence - 1;
-      let startIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence]);
-      let endIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence + 1]);
+      const currentSentence = this.state.currentSentence - 1;
+      const startIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence]);
+      const endIndex = this.props.currentNote.text.indexOf(this.state.sentences[currentSentence + 1]);
 
       this.setState({ currentSentence });
 
       Tts.speak(this.state.sentences[currentSentence]);
-      if (this.state.usingWebView)
-        this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
+      if (this.state.usingWebView) this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
     }
   }
 
-  summarised() {
-    navigator.summarised(this.props, this.props.currentNote.title, this.props.currentNote.text);
+  comment = () => {
+    this.props.navigation.navigate('Comments');
   }
 
-  comment() {
-    navigator.comments(this.props);
-  }
-
-  renderCommentsCount() {
-    let kDNum = num => {
-      var numStr = String(num);
+  renderCommentsCount = () => {
+    const kDNum = num => {
+      const numStr = String(num);
 
       if (num > 999 && num < 9999) {
-        return numStr.substring(0, 1).concat('K');
-      } else if (num > 9999 && num < 99999) {
-        return numStr.substring(0, 2).concat('K');
-      } else if (num > 99999) {
-        return numStr.substring(0, 3).concat('K');
-      } else {
-        return num;
+        numStr.substring(0, 1).concat('K');
       }
+
+      if (num > 9999 && num < 99999) {
+        numStr.substring(0, 2).concat('K');
+      }
+
+      if (num > 99999) {
+        numStr.substring(0, 3).concat('K');
+      }
+
+      return num;
     };
 
     if (this.state.comments.length > 0) {
       return (
         <View
-          style={{
-            width: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 25,
-            borderRadius: 12.5,
-            backgroundColor: '#e74c3c',
-            zIndex: 100,
-            position: 'absolute',
-            top: -5,
-            right: -10,
-          }}
+          style={style.commentCountBubble}
         >
           <Text style={{ fontSize: 8, color: colors.white }}>{kDNum(this.state.comments.length)}</Text>
         </View>
       );
     }
   }
-
-  share() {}
 
   render() {
     return (
@@ -345,75 +283,34 @@ class Note extends Component {
           },
         ]}
       >
-        <View
-          style={{
-            width: width,
-            backgroundColor: colors.black,
-            paddingRight: 20,
-            paddingLeft: 20,
-            paddingTop: 20,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            height: 80,
-          }}
-        >
+        <View style={style.topAction}>
           <Text style={{ fontSize: 16, color: colors.white }}>Voice Rate</Text>
           <Slider
             ref={r => (this.slider = r)}
             style={{ width: width - 40 }}
             value={0.5}
-            onValueChange={this.rateChange.bind(this)}
+            onValueChange={this.rateChange}
           />
         </View>
         {this._renderReaderView()}
         <View
-          style={{
-            width,
-            height: 60,
-            flexDirection: 'row',
-            paddingLeft: 20,
-            paddingRight: 20,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+          style={style.bttnsRow}
         >
           <TouchableOpacity
-            style={{
-              width: 50,
-              height: 50,
-              backgroundColor: colors.gray,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 25,
-            }}
-            onPress={this.light.bind(this)}
+            style={style.bttns}
+            onPress={this.light}
           >
             {this._renderNightButton()}
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              width: 50,
-              height: 50,
-              backgroundColor: colors.black,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 25,
-            }}
-            onPress={this.play.bind(this)}
+            style={style.bttns}
+            onPress={this.play}
           >
             {this._renderPlayButton()}
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              width: 50,
-              height: 50,
-              backgroundColor: colors.black,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 25,
-            }}
-            onPress={this.comment.bind(this)}
+            style={style.bttns}
+            onPress={this.comment}
           >
             <View>
               {this.renderCommentsCount()}
@@ -430,25 +327,47 @@ class Note extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    startRequest: () => {
-      dispatch(StartRequest());
-    },
-    finishRequest: () => {
-      dispatch(FinishRequest());
-    },
-    getComments: noteId => {
-      return dispatch(GetComments('note', noteId));
-    },
-  };
-};
+const style = StyleSheet.create({
+  topAction: {
+    width: width,
+    backgroundColor: colors.black,
+    paddingRight: 20,
+    paddingLeft: 20,
+    paddingTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    height: 80,
+  },
+  bttnsRow: {
+    width,
+    height: 60,
+    flexDirection: 'row',
+    paddingLeft: 20,
+    paddingRight: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bttns: {
+    width: 50,
+    height: 50,
+    backgroundColor: colors.black,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+  },
+  commentCountBubble: {
+    width: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 25,
+    borderRadius: 12.5,
+    backgroundColor: '#e74c3c',
+    zIndex: 100,
+    position: 'absolute',
+    top: -5,
+    right: -10,
+  }
+});
 
-const mapStateToProps = store => {
-  return {
-    currentNote: store.notesState.currentNote,
-    currentCourse: store.courseState.currentCourse,
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Note);
+export default Note;

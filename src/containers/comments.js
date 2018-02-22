@@ -9,8 +9,8 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getComments: () => dispatch(GetComments()),
-    postComments: comments => dispatch(PostComments(comments))
+    getComments: noteId => dispatch(GetComments('note', noteId)),
+    sendComment: comments => dispatch(PostComments(comments))
   };
 };
 

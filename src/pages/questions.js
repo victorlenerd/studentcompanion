@@ -1,60 +1,33 @@
 import React, { Component } from 'react';
 import { View, WebView, Platform } from 'react-native';
-
-import { connect } from 'react-redux';
 import { main, colors } from 'shared/styles';
 
+import questions from 'container/questions';
+
+@questions
 class Questions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: 0,
-      questions: [],
-    };
-  }
-
   componentDidMount() {
-    const Bodify = body => {
-      return JSON.parse('' + body + '', (key, value) => {
-        if (typeof value === 'string') {
-          return unescape(value);
-        }
-        return value;
-      });
-    };
+    // const Bodify = body => {
+    //   return JSON.parse('' + body + '', (key, value) => {
+    //     if (typeof value === 'string') {
+    //       return unescape(value);
+    //     }
+    //     return value;
+    //   });
+    // };
 
-    this.setState({
-      questions: this.props.questions.map((question, i) => {
-        question.question = Bodify(JSON.stringify(question.question));
+    // this.setState({
+    //   questions: this.props.questions.map((question, i) => {
+    //     question.question = Bodify(JSON.stringify(question.question));
 
-        question.answers = question.answers.map((answer, i) => {
-          answer.answer = Bodify(JSON.stringify(answer.answer));
-          return answer;
-        });
+    //     question.answers = question.answers.map((answer, i) => {
+    //       answer.answer = Bodify(JSON.stringify(answer.answer));
+    //       return answer;
+    //     });
 
-        return question;
-      }),
-    });
-
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-  }
-
-  onNavigatorEvent(event) {
-    if (event.id === 'menu' && !this.state.drawerOpen) {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'open',
-      });
-      this.setState({ drawerOpen: true });
-    } else {
-      this.props.navigator.toggleDrawer({
-        side: 'left',
-        animated: true,
-        to: 'closed',
-      });
-      this.setState({ drawerOpen: false });
-    }
+    //     return question;
+    //   }),
+    // });
   }
 
   render() {
@@ -81,12 +54,4 @@ class Questions extends Component {
   }
 }
 
-const mapStateToProps = store => {
-  return {
-    currentPaper: store.paperState.currentPaper,
-    currentCourse: store.courseState.currentCourse,
-    questions: store.questionsState.questions,
-  };
-};
-
-export default connect(mapStateToProps)(Questions);
+export default Questions;

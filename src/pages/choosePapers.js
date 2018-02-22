@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+
 import papers from 'containers/papers';
+import questions from 'containers/questions';
 
 import { main, colors } from 'shared/styles';
 
 @papers
+@questions
 class ChoosePapers extends Component {
   _openPaper = async paper => {
     const { navigation: { navigate }, setCurrentPaper, getQuestions, getQuestionsOffline } = this.props;

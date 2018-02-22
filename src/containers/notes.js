@@ -10,8 +10,8 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     setNotes: notes => dispatch(SetNotes(notes)),
-    getNotes: () => dispatch(GetNotes()),
-    getNotesOffline: () => dispatch(GetNotesOffline()),
+    getNotes: courseId => dispatch(GetNotes(courseId)),
+    getNotesOffline: courseId => dispatch(GetNotesOffline(courseId)),
     saveNotesOffline: (courseId, notes) => dispatch(SaveNotesOffline(courseId, notes)),
     setCurrentNote: note => dispatch(SetCurrentNote(note))
   };

@@ -24,9 +24,9 @@ class ChooseCourse extends Component {
     }
   }
 
-  _openCourse = ({ $id }) => {
+  _openCourse = course => {
     const { navigation: { navigate, state: { params: { facultyId, departmentId, universityId, levelId } } } } = this.props;
-    navigate('Course', { courseId: $id, departmentId, facultyId, universityId, levelId });
+    navigate('CourseHome', { course, departmentId, facultyId, universityId, levelId });
   }
 
   render() {

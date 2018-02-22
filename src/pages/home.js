@@ -77,7 +77,7 @@ class Home extends Component {
               source={require('../assets/open-book-black-accent.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>My Course</Text>
+            <Text style={style.homeTitle}>Library</Text>
             <Text style={style.homeSubtitle}>
               Find resources you have saved on you phone.
             </Text>
