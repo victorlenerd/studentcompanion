@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, WebView, Platform } from 'react-native';
 import { main, colors } from 'shared/styles';
 
-import questions from 'container/questions';
+import questions from 'containers/questions';
 
 @questions
 class Questions extends Component {

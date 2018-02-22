@@ -19,6 +19,9 @@ import DeviceInfo from 'react-native-device-info';
 import PushNotification from 'react-native-push-notification';
 import { main, colors } from 'shared/styles';
 
+import notes from 'containers/notes';
+import comments from 'containers/comments';
+
 const { height, width } = Dimensions.get('window');
 
 const supportsQuill = () => {
@@ -31,6 +34,9 @@ const supportsQuill = () => {
 
 let notificationInterval;
 
+
+@notes
+@comments
 class Note extends Component {
   constructor(props) {
     super(props);

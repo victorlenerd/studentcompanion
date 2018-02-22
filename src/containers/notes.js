@@ -3,7 +3,8 @@ import { GetNotes, SetNotes, GetNotesOffline, SaveNotesOffline, SetCurrentNote }
 
 const mapStateToProps = store => {
   return {
-    notes: store.notesState.notes
+    notes: store.notesState.notes,
+    currentNote: store.notesState.currentNote
   };
 };
 
