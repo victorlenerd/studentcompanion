@@ -9,7 +9,7 @@ const SET_CURRENT_QUESTION = 'SET_CURRENT_QUESTION';
 
 const initialState = {
   currentQuestion: {},
-  questions: [],
+  questions: {},
 };
 
 export const SetQuestions = questions => {
@@ -19,7 +19,7 @@ export const SetQuestions = questions => {
   };
 };
 
-export const GetQuestions = paperId => dispatch => new Promise((resolve, reject) => {
+export const GetQuestions = paperId => (dispatch, getState) => new Promise((resolve, reject) => {
   const questionsRef = app
     .database()
     .ref('/questions')
@@ -35,7 +35,7 @@ export const GetQuestions = paperId => dispatch => new Promise((resolve, reject)
   });
 });
 
-export const GetQuestionsOffline = (courseId, paperId) => dispatch => new Promise(async (resolve, reject) => {
+export const GetQuestionsOffline = (courseId, paperId) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
     const saved_questions = await AsyncStorage.getItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`);
@@ -54,15 +54,15 @@ export const GetQuestionsOffline = (courseId, paperId) => dispatch => new Promis
 });
 
 export const SaveQuestionsOffline = courseId => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
   const questionsRef = app
     .database()
     .ref('/questions')
     .equalTo(courseId)
     .orderByChild('courseId');
 
-  dispatch(StartRequest());
   questionsRef.once('value', async snapshot => {
-    const questions = JSON.stringify(toArray(snapshot.val()));
+    const questions = JSON.stringify(toArray(snapshot.val())) || '';
     try {
       await AsyncStorage.setItem(`@UPQ:OFFLINE_QUESTIONS:ID_${courseId}`, questions);
       resolve(questions);

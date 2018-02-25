@@ -39,7 +39,7 @@ class Drawer extends Component {
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View
           style={{
-            flex: 0.3,
+            flex: 0.1,
             padding: 20,
             paddingTop: 30,
             backgroundColor: colors.brightBlue,
@@ -47,28 +47,16 @@ class Drawer extends Component {
             borderBottomWidth: 2,
           }}
         >
-          <View
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 15,
-              elevation: 5,
-              shadowColor: '#000000',
-              marginBottom: 15,
-              shadowOffset: { width: 2, height: 3 },
-              shadowOpacity: 0.3,
-            }}
-          >
-            <Image resizeMode="contain" source={require('../assets/logo.png')} style={{ height: 50, width: 50 }} />
-          </View>
           <Text style={{ fontSize: 20, color: colors.white }}>{this.props.currentUser.name}</Text>
           <Text style={{ fontSize: 15, color: colors.white, marginTop: 5 }}>{this.props.currentUser.email}</Text>
         </View>
-        <ScrollView style={{ flex: 0.5, flexDirection: 'column' }}>
+        <ScrollView style={{ flex: 0.7, flexDirection: 'column' }}>
           <View style={{ flex: 0.6 }}>
             <MenuItem label="Home" path="Home" navigation={this.props.navigation} />
             <MenuItem label="Search" path="Search" navigation={this.props.navigation} />
+            <MenuItem label="Browse" path="Browse" navigation={this.props.navigation} />
             <MenuItem label="Library" path="SavedCourses" navigation={this.props.navigation} />
+            <MenuItem label="Extract Text" path="Scanner" navigation={this.props.navigation} />
             <MenuItem label="Feedback" path="Feedback" navigation={this.props.navigation} />
             <MenuItem label="Upload Photos" path="UploadPhotos" navigation={this.props.navigation} />
             <TouchableOpacity

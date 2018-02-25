@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SetDepartments, GetDepartments, GetDepartmentsByFacultyId } from 'ducks/departments';
+import { GetDepartmentsByFacultyId } from 'ducks/departments';
 
 const mapStateToProps = store => {
   return {
@@ -9,8 +9,6 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setDepartments: data => dispatch(SetDepartments(data)),
-    getDepartments: () => dispatch(GetDepartments()),
     getDepartmentsByFacultyId: facultyId => dispatch(GetDepartmentsByFacultyId(facultyId))
   };
 };

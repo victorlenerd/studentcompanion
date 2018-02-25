@@ -4,15 +4,17 @@ import { StartRequest, FinishRequest } from './request';
 const LEVELS = 'LEVELS';
 
 const initialState = {
-  levels: [],
+  levels: {},
 };
 
 export const LevelsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LEVELS:
+    case LEVELS: {
+      const { departmentId, data } = action;
       return Object.assign({}, state, {
-        levels: action.data,
+        levels: { [departmentId]: data },
       });
+    }
     default:
       break;
   }
@@ -20,24 +22,19 @@ export const LevelsReducer = (state = initialState, action) => {
   return state;
 };
 
-export const SetLevels = data => {
+export const SetLevels = (departmentId, data) => {
   return {
     type: LEVELS,
+    departmentId,
     data,
   };
 };
 
-export const GetLevels = () => dispatch => new Promise((resolve, reject) => {
-  const levelsRef = app.database().ref('/levels');
-  dispatch(StartRequest());
-  levelsRef.once('value', snapshot => {
-    dispatch(SetLevels(toArray(snapshot.val())));
-    resolve(snapshot.val());
-    dispatch(FinishRequest());
-  });
-});
+export const GetLevelsByDepartmentId = departmentId => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { levelsState: { levels } } = getState();
+  const cached = levels[departmentId];
+  if (cached) return resolve(cached);
 
-export const GetLevelsByDepartmentId = departmentId => dispatch => new Promise((resolve, reject) => {
   const levelsRef = app
     .database()
     .ref('/levels')
@@ -48,7 +45,7 @@ export const GetLevelsByDepartmentId = departmentId => dispatch => new Promise((
 
   levelsRef.once('value', snapshot => {
     resolve(toArray(snapshot.val()));
-    dispatch(SetLevels(toArray(snapshot.val())));
+    dispatch(SetLevels(departmentId, toArray(snapshot.val())));
     dispatch(FinishRequest());
   });
 });

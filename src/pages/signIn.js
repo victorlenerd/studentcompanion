@@ -23,7 +23,7 @@ class SignIn extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, validEmail, navigation: { navigate } } = nextProps;
-    if (validEmail(currentUser.email)) navigate('Courses');
+    if (validEmail(currentUser.email)) navigate('Home');
   }
 
   signIn = async () => {

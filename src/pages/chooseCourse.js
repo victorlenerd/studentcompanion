@@ -17,15 +17,16 @@ class ChooseCourse extends Component {
     const { getCoursesByOtherId, navigation: { state: { params: { levelId } } } } = this.props;
 
     try {
-      const courses = await getCoursesByOtherId('levelId', levelId);
-      this.setState({ courses });
+      const coursesById = await getCoursesByOtherId('levelId', levelId);
+      this.setState({ courses: coursesById });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
   }
 
   _openCourse = course => {
-    const { navigation: { navigate, state: { params: { facultyId, departmentId, universityId, levelId } } } } = this.props;
+    const { setCurrentCourse, navigation: { navigate, state: { params: { facultyId, departmentId, universityId, levelId } } } } = this.props;
+    setCurrentCourse(course);
     navigate('CourseHome', { course, departmentId, facultyId, universityId, levelId });
   }
 

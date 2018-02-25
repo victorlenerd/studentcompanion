@@ -4,15 +4,17 @@ import { StartRequest, FinishRequest } from './request';
 const DEPARTMENTS = 'DEPARTMENTS';
 
 const initialState = {
-  departments: [],
+  departments: {},
 };
 
 export const DepartmentsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case DEPARTMENTS:
+    case DEPARTMENTS: {
+      const { facultyId, data } = action;
       return Object.assign({}, state, {
-        departments: action.data,
+        departments: { [facultyId]: data },
       });
+    }
     default:
       break;
   }
@@ -20,24 +22,19 @@ export const DepartmentsReducer = (state = initialState, action) => {
   return state;
 };
 
-export const SetDepartments = data => {
+export const SetDepartments = (facultyId, data) => {
   return {
     type: DEPARTMENTS,
-    data,
+    facultyId,
+    data
   };
 };
 
-export const GetDepartments = () => dispatch => new Promise((resolve, reject) => {
-  const departmentsRef = app.database().ref('/departments');
-  dispatch(StartRequest());
-  departmentsRef.once('value', snapshot => {
-    dispatch(SetDepartments(toArray(snapshot.val())));
-    resolve(snapshot.val());
-    dispatch(FinishRequest());
-  });
-});
+export const GetDepartmentsByFacultyId = facultyId => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { departmentsState: { departments } } = getState();
+  const cached = departments[facultyId];
+  if (cached) return resolve(cached);
 
-export const GetDepartmentsByFacultyId = facultyId => dispatch => new Promise((resolve, reject) => {
   dispatch(StartRequest());
   const departmentsRef = app
     .database()
@@ -47,7 +44,7 @@ export const GetDepartmentsByFacultyId = facultyId => dispatch => new Promise((r
 
   departmentsRef.once('value', snapshot => {
     resolve(toArray(snapshot.val()));
-    dispatch(SetDepartments(toArray(snapshot.val())));
+    dispatch(SetDepartments(facultyId, toArray(snapshot.val())));
     dispatch(FinishRequest());
   });
 });

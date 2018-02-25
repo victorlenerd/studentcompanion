@@ -17,7 +17,7 @@ class ActivateMultipleDevice extends Component {
   }
 
   signout = async () => {
-    const { signOut, navigate } = this.props;
+    const { signOut, navigation: { navigate } } = this.props;
     try {
       await signOut();
       navigate('Intro');
@@ -27,9 +27,9 @@ class ActivateMultipleDevice extends Component {
   }
 
   sendActivationCode = async () => {
-    const { sendActivationCode, currentUser: { email } } = this.props;
+    const { sendDeviceActivationCode, currentUser: { email, $id } } = this.props;
     try {
-      await sendActivationCode(email);
+      await sendDeviceActivationCode(email, $id);
       this.setState({ codeSent: true });
     } catch (err) {
       Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);

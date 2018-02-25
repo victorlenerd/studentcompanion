@@ -11,10 +11,12 @@ import Loader from 'components/loader';
 import notes from 'containers/notes';
 import papers from 'containers/papers';
 import courses from 'containers/courses';
+import questions from 'containers/questions';
 
 @papers
 @notes
 @courses
+@questions
 class CourseHome extends Component {
   state = {
     notes: [],
@@ -28,17 +30,14 @@ class CourseHome extends Component {
     const { $id } = course;
     const notes = await getNotes($id);
     const papers = await getPapers($id);
+    console.log('PAPERS', papers);
+    const courseInLibrary = await this.inLibrary($id);
 
-    if (this.inLibrary($id)) {
+    if (courseInLibrary) {
       return navigate('Course', { course });
     }
 
     this.setState({ canAddToLibrary: true, notes, papers });
-  }
-
-  addCourseToLibrary = async () => {
-    const { navigation: { state: { params: { course: { $id } } } } } = this.props;
-    this.saveCourse();
   }
 
   saveCourse = async () => {
@@ -59,8 +58,8 @@ class CourseHome extends Component {
 
   inLibrary = async $id => {
     const { getCoursesOffline } = this.props;
-    const courses = await getCoursesOffline();
-    const match = filter(courses, course => {
+    const offlineCourses = await getCoursesOffline();
+    const match = filter(offlineCourses, course => {
       if (course.$id === $id) return course;
     });
 
@@ -80,9 +79,7 @@ class CourseHome extends Component {
           <Text style={style.val}>{this.state.notes.length}</Text>
           <Text style={style.label}>Number Of Past Questions</Text>
           <Text style={style.val}>{this.state.papers.length}</Text>
-          <Text style={style.label}>Number Of Photos</Text>
-          <Text style={style.val}>{this.state.photos.length}</Text>
-          {this.state.canAddToLibrary && <Button text="Add To Library" onPress={this.addCourseToLibrary} />}
+          {this.state.canAddToLibrary && <Button text="Add To Library" onPress={this.saveCourse} />}
         </View>
         <Loader />
       </View>

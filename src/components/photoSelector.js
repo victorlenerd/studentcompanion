@@ -21,7 +21,7 @@ class PhotoSelector extends Component {
       const images = await ImagePicker.openPicker({ multiple: true, includeBase64: true });
       this.setState({ images });
     } catch (err) {
-      Alert.alert(err, err.message, [{ text: 'Cancel', style: 'cancel' }]);
+      // Do nothing
     }
   };
 

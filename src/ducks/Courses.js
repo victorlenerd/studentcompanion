@@ -1,43 +1,25 @@
 import { AsyncStorage } from 'react-native';
 
-import find from 'lodash/find';
+import filter from 'lodash/filter';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
 
 const COURSES = 'COURSES';
 const SET_CURRENT_COURSE = 'SET_CURRENT_COURSE';
+const SAVED_COURSES = 'SAVED_COURSES';
 
 const initialState = {
   currentCourse: {},
-  courses: [],
+  coursesById: {},
+  library: []
 };
 
-export const GetCourses = () => dispatch => new Promise((resolve, reject) => {
-  dispatch(StartRequest());
-  const coursesRef = app.database().ref('/courses');
-  coursesRef.once('value', snapshot => {
-    dispatch(SetCourses(toArray(snapshot.val())));
-    resolve();
-    dispatch(FinishRequest());
-  });
-});
 
-export const GetCoursesByDepartmentId = departmentId => dispatch => new Promise((resolve, reject) => {
-  const coursesRef = app
-    .database()
-    .ref('/courses')
-    .orderByChild('departmentId')
-    .equalTo(departmentId);
+export const GetCoursesByOtherId = (idName, dbId) => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { courseState: { coursesById } } = getState();
+  const cached = coursesById[dbId];
+  if (cached) return resolve(cached);
 
-  dispatch(StartRequest());
-
-  coursesRef.once('value', snapshot => {
-    resolve(toArray(snapshot.val()));
-    dispatch(FinishRequest());
-  });
-});
-
-export const GetCoursesByOtherId = (idName, dbId) => dispatch => new Promise((resolve, reject) => {
   dispatch(StartRequest());
   const coursesRef = app
     .database()
@@ -46,16 +28,22 @@ export const GetCoursesByOtherId = (idName, dbId) => dispatch => new Promise((re
     .equalTo(dbId);
 
   coursesRef.once('value', snapshot => {
-    resolve(toArray(snapshot.val()));
+    const courses = toArray(snapshot.val());
+    dispatch(SetCourses(dbId, courses));
+    resolve(courses);
     dispatch(FinishRequest());
   });
 });
 
-export const GetCoursesOffline = () => dispatch => new Promise(async (resolve, reject) => {
+export const GetCoursesOffline = () => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  const { courseState: { library } } = getState();
+  if (library.length > 0) return resolve(library);
+
   dispatch(StartRequest());
   try {
     const saved_courses = await AsyncStorage.getItem('@UPQ:OFFLINE_COURSES');
     if (saved_courses !== null) {
+      dispatch(SetLibrary(JSON.parse(saved_courses)));
       resolve(JSON.parse(saved_courses));
     } else {
       resolve([]);
@@ -67,31 +55,42 @@ export const GetCoursesOffline = () => dispatch => new Promise(async (resolve, r
   dispatch(FinishRequest());
 });
 
-export const SaveCourseOffline = course => dispatch => new Promise((resolve, reject) => {
+export const SaveCourseOffline = course => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
-  dispatch(GetCoursesOffline()).then(async courses => {
-    const match = find(courses, (c, index) => (c.$id === course.$id));
-
-    if (match.length < 1) {
-      courses.push(course);
-    } else {
-      courses[Object.keys(course)[0]] = course;
-    }
-
-    try {
-      await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(courses));
-      resolve(course);
-    } catch (err) {
-      reject(err.message);
-    }
-
-    dispatch(FinishRequest());
+  const courses = await dispatch(GetCoursesOffline());
+  const match = filter(courses, c => {
+    if (c.$id === course.$id) return course;
   });
+
+  if (match.length < 1) {
+    courses.push(course);
+  } else {
+    courses[Object.keys(course)[0]] = course;
+  }
+
+  dispatch(SetLibrary(courses));
+
+  try {
+    await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(courses));
+    resolve(course);
+  } catch (err) {
+    reject(err.message);
+  }
+
+  dispatch(FinishRequest());
 });
 
-export const SetCourses = courses => {
+export const SetCourses = (id, courses) => {
   return {
     type: COURSES,
+    typeId: id,
+    courses,
+  };
+};
+
+export const SetLibrary = courses => {
+  return {
+    type: SAVED_COURSES,
     courses,
   };
 };
@@ -99,15 +98,21 @@ export const SetCourses = courses => {
 export const SetCurrentCourse = course => {
   return {
     type: SET_CURRENT_COURSE,
-    course,
+    course
   };
 };
 
 export const CourseReducer = (state = initialState, action) => {
   switch (action.type) {
-    case COURSES:
+    case COURSES: {
+      const { typeId, courses } = action;
       return Object.assign({}, state, {
-        courses: action.courses,
+        coursesById: { [typeId]: courses },
+      });
+    }
+    case SAVED_COURSES:
+      return Object.assign({}, state, {
+        library: action.courses,
       });
     case SET_CURRENT_COURSE:
       return Object.assign({}, state, {

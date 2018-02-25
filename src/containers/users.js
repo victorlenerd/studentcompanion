@@ -9,7 +9,7 @@ const mapDispatchToProps = dispatch => {
     setAcademicInfo: (id, data) => dispatch(SetAcademicInfo(id, data)),
     getCurrentUserOffline: () => dispatch(GetCurrentUserOffline()),
     deleteCurrentUser: () => dispatch(DeleteCurrentUser()),
-    sendDeviceActivationCode: email => dispatch(SendDeviceActivationCode(email)),
+    sendDeviceActivationCode: (email, $id) => dispatch(SendDeviceActivationCode(email, $id)),
     sendFeedback: (userId, message) => dispatch(SendFeedback(userId, message)),
     signOut: () => dispatch(SignOut())
   };

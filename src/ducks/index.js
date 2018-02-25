@@ -12,6 +12,8 @@ import { NotesReducer } from './notes';
 import { IsConnectedReducer } from './connection';
 import { PriceReducer } from './price';
 import { UserReducer } from './user';
+import { CommentsReducer } from './comments';
+import { ReaderReducer } from './reader';
 
 const reducers = combineReducers({
   courseState: CourseReducer,
@@ -25,7 +27,9 @@ const reducers = combineReducers({
   notesState: NotesReducer,
   isConnectedState: IsConnectedReducer,
   priceState: PriceReducer,
-  userState: UserReducer
+  userState: UserReducer,
+  commentsState: CommentsReducer,
+  readerState: ReaderReducer
 });
 
 export default reducers;

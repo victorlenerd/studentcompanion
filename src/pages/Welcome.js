@@ -33,6 +33,7 @@ class Welcome extends Component {
 
   componentWillUnmount() {
     clearTimeout(timeout);
+    NetInfo.isConnected.removeEventListener('connectionChange');
   }
 
   _loadData = async () => {
@@ -51,19 +52,24 @@ class Welcome extends Component {
 
           if (diffDays >= 0) {
             if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
-            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateDevice');
+
+            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
+
             navigate('Main');
           } else {
             return navigate('ActivateAccount');
           }
         } else {
-          return deleteCurrentUser();
+          deleteCurrentUser();
+          return navigate('SignIn');
         }
       } else {
         const user = await getCurrentUserOffline();
         setCurrentUser(user);
 
-        if (user !== null) navigate('Main');
+        if (user !== null) {
+          navigate('Main');
+        }
       }
     } catch (err) {
       navigate('Intro');

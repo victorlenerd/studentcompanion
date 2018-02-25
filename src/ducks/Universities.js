@@ -27,7 +27,9 @@ export const SetUniversities = data => {
   };
 };
 
-export const GetUniversities = () => dispatch => new Promise((resolve, reject) => {
+export const GetUniversities = () => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { universitiesState: { universities } } = getState();
+  if (universities.length > 0) return resolve(universities);
   const universitiesRef = app.database().ref('/universities');
   dispatch(StartRequest());
   universitiesRef.once('value', snapshot => {

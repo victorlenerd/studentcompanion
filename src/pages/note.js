@@ -3,15 +3,12 @@ import {
   View,
   Text,
   WebView,
-  Image,
   ScrollView,
   Platform,
-  Slider,
   Alert,
   StyleSheet,
   AppState,
-  Dimensions,
-  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 
 import Tts from 'react-native-tts';
@@ -21,8 +18,11 @@ import { main, colors } from 'shared/styles';
 
 import notes from 'containers/notes';
 import comments from 'containers/comments';
+import reader from 'containers/reader';
 
-const { height, width } = Dimensions.get('window');
+import VoiceRatePane from 'components/voiceRatePane';
+
+const { height } = Dimensions.get('window');
 
 const supportsQuill = () => {
   const deviceType = DeviceInfo.getSystemName();
@@ -34,28 +34,27 @@ const supportsQuill = () => {
 
 let notificationInterval;
 
-
 @notes
 @comments
+@reader
 class Note extends Component {
   constructor(props) {
     super(props);
     this.state = {
       playing: false,
       sentences: [],
-      comments: [],
       usingWebView: false,
-      light: true,
+      themeMode: 'light',
       currentSentence: 0,
       appState: AppState.currentState,
     };
   }
 
-  async componentWillUnmount() {
-    const { getComments, currentNote: { $id } } = this.props;
+  async componentWillMount() {
+    const { getComments, currentNote, setCommentsCount, setPlayMode } = this.props;
+    const { $id } = currentNote;
 
     this.setState({
-      playing: false,
       currentSentence: 0,
       usingWebView: supportsQuill(),
       sentences: this.props.currentNote.text.split('.'),
@@ -68,15 +67,15 @@ class Note extends Component {
         this.next();
       } else {
         this.setState({
-          playing: false,
           currentSentence: 0,
         });
+        setPlayMode(false);
       }
     });
 
     try {
-      const comments = await getComments($id);
-      this.setState({ comments });
+      const noteComments = await getComments($id);
+      setCommentsCount(noteComments.length);
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -84,31 +83,33 @@ class Note extends Component {
     AppState.addEventListener('change', this._handleAppStateChange);
   }
 
-  play() {
-    if (this.state.playing) {
-      this.setState({ playing: false });
-      Tts.stop();
-      if (this.state.usingWebView) this.webView.postMessage('pause.mode');
-    } else {
+  componentWillReceiveProps(nextProps) {
+    const { themeMode, playing } = nextProps;
+
+    if (themeMode !== this.state.themeMode && this.state.usingWebView) {
+      this.setState({ themeMode });
+      this.webView.postMessage(`${themeMode}.mode`);
+    }
+
+    if (this.state.playing !== playing && playing) {
       const startIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence]);
       const endIndex = this.props.currentNote.text.indexOf(this.state.sentences[this.state.currentSentence + 1]);
-
-      this.setState({ playing: true });
 
       Tts.speak(this.state.sentences[this.state.currentSentence]);
       if (this.state.usingWebView) this.webView.postMessage(`${startIndex},${endIndex}, ${this.props.currentNote.text.length}`);
       if (this.state.usingWebView) this.webView.postMessage('play.mode');
+      this.setState({ playing });
+    }
+
+    if (this.state.playing !== playing && !playing) {
+      Tts.stop();
+      if (this.state.usingWebView) this.webView.postMessage('pause.mode');
+      this.setState({ playing });
     }
   }
 
-  light() {
-    if (this.state.light) {
-      this.setState({ light: false });
-      if (this.state.usingWebView) this.webView.postMessage('dark.mode');
-    } else {
-      this.setState({ light: true });
-      if (this.state.usingWebView) this.webView.postMessage('light.mode');
-    }
+  componentWillUnmount() {
+    Tts.stop();
   }
 
   _handleAppStateChange = nextAppState => {
@@ -132,39 +133,7 @@ class Note extends Component {
     this.setState({ appState: nextAppState });
   };
 
-  _renderPlayButton() {
-    if (this.state.playing) {
-      return (
-        <View>
-          <Image source={require('../assets/pause.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-        </View>
-      );
-    }
-
-    return (
-      <View>
-        <Image source={require('../assets/play.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-      </View>
-    );
-  }
-
-  _renderNightButton() {
-    if (this.state.light) {
-      return (
-        <View>
-          <Image source={require('../assets/moon.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-        </View>
-      );
-    }
-
-    return (
-      <View>
-        <Image source={require('../assets/sun.png')} style={{ width: 22, height: 32 }} resizeMode="contain" />
-      </View>
-    );
-  }
-
-  _renderReaderView() {
+  _renderReaderView = () => {
     if (!this.props.isImages) {
       if (!supportsQuill()) {
         return (
@@ -207,7 +176,7 @@ class Note extends Component {
   }
 
   rateChange = v => {
-    if (this.state.playing) this.play();
+    if (this.props.playing) this.play();
     Tts.setDefaultRate(v);
   }
 
@@ -243,117 +212,26 @@ class Note extends Component {
     }
   }
 
-  comment = () => {
-    this.props.navigation.navigate('Comments');
-  }
-
-  renderCommentsCount = () => {
-    const kDNum = num => {
-      const numStr = String(num);
-
-      if (num > 999 && num < 9999) {
-        numStr.substring(0, 1).concat('K');
-      }
-
-      if (num > 9999 && num < 99999) {
-        numStr.substring(0, 2).concat('K');
-      }
-
-      if (num > 99999) {
-        numStr.substring(0, 3).concat('K');
-      }
-
-      return num;
-    };
-
-    if (this.state.comments.length > 0) {
-      return (
-        <View
-          style={style.commentCountBubble}
-        >
-          <Text style={{ fontSize: 8, color: colors.white }}>{kDNum(this.state.comments.length)}</Text>
-        </View>
-      );
-    }
-  }
-
   render() {
     return (
       <View
         style={[
           main.container,
           {
-            backgroundColor: this.state.light ? colors.white : colors.black,
+            backgroundColor: this.state.themeMode === 'light' ? colors.white : colors.black,
             borderTopColor: colors.accent,
             borderTopWidth: 2,
           },
         ]}
       >
-        <View style={style.topAction}>
-          <Text style={{ fontSize: 16, color: colors.white }}>Voice Rate</Text>
-          <Slider
-            ref={r => (this.slider = r)}
-            style={{ width: width - 40 }}
-            value={0.5}
-            onValueChange={this.rateChange}
-          />
-        </View>
+        <VoiceRatePane change={this.rateChange} />
         {this._renderReaderView()}
-        <View
-          style={style.bttnsRow}
-        >
-          <TouchableOpacity
-            style={style.bttns}
-            onPress={this.light}
-          >
-            {this._renderNightButton()}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={style.bttns}
-            onPress={this.play}
-          >
-            {this._renderPlayButton()}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={style.bttns}
-            onPress={this.comment}
-          >
-            <View>
-              {this.renderCommentsCount()}
-              <Image
-                source={require('../assets/bubble-white.png')}
-                style={{ width: 22, height: 32 }}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }
 }
 
 const style = StyleSheet.create({
-  topAction: {
-    width: width,
-    backgroundColor: colors.black,
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingTop: 20,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    height: 80,
-  },
-  bttnsRow: {
-    width,
-    height: 60,
-    flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 20,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   bttns: {
     width: 50,
     height: 50,
@@ -361,18 +239,6 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 25,
-  },
-  commentCountBubble: {
-    width: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 25,
-    borderRadius: 12.5,
-    backgroundColor: '#e74c3c',
-    zIndex: 100,
-    position: 'absolute',
-    top: -5,
-    right: -10,
   }
 });
 

@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 
 const { width, height } = Dimensions.get('window');
 
 class Home extends Component {
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      const { navigation: { navigate } } = this.props;
+      return true;
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
+  }
+
   render() {
     const { navigation: { navigate } } = this.props;
     return (
@@ -31,7 +42,7 @@ class Home extends Component {
             />
             <Text style={style.homeTitle}>Search</Text>
             <Text style={style.homeSubtitle}>
-              Find study resources by school or subject.
+              Search resources by topic or titles.
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -54,7 +65,55 @@ class Home extends Component {
             />
             <Text style={style.homeTitle}>Upload Photos</Text>
             <Text style={style.homeSubtitle}>
-              Earn from uploading photos of your notes.
+              Earn from uploads of your notes.
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={style.row}>
+          <TouchableOpacity
+            onPress={() => {
+              navigate('Scanner');
+            }}
+            style={{
+              flex: 0.4,
+              borderWidth: 1,
+              borderColor: '#eee',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              resizeMode="contain"
+              source={require('../assets/eye-accent.png')}
+              style={style.homeIcon}
+            />
+            <Text style={style.homeTitle}>Extract Text</Text>
+            <Text style={style.homeSubtitle}>
+              Extract Text From Notes and Documents.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigate('Browse');
+            }}
+            style={{
+              flex: 0.6,
+              borderWidth: 1,
+              borderColor: '#eee',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              resizeMode="contain"
+              source={require('../assets/stack-accent.png')}
+              style={style.homeIcon}
+            />
+            <Text style={style.homeTitle}>Browse</Text>
+            <Text style={style.homeSubtitle}>
+              Browse by schools and departments.
             </Text>
           </TouchableOpacity>
         </View>
@@ -74,12 +133,12 @@ class Home extends Component {
           >
             <Image
               resizeMode="contain"
-              source={require('../assets/open-book-black-accent.png')}
+              source={require('../assets/books-accent.png')}
               style={style.homeIcon}
             />
             <Text style={style.homeTitle}>Library</Text>
             <Text style={style.homeSubtitle}>
-              Find resources you have saved on you phone.
+              Offline resources available on your phone.
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -113,7 +172,7 @@ class Home extends Component {
 
 const style = StyleSheet.create({
   row: {
-    flex: 0.5,
+    flex: 0.33,
     flexDirection: 'column'
   },
   container: {
@@ -126,7 +185,7 @@ const style = StyleSheet.create({
   },
   homeMenu: {},
   homeTitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     color: colors.black,
     marginTop: 20
@@ -137,7 +196,7 @@ const style = StyleSheet.create({
   },
   homeSubtitle: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '200',
     color: colors.black,
     textAlign: 'center',
     marginTop: 20,

@@ -17,8 +17,8 @@ class ChooseDepartment extends Component {
     const { getDepartmentsByFacultyId, navigation: { state: { params: { facultyId } } } } = this.props;
 
     try {
-      const departments = await getDepartmentsByFacultyId(facultyId);
-      this.setState({ departments });
+      const facultyDepartments = await getDepartmentsByFacultyId(facultyId);
+      this.setState({ departments: facultyDepartments });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }

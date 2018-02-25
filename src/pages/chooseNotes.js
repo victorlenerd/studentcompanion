@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import notes from 'containers/notes';
+import courses from 'containers/courses';
 
 import { main, colors } from 'shared/styles';
 
 @notes
+@courses
 class ChooseNotes extends Component {
   _openNote = note => {
     const { navigation: { navigate }, setCurrentNote } = this.props;
@@ -13,12 +15,13 @@ class ChooseNotes extends Component {
   }
 
   _renderSection() {
-    const { notes } = this.props;
-    if (notes.length > 0) {
+    const { currentCourse: { $id }, notes } = this.props;
+    const courseNotes = notes[$id];
+    if (courseNotes && courseNotes.length > 0) {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
           <ScrollView style={{ flex: 1 }}>
-            {notes.map((note, index) => {
+            {courseNotes.map((note, index) => {
               return (
                 <TouchableOpacity
                   style={{

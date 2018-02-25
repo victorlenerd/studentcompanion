@@ -2,45 +2,56 @@ import { AsyncStorage } from 'react-native';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
 
-
 const PAPERS = 'PAPERS';
 const SET_CURRENT_PAPER = 'SET_CURRENT_PAPER';
 
 const initialState = {
   currentPaper: {},
-  papers: [],
+  papers: {},
 };
 
-export const SetPapers = papers => {
+export const SetPapers = (courseId, papers) => {
   return {
     type: PAPERS,
+    courseId,
     papers,
   };
 };
 
-export const GetPapers = courseId => dispatch => new Promise((resolve, reject) => {
+export const GetPapers = courseId => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { paperState: { papers } } = getState();
+  const cached = papers[courseId];
+  console.log('GetPapers::Cached', cached);
+
+  if (cached) return resolve(cached);
+
+  dispatch(StartRequest());
+
   const papersRef = app
     .database()
     .ref('/papers')
     .equalTo(courseId)
     .orderByChild('courseId');
 
-  dispatch(StartRequest());
-
   papersRef.once('value', snapshot => {
-    dispatch(SetPapers(toArray(snapshot.val())));
-    resolve(toArray(snapshot.val()));
+    const coursePapers = toArray(snapshot.val()) || [];
+    if (coursePapers.length > 0) dispatch(SetPapers(courseId, coursePapers));
+    resolve(coursePapers);
     dispatch(FinishRequest());
   });
 });
 
-export const GetPapersOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+export const GetPapersOffline = courseId => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  const { paperState: { papers } } = getState();
+  const cached = papers[courseId];
+  if (cached) return resolve(cached);
+
   dispatch(StartRequest());
 
   try {
     const saved_courses = await AsyncStorage.getItem(`@UPQ:OFFLINE_PAPERS:ID_${courseId}`);
     if (saved_courses !== null) {
-      dispatch(SetPapers(JSON.parse(saved_courses)));
+      dispatch(SetPapers(courseId, JSON.parse(saved_courses)));
       resolve(JSON.parse(saved_courses));
     }
     resolve([]);
@@ -69,10 +80,12 @@ export const SetCurrentPaper = paper => {
 
 export const PapersReducer = (state = initialState, action) => {
   switch (action.type) {
-    case PAPERS:
+    case PAPERS: {
+      const { courseId, papers } = action;
       return Object.assign({}, state, {
-        papers: action.papers,
+        papers: { [courseId]: papers },
       });
+    }
     case SET_CURRENT_PAPER:
       return Object.assign({}, state, {
         currentPaper: action.paper,

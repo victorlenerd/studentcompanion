@@ -28,8 +28,8 @@ class SavedCourses extends Component {
     const { getCoursesOffline } = this.props;
 
     try {
-      const courses = await getCoursesOffline();
-      this.setState({ courses });
+      const offineCourses = await getCoursesOffline();
+      this.setState({ courses: offineCourses });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -52,12 +52,12 @@ class SavedCourses extends Component {
     }
   }
 
-  _renderSection() {
+  _renderSection = () => {
     if (this.state.courses.length) {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
           <ScrollView style={{ flex: 1 }}>
-            {this.props.courses.map(course => {
+            {this.state.courses.map(course => {
               return (
                 <TouchableOpacity
                   key={course.$id}

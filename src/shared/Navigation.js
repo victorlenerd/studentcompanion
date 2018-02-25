@@ -31,6 +31,7 @@ import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
 
 import Drawer from 'components/drawer';
+import NoteToobarOptions from 'components/noteToobarOptions';
 import DrawerIcon from 'components/drawerIcon';
 
 import { colors } from 'shared/styles';
@@ -69,12 +70,11 @@ const CourseNavigator = TabNavigator({
 }, {
   tabBarOptions: {
     tabStyle: {
-      backgroundColor: colors.brightBlue,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
-    indicatorStyle: {
-      height: 5,
-      top: 0,
-      backgroundColor: colors.accent
+    labelStyle: {
+      fontSize: 16
     }
   }
 });
@@ -131,7 +131,7 @@ const MainNavigator = DrawerNavigator({
   SavedCourses: {
     screen: SavedCoursesScreen,
     navigationOptions: {
-      headerTitle: 'Saved Courses'
+      headerTitle: 'Library'
     }
   },
   UploadPhotos: {
@@ -148,14 +148,13 @@ const MainNavigator = DrawerNavigator({
   },
   Note: {
     screen: NoteScreen,
-    navigationOptions: {
-      headerTitle: 'Note'
-    }
+    navigationOptions: ({ navigation }) => ({
+      headerRight: <NoteToobarOptions navigation={navigation} />
+    })
   },
   Questions: {
     screen: QuestionsScreen,
     navigationOptions: {
-      headerTitle: 'Questions'
     }
   }
 }, {

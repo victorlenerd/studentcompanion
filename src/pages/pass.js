@@ -23,7 +23,8 @@ class Pass extends Component {
     try {
       const done = await updateDeviceId(this.state.code);
       if (done) {
-        navigate('SearchCourses');
+        Alert.alert('Success', 'Device Activation Success.', [{ text: 'Cancel', style: 'cancel' }]);
+        return navigate('Main');
       }
 
       Alert.alert('An Error Occured', 'The code you used is not valid.', [{ text: 'Cancel', style: 'cancel' }]);
@@ -43,7 +44,7 @@ class Pass extends Component {
             onChangeText={code => this.setState({ code })}
             editable={true}
             keyboardType="phone-pad"
-            style={{ height: 50 }}
+            style={{ height: 50, textAlign: 'center' }}
           />
           <View style={{ marginVertical: 50 }} />
           <Button text="DONE" onPress={this.done} />

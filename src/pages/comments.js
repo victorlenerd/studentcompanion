@@ -82,7 +82,7 @@ class Comments extends Component {
           <ScrollView style={{ padding: 20 }}>
             {this.state.comments.map((comment, index) => {
               return (
-                <CommentListItem comment={comment} setReplyComment={(isReply, repliedComment) => this.setState({ isReply, repliedComment })} />
+                <CommentListItem key={() => index} comment={comment} setReplyComment={(isReply, repliedComment) => this.setState({ isReply, repliedComment })} />
               );
             })}
           </ScrollView>

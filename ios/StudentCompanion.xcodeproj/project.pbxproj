@@ -43,6 +43,9 @@
 		D9B9648467DB09B01CD8E629 /* libPods-StudentCompanion-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C2249D355C67FBF9AA8070F /* libPods-StudentCompanion-tvOSTests.a */; };
 		F3510C3A202682B10015056F /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3510C39202682810015056F /* Fabric.framework */; };
 		F3510C3B202682B50015056F /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3510C38202682810015056F /* Crashlytics.framework */; };
+		F3B4698C2043317500040F15 /* RSKImageCropper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B469612043317400040F15 /* RSKImageCropper.framework */; };
+		F3B4698D2043317500040F15 /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3B4698B2043317500040F15 /* QBImagePicker.framework */; };
+		F3B4699020433BA200040F15 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3F4867F20345B040068C040 /* libimageCropPicker.a */; };
 		F3C4171F201A76BC000BEAE1 /* libTextToSpeech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3AE58391FF407E600773607 /* libTextToSpeech.a */; };
 		F3C41720201A76CF000BEAE1 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3AE58301FF407E600773607 /* libRNDeviceInfo.a */; };
 		F3C41735201A8D64000BEAE1 /* RCTPushNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C41733201A8D64000BEAE1 /* RCTPushNotificationManager.m */; };
@@ -433,6 +436,8 @@
 		F3794FCC2017ED2A008E5483 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F3794FF92017ED8C008E5483 /* GTMNSData+zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSData+zlib.h"; sourceTree = "<group>"; };
 		F3794FFA2017ED8C008E5483 /* GTMNSData+zlib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSData+zlib.m"; sourceTree = "<group>"; };
+		F3B469612043317400040F15 /* RSKImageCropper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RSKImageCropper.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/RSKImageCropper.framework"; sourceTree = "<group>"; };
+		F3B4698B2043317500040F15 /* QBImagePicker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QBImagePicker.framework; path = "../node_modules/react-native-image-crop-picker/ios/ImageCropPickerSDK/QBImagePicker.framework"; sourceTree = "<group>"; };
 		F3C41732201A8D64000BEAE1 /* RCTPushNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTPushNotificationManager.h; sourceTree = "<group>"; };
 		F3C41733201A8D64000BEAE1 /* RCTPushNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTPushNotificationManager.m; sourceTree = "<group>"; };
 		F3C5B7132017FD990000D6F0 /* RCCTitleViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCTitleViewHelper.h; sourceTree = "<group>"; };
@@ -531,6 +536,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3B4699020433BA200040F15 /* libimageCropPicker.a in Frameworks */,
 				F3E0E690201B342C00199E2F /* libRNImagePicker.a in Frameworks */,
 				F3C41720201A76CF000BEAE1 /* libRNDeviceInfo.a in Frameworks */,
 				F3C4171F201A76BC000BEAE1 /* libTextToSpeech.a in Frameworks */,
@@ -539,12 +545,14 @@
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
+				F3B4698C2043317500040F15 /* RSKImageCropper.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				F3B4698D2043317500040F15 /* QBImagePicker.framework in Frameworks */,
 				F3510C3B202682B50015056F /* Crashlytics.framework in Frameworks */,
 				F3510C3A202682B10015056F /* Fabric.framework in Frameworks */,
 				832D7093D9D9A71C5387E260 /* libPods-StudentCompanion.a in Frameworks */,
@@ -768,6 +776,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F3B4698B2043317500040F15 /* QBImagePicker.framework */,
+				F3B469612043317400040F15 /* RSKImageCropper.framework */,
 				F3510C38202682810015056F /* Crashlytics.framework */,
 				F3510C39202682810015056F /* Fabric.framework */,
 				13B07FAE1A68108700A75B9A /* StudentCompanion */,
@@ -1687,7 +1697,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -1695,7 +1705,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
@@ -1835,7 +1845,7 @@
 		};
 		A514221A6DF5CDC9C6F8222B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -1880,14 +1890,14 @@
 		};
 		F3510C35202681B10015056F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 774a1ab617ec8d3d0d8bb1e2acf9a43e58380d79 744bd8ba8516dcb79e8177690512c8a46bbe386a1e73dcc292574e60e4eed10e";
 		};

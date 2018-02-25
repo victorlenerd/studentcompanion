@@ -130,9 +130,13 @@ export const SetCurrentUserOffline = user => dispatch => dispatch({ type: 'SET_C
 
 export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
   const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
+
+  if (saved_data === null) {
+    return resolve(null);
+  }
+
   const { email } = JSON.parse(saved_data);
   const usersRefs = app.database().ref('/users');
-
   usersRefs
     .orderByChild('email')
     .equalTo(email)
@@ -145,10 +149,6 @@ export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reje
         } catch (err) {
           reject(err);
         }
-      } else {
-        // dispatch(DeleteCurrentUser()).then(() => {
-        //   navigator.welcome();
-        // });
       }
     });
 });
@@ -183,8 +183,9 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
   }
 });
 
-export const SendDeviceActivationCode = email => dispatch => new Promise(async (resolve, reject) => {
+export const SendDeviceActivationCode = (email, $id) => dispatch => new Promise(async (resolve, reject) => {
   try {
+    dispatch(StartRequest());
     const { code } = await fetch('https://victor-com-ng.appspot.com/send_device_activate_code_upq', {
       method: 'POST',
       headers: {
@@ -195,24 +196,20 @@ export const SendDeviceActivationCode = email => dispatch => new Promise(async (
       }),
     }).then(response => response.json());
 
-    const usersRefs = app.database().ref('/users');
-    const ref = usersRefs.orderByChild('email').equalTo(email);
-
-    ref.once('value', snapshot => {
-      const usr = toArray(snapshot.val())[0];
-      const userRef = app.database().ref(`/users/${usr.$id}`);
-      userRef.update({ deviceActivationCode: code }, async err => {
-        if (err !== null) reject(err);
-        await dispatch(SetCurrentUser({ email }));
-        resolve();
-      });
+    const userRef = app.database().ref(`/users/${$id}`);
+    userRef.update({ deviceActivationCode: code }, async err => {
+      if (err !== null) reject(err);
+      resolve(true);
     });
   } catch (err) {
     reject(err);
   }
+
+  dispatch(FinishRequest());
 });
 
 export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
   try {
     const { deviceActivationCode, $id } = await dispatch(GetCurrentUser());
     const usersRefs = app.database().ref(`/users/${$id}`);
@@ -221,7 +218,7 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
       usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, async err => {
         if (err !== null) reject(err);
         const newUser = await dispatch(GetCurrentUser());
-        await dispatch(SetCurrentUser(newUser));
+        dispatch(SetCurrentUser(newUser));
         resolve(true);
       });
     } else {
@@ -230,9 +227,12 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
   } catch (err) {
     reject(err);
   }
+
+  dispatch(FinishRequest());
 });
 
 export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId, levelId }) => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
   try {
     const usersRefs = app.database().ref(`/users/${userId}`);
 
@@ -248,6 +248,7 @@ export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId,
   } catch (err) {
     reject(err);
   }
+  dispatch(FinishRequest());
 });
 
 export const UserReducer = (state = initialState, action) => {

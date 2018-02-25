@@ -7,17 +7,26 @@ const SET_CURRENT_NOTE = 'SET_CURRENT_NOTE';
 
 const initialState = {
   currentNote: {},
-  notes: [],
+  notes: {}
 };
 
-export const SetNotes = notes => {
+export const SetNotes = (courseId, notes) => {
   return {
     type: NOTES,
+    courseId,
     notes,
   };
 };
 
-export const GetNotes = courseId => dispatch => new Promise((resolve, reject) => {
+export const GetNotes = courseId => (dispatch, getState) => new Promise((resolve, reject) => {
+  const { notesState: { notes } } = getState();
+
+  if (notes[courseId]) {
+    resolve(notes[courseId]);
+    dispatch(FinishRequest());
+    return;
+  }
+
   const notesRef = app
     .database()
     .ref('/notes')
@@ -25,19 +34,29 @@ export const GetNotes = courseId => dispatch => new Promise((resolve, reject) =>
     .orderByChild('courseId');
 
   dispatch(StartRequest());
+
   notesRef.once('value', snapshot => {
-    dispatch(SetNotes(toArray(snapshot.val())));
-    resolve(toArray(snapshot.val()));
+    const courseNotes = toArray(snapshot.val()) || [];
+    dispatch(SetNotes(courseId, courseNotes));
+    resolve(courseNotes);
     dispatch(FinishRequest());
   });
 });
 
-export const GetNotesOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+export const GetNotesOffline = courseId => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  const { notesState: { notes } } = getState();
   dispatch(StartRequest());
+
+  if (notes[courseId]) {
+    resolve(notes[courseId]);
+    dispatch(FinishRequest());
+    return;
+  }
+
   try {
     const saved_notes = await AsyncStorage.getItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`);
     if (saved_notes !== null) {
-      dispatch(SetNotes(JSON.parse(saved_notes)));
+      dispatch(SetNotes(courseId, JSON.parse(saved_notes)));
       resolve(JSON.parse(saved_notes));
     }
   } catch (err) {
@@ -67,10 +86,13 @@ export const SetCurrentNote = note => {
 
 export const NotesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case NOTES:
+    case NOTES: {
+      const { courseId, notes } = action;
       return Object.assign({}, state, {
-        notes: action.notes,
+        notes: { [courseId]: notes }
       });
+    }
+
     case SET_CURRENT_NOTE:
       return Object.assign({}, state, {
         currentNote: action.note,

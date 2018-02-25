@@ -39,7 +39,7 @@ export const AddPhotoNote = photoNote => dispatch => new Promise(async (resolve,
   }
 });
 
-export const GetPhotoNotes = userId => dispatch => new Promise((resolve, reject) => {
+export const GetPhotoNotes = userId => (dispatch, getState) => new Promise((resolve, reject) => {
   const photoRef = app
     .database()
     .ref('/photos')

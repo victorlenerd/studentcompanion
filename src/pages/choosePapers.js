@@ -3,11 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-nativ
 
 import papers from 'containers/papers';
 import questions from 'containers/questions';
+import courses from 'containers/courses'
 
 import { main, colors } from 'shared/styles';
 
 @papers
 @questions
+@courses
 class ChoosePapers extends Component {
   _openPaper = async paper => {
     const { navigation: { navigate }, setCurrentPaper, getQuestions, getQuestionsOffline } = this.props;
@@ -23,11 +25,14 @@ class ChoosePapers extends Component {
   }
 
   _renderSection() {
-    if (this.props.papers.length > 0) {
+    const { currentCourse: { $id }, papers } = this.props;
+    const coursePapers = papers[$id];
+
+    if (coursePapers && coursePapers.length > 0) {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
           <ScrollView style={{ flex: 1 }}>
-            {this.props.papers.map((paper, index) => {
+            {coursePapers.map((paper, index) => {
                 return (
                   <TouchableOpacity style={{ flex: 1 }} key={paper.$id} onPress={() => this._openPaper(paper)}>
                     <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: '#f1f1f1' }}>
