@@ -26,6 +26,7 @@ import CommentsScreen from 'pages/comments';
 import FeedbackScreen from 'pages/feedback';
 import SavedCoursesScreen from 'pages/savedCourses';
 import UploadPhotosScreen from 'pages/uploadPhotos';
+import TextExtractorScreen from 'pages/textExtractor';
 
 import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
@@ -154,7 +155,11 @@ const MainNavigator = DrawerNavigator({
   },
   Questions: {
     screen: QuestionsScreen,
+  },
+  TextExtractor: {
+    screen: TextExtractorScreen,
     navigationOptions: {
+      headerTitle: 'Extract Text'
     }
   }
 }, {

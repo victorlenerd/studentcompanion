@@ -11,6 +11,7 @@ import net.no_mad.tts.TextToSpeechPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.crash.RNFirebaseCrashPackage;
 import com.facebook.react.ReactApplication;
+import com.wix.RNCameraKit.RNCameraKitPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.soloader.SoLoader;
@@ -36,7 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-                new PickerPackage(),
+          new RNCameraKitPackage(),
+          new PickerPackage(),
           new RandomBytesPackage(),
           new RNFirebasePackage(),
           new TextToSpeechPackage(),
