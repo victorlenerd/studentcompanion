@@ -102,7 +102,7 @@ class AcademicInfo extends Component {
                 >
                   {this.state.universities.map(university => {
                     return (
-                      <Picker.Item key={university.$id} label={university.name} value={university.$id} />
+                      <Picker.Item style={{ color: colors.white }} key={university.$id} label={university.name} value={university.$id} />
                     );
                   })}
                 </Picker>
@@ -121,7 +121,7 @@ class AcademicInfo extends Component {
                 >
                   {this.state.faculties.map(faculty => {
                     return (
-                      <Picker.Item key={faculty.$id} label={faculty.name} value={faculty.$id} />
+                      <Picker.Item style={{ color: colors.white }} key={faculty.$id} label={faculty.name} value={faculty.$id} />
                     );
                   })}
                 </Picker>
@@ -140,7 +140,7 @@ class AcademicInfo extends Component {
                 >
                   {this.state.departments.map(department => {
                     return (
-                      <Picker.Item key={department.$id} label={department.name} value={department.$id} />
+                      <Picker.Item style={{ color: colors.white }} key={department.$id} label={department.name} value={department.$id} />
                     );
                   })}
                 </Picker>
@@ -158,7 +158,7 @@ class AcademicInfo extends Component {
                 >
                   {this.state.levels.map(level => {
                     return (
-                      <Picker.Item key={level.$id} label={level.name} value={level.$id} />
+                      <Picker.Item style={{ color: colors.white }} key={level.$id} label={level.name} value={level.$id} />
                     );
                   })}
                 </Picker>

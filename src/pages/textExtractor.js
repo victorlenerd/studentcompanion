@@ -146,14 +146,14 @@ class TextExtractor extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={e => {
-              // navigate('Reader', {
-              //     image: this.state.image,
-              //     type
-              // });
+              this.props.navigation.navigate('Reader', {
+                  image: this.state.image,
+                  type: this.state.docType
+              });
             }}
             style={[styles.actionBtn, {}]}
           >
-            <Image style={styles.actionIcon} source={require('../assets/mark.png')} resizeMode="contain" /> 
+            <Image style={styles.actionIcon} source={require('../assets/mark.png')} resizeMode="contain" />
           </TouchableOpacity>
         </View>
       );

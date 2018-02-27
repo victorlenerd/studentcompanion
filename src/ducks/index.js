@@ -14,6 +14,7 @@ import { PriceReducer } from './price';
 import { UserReducer } from './user';
 import { CommentsReducer } from './comments';
 import { ReaderReducer } from './reader';
+import { SearchReducer } from './search';
 
 const reducers = combineReducers({
   courseState: CourseReducer,
@@ -29,6 +30,7 @@ const reducers = combineReducers({
   priceState: PriceReducer,
   userState: UserReducer,
   commentsState: CommentsReducer,
+  searchState: SearchReducer,
   readerState: ReaderReducer
 });
 

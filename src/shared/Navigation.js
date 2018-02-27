@@ -62,13 +62,13 @@ const CourseNavigator = TabNavigator({
   ChooseNotes: {
     screen: ChooseNotes,
     navigationOptions: {
-      tabBarLabel: 'Notes'
+      tabBarLabel: 'NOTES'
     }
   },
   ChoosePapers: {
     screen: ChoosePapers,
     navigationOptions: {
-      tabBarLabel: 'Past Questions'
+      tabBarLabel: 'PAST QUESTIONS'
     }
   }
 }, {
@@ -78,7 +78,8 @@ const CourseNavigator = TabNavigator({
       justifyContent: 'center',
     },
     labelStyle: {
-      fontSize: 16
+      marginTop: -5,
+      fontSize: 18,
     }
   }
 });
@@ -96,7 +97,7 @@ const MainNavigator = DrawerNavigator({
       headerTitle: 'Browse'
     }
   },
-  SearchTypedScreen: {
+  SearchTyped: {
     screen: SearchTypedScreen,
     navigationOptions: {
       headerTitle: 'Search'

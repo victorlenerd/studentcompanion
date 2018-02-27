@@ -49,7 +49,7 @@ class ChoosePapers extends Component {
     return (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <View style={[main.emptyState, { margin: 20 }]}>
-          <Text style={main.emptyStateText}>There are no exams available.</Text>
+          <Text style={main.emptyStateText}>There are no past questions available yet.</Text>
         </View>
       </View>
     );

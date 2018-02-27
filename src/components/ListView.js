@@ -38,6 +38,7 @@ class ListView extends Component {
   }
 
   _renderListHeader = () => {
+    if (this.props.hideHeader) return null;
     if (!this.state.isConnected && this.state.isConnected !== null) {
       return (
         <View style={[style.listHeader, { backgroundColor: colors.red }]}>
@@ -54,6 +55,7 @@ class ListView extends Component {
   }
 
   _renderEmpty = () => {
+    if (this.props.hideEmptyState) return null;
     return (
       <View style={style.emptyContainer}>
         <View style={[main.emptyState, { margin: 20 }]}>
@@ -74,7 +76,7 @@ class ListView extends Component {
           ListEmptyComponent={this._renderEmpty}
           renderItem={this._renderItem}
         />
-        <Loader />
+        {!this.props.hideLoader && <Loader />}
       </View>
     );
   }

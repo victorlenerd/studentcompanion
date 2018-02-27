@@ -53,8 +53,8 @@ class Drawer extends Component {
         <ScrollView style={{ flex: 0.7, flexDirection: 'column' }}>
           <View style={{ flex: 0.6 }}>
             <MenuItem label="Home" path="Home" navigation={this.props.navigation} />
-            <MenuItem label="Search" path="Search" navigation={this.props.navigation} />
-            <MenuItem label="Browse" path="Browse" navigation={this.props.navigation} />
+            <MenuItem label="Search" path="SearchTyped" navigation={this.props.navigation} />
+            <MenuItem label="Browse" path="Search" navigation={this.props.navigation} />
             <MenuItem label="Library" path="SavedCourses" navigation={this.props.navigation} />
             <MenuItem label="Extract Text" path="TextExtractor" navigation={this.props.navigation} />
             <MenuItem label="Feedback" path="Feedback" navigation={this.props.navigation} />
