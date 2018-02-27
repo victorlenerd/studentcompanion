@@ -6,14 +6,13 @@ import {
   ScrollView,
   Platform,
   Alert,
-  StyleSheet,
   AppState,
   Dimensions
 } from 'react-native';
 
 import Tts from 'react-native-tts';
 import DeviceInfo from 'react-native-device-info';
-import PushNotification from 'react-native-push-notification';
+// import PushNotification from 'react-native-push-notification';
 import { main, colors } from 'shared/styles';
 
 import notes from 'containers/notes';
@@ -32,8 +31,6 @@ const supportsQuill = () => {
     (deviceType === 'Android' && parseFloat(deviceVersion) >= 5.1);
 };
 
-let notificationInterval;
-
 @notes
 @comments
 @reader
@@ -45,8 +42,7 @@ class Note extends Component {
       sentences: [],
       usingWebView: false,
       themeMode: 'light',
-      currentSentence: 0,
-      appState: AppState.currentState,
+      currentSentence: 0
     };
   }
 
@@ -113,24 +109,24 @@ class Note extends Component {
   }
 
   _handleAppStateChange = nextAppState => {
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      if (notificationInterval !== undefined) clearInterval(notificationInterval);
-    } else {
-      const messages = [
-        'No shortcuts. Work for it.',
-        'Difficult roads often lead to beautiful destinations.',
-        "Don't just dream about success work for it.",
-      ];
+    // if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+    //   if (notificationInterval !== undefined) clearInterval(notificationInterval);
+    // } else {
+    //   const messages = [
+    //     'No shortcuts. Work for it.',
+    //     'Difficult roads often lead to beautiful destinations.',
+    //     "Don't just dream about success work for it.",
+    //   ];
 
-      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    //   const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-      PushNotification.localNotification({
-        title: 'Student Companion',
-        message: randomMessage,
-      });
-    }
+    //   PushNotification.localNotification({
+    //     title: 'Student Companion',
+    //     message: randomMessage,
+    //   });
+    // }
 
-    this.setState({ appState: nextAppState });
+    // this.setState({ appState: nextAppState });
   };
 
   _renderReaderView = () => {
@@ -230,16 +226,5 @@ class Note extends Component {
     );
   }
 }
-
-const style = StyleSheet.create({
-  bttns: {
-    width: 50,
-    height: 50,
-    backgroundColor: colors.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
-  }
-});
 
 export default Note;

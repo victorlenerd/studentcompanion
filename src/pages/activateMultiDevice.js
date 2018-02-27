@@ -17,10 +17,10 @@ class ActivateMultipleDevice extends Component {
   }
 
   signout = async () => {
-    const { signOut, navigation: { navigate } } = this.props;
+    const { signOut, navigation: { replace } } = this.props;
     try {
       await signOut();
-      navigate('Intro');
+      replace('Intro');
     } catch (err) {
       Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }

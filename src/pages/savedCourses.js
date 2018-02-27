@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Dimensions,
+  BackHandler,
   Alert,
 } from 'react-native';
 
@@ -33,6 +34,14 @@ class SavedCourses extends Component {
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
+
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _openCourse = async course => {

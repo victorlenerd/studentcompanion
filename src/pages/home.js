@@ -7,7 +7,6 @@ const { width, height } = Dimensions.get('window');
 class Home extends Component {
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', () => {
-      const { navigation: { navigate } } = this.props;
       return true;
     });
   }
@@ -24,7 +23,7 @@ class Home extends Component {
         <View style={style.row}>
           <TouchableOpacity
             onPress={() => {
-              navigate('Search');
+              navigate('SearchTyped');
             }}
             style={{
               flex: 0.4,
@@ -72,7 +71,7 @@ class Home extends Component {
         <View style={style.row}>
           <TouchableOpacity
             onPress={() => {
-              navigate('Scanner');
+              navigate('TextExtractor');
             }}
             style={{
               flex: 0.4,
@@ -95,7 +94,7 @@ class Home extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigate('Browse');
+              navigate('Search');
             }}
             style={{
               flex: 0.6,

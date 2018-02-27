@@ -5,7 +5,8 @@ import {
   TextInput,
   Alert,
   Dimensions,
-  StatusBar
+  StatusBar,
+  BackHandler
 } from 'react-native';
 
 import { main, colors } from 'shared/styles';
@@ -25,6 +26,17 @@ class Feedback extends Component {
       feedback: '',
       submitted: false,
     };
+  }
+
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _submit = async () => {

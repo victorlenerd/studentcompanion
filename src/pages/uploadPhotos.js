@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   Modal,
+  BackHandler,
   Alert
 } from 'react-native';
 
@@ -54,6 +55,14 @@ class UploadPhotos extends Component {
     } catch (err) {
       Alert.alert('Err!', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
+
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _setPhotoNotes = photoNotes => {

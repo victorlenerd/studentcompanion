@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   StatusBar,
-  Alert
+  Alert,
+  BackHandler
 } from 'react-native';
 
 import { colors } from 'shared/styles';
@@ -30,6 +31,14 @@ class SearchCourses extends Component {
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
+
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _openFacuties = ({ $id }) => {

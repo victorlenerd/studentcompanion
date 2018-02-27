@@ -54,6 +54,7 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Protobuf (3.5.0)
+  - QBImagePickerController (3.4.0)
   - React (0.51.0):
     - React/Core (= 0.51.0)
   - react-native-camera-kit (5.3.22):
@@ -78,6 +79,7 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RSKImageCropper (2.0.0)
   - yoga (0.51.0.React)
 
 DEPENDENCIES:
@@ -85,11 +87,13 @@ DEPENDENCIES:
   - Firebase/Crash
   - Firebase/Messaging
   - Google
+  - QBImagePickerController
   - react-native-camera-kit (from `../node_modules/react-native-camera-kit`)
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - React/BatchedBridge (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
+  - RSKImageCropper
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -117,11 +121,13 @@ SPEC CHECKSUMS:
   GoogleUtilities: 8bbc733218aad26306f9d4a253823986110e3358
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 352f02f1db6e4744f9a758527e13e3fdefbbd6ba
-  react-native-camera-kit: d03b36448a109fdac8894c8803299788de9d3e42
+  react-native-camera-kit: 94f54741f79ff98e7b7e41e64aa639b20238bed1
   react-native-fetch-blob: 2bef9be702de8726f4d7bf58d2345579aaaee60d
+  RSKImageCropper: d9a1acbc0600bf8decc8f0d21895872c99a9e4cf
   yoga: b5d96400ca8b2936965a7a6516da7c1177f432a3
 
-PODFILE CHECKSUM: b236b1b940baa0a6aa8aafa9c1ab94c4025a1f60
+PODFILE CHECKSUM: 10a49c144f1526cb1f5cc17237b6602dd39e7c2d
 
 COCOAPODS: 1.2.1

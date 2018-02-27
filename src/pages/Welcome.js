@@ -10,37 +10,39 @@ import Loader from 'components/loader';
 import { colors } from 'shared/styles';
 import * as Animatable from 'react-native-animatable';
 
-let timeout = null;
-
 @users
 @connection
 class Welcome extends Component {
-  componentWillMount() {
+  state = {
+    connected: false
+  }
+
+  async componentWillMount() {
     const { setConnection } = this.props;
 
     const dispatchConnected = isConnected => {
       setConnection(isConnected);
+      this.setState({ connected: isConnected });
       this._loadData();
     };
 
-    timeout = setTimeout(async () => {
-      const connected = await NetInfo.getConnectionInfo();
-      setConnection((connected !== 'none') && (connected !== 'unknown'));
-      this._loadData();
-      NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
-    }, 4000);
+    const { type } = await NetInfo.getConnectionInfo();
+    const connected = type !== 'none';
+    setConnection(connected);
+    this.setState({ connected });
+    this._loadData();
+    NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
   }
 
   componentWillUnmount() {
-    clearTimeout(timeout);
     NetInfo.isConnected.removeEventListener('connectionChange');
   }
 
   _loadData = async () => {
-    const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
+    const { navigation: { replace }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
 
     try {
-      if (this.props.isConnected) {
+      if (this.state.connected) {
         const user = await getCurrentUser();
 
         if (user !== null) {
@@ -51,28 +53,28 @@ class Welcome extends Component {
           const diffDays = paymentDate.diff(now, 'days');
 
           if (diffDays >= 0) {
-            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
+            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return replace('AcademicInfo');
 
-            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
+            if (user.deviceId !== DeviceInfo.getUniqueID()) return replace('ActivateMuitiDevice');
 
-            navigate('Main');
+            replace('Main');
           } else {
-            return navigate('ActivateAccount');
+            return replace('ActivateAccount');
           }
         } else {
           deleteCurrentUser();
-          return navigate('SignIn');
+          return replace('SignIn');
         }
       } else {
         const user = await getCurrentUserOffline();
         setCurrentUser(user);
 
         if (user !== null) {
-          navigate('Main');
+          replace('Main');
         }
       }
     } catch (err) {
-      navigate('Intro');
+      replace('Intro');
     }
   }
 
@@ -83,7 +85,7 @@ class Welcome extends Component {
         <Image resizeMode="contain" source={require('../assets/things.png')} style={{ position: 'absolute', top: 0, left: 0 }} />
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ height: 150, width: 200, elevation: 15 }}>
-            <Animatable.Image animation="fadeIn" duration={3500} resizeMode="contain" source={require('../assets/logo-lshw.png')} style={{ height: 150, width: 200 }} />
+            <Animatable.Image animation="fadeIn" duration={500} resizeMode="contain" source={require('../assets/logo-lshw.png')} style={{ height: 150, width: 200 }} />
           </View>
         </View>
         <Loader />

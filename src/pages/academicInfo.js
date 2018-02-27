@@ -44,12 +44,17 @@ class AcademicInfo extends Component {
     });
   }
 
+  skip = () => {
+    const { navigation: { replace } } = this.props;
+    return replace('Main');
+  }
+
   done = async () => {
-    const { navigation: { navigate }, setAcademicInfo, currentUser: { $id } } = this.props;
+    const { navigation: { replace }, setAcademicInfo, currentUser: { $id } } = this.props;
     const { universityId, facultyId, departmentId, levelId } = this.state;
     if (universityId !== null && facultyId && departmentId && levelId) {
       await setAcademicInfo($id, { universityId, facultyId, departmentId, levelId });
-      return navigate('SearchCourses');
+      return replace('Main');
     }
 
     Alert.alert('Error', 'You have to select all the fields.', [{ text: 'Cancel', style: 'cancel' }]);
@@ -79,6 +84,10 @@ class AcademicInfo extends Component {
               <Text style={{ color: colors.white, fontSize: 18, textAlign: 'center', marginBottom: 95, marginTop: 25 }}>
                 Please set your academic information, so you can get courses.
               </Text>
+              <Button
+                onPress={this.skip}
+                text="Skip For Now"
+              />
               <View>
                 <Text style={style.pickerLabels}>Choose University</Text>
                 <Picker

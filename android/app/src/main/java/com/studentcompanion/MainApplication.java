@@ -3,6 +3,7 @@ package com.studentcompanion;
 import android.app.Application;
 import android.util.Log;
 
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.crashlytics.android.Crashlytics;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import io.fabric.sdk.android.Fabric;
@@ -45,7 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebaseAnalyticsPackage(),
           new RNFirebaseCrashPackage(),
           new ReactNativePushNotificationPackage(),
-          new RNDeviceInfo()
+          new RNDeviceInfo(),
+          new RNFetchBlobPackage()
       );
     }
 

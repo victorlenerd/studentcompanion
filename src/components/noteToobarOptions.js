@@ -102,10 +102,6 @@ class NoteToolbarOptions extends Component {
           {this.renderPlayButton()}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={this.showVoiceRatePane}>
-          <Image resizeMode="contain" style={style.menuIcon} source={require('../assets/record_voice_over.png')} />
-        </TouchableOpacity>
-
         <TouchableOpacity onPress={this.openComments}>
           <View>
             {this.renderCommentsCount()}

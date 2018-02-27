@@ -27,6 +27,9 @@ import FeedbackScreen from 'pages/feedback';
 import SavedCoursesScreen from 'pages/savedCourses';
 import UploadPhotosScreen from 'pages/uploadPhotos';
 import TextExtractorScreen from 'pages/textExtractor';
+import ReaderScreen from 'pages/reader';
+import SearchTypedScreen from 'pages/searchTyped';
+
 
 import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
@@ -89,6 +92,12 @@ const MainNavigator = DrawerNavigator({
   },
   Search: {
     screen: SearchCoursesScreen,
+    navigationOptions: {
+      headerTitle: 'Browse'
+    }
+  },
+  SearchTypedScreen: {
+    screen: SearchTypedScreen,
     navigationOptions: {
       headerTitle: 'Search'
     }
@@ -158,6 +167,12 @@ const MainNavigator = DrawerNavigator({
   },
   TextExtractor: {
     screen: TextExtractorScreen,
+    navigationOptions: {
+      headerTitle: 'Extract Text'
+    }
+  },
+  Reader: {
+    screen: ReaderScreen,
     navigationOptions: {
       headerTitle: 'Extract Text'
     }

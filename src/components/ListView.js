@@ -57,7 +57,7 @@ class ListView extends Component {
     return (
       <View style={style.emptyContainer}>
         <View style={[main.emptyState, { margin: 20 }]}>
-          <Text style={main.emptyStateText}>You Are Offline!</Text>
+          <Text style={main.emptyStateText}>No Resource Available Yet!</Text>
         </View>
       </View>
     );
