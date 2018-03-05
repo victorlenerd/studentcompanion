@@ -20,8 +20,6 @@ import ChooseDepartmentScreen from 'pages/chooseDepartment';
 import ChooseLevelScreen from 'pages/chooseLevel';
 import ChooseCourseScreen from 'pages/chooseCourse';
 import CourseHomeScreen from 'pages/courseHome';
-import ChooseNotesScreen from 'pages/chooseNotes';
-import ChoosePapersScreen from 'pages/choosePapers';
 import CommentsScreen from 'pages/comments';
 import FeedbackScreen from 'pages/feedback';
 import SavedCoursesScreen from 'pages/savedCourses';
@@ -30,6 +28,8 @@ import TextExtractorScreen from 'pages/textExtractor';
 import ReaderScreen from 'pages/reader';
 import SearchTypedScreen from 'pages/searchTyped';
 
+import ChooseNotesScreen from 'pages/chooseNotes';
+import ChoosePapersScreen from 'pages/choosePapers';
 
 import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
@@ -78,8 +78,7 @@ const CourseNavigator = TabNavigator({
       justifyContent: 'center',
     },
     labelStyle: {
-      marginTop: -5,
-      fontSize: 18,
+      fontSize: 15,
     }
   }
 });
@@ -177,6 +176,12 @@ const MainNavigator = DrawerNavigator({
     navigationOptions: {
       headerTitle: 'Extract Text'
     }
+  },
+  Course: {
+    screen: CourseNavigator,
+    navigationOptions: {
+      headerTitle: 'Course'
+    }
   }
 }, {
   contentComponent: Drawer
@@ -248,9 +253,6 @@ const Navigation = StackNavigator({
     navigationOptions: {
       header: null
     }
-  },
-  Course: {
-    screen: CourseNavigator
   },
   Main: {
     screen: MainNavigator,

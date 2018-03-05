@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, BackHandler, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import notes from 'containers/notes';
 import courses from 'containers/courses';
 
@@ -8,6 +8,16 @@ import { main, colors } from 'shared/styles';
 @notes
 @courses
 class ChooseNotes extends Component {
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
+  }
+
   _openNote = note => {
     const { navigation: { navigate }, setCurrentNote } = this.props;
     setCurrentNote(note);

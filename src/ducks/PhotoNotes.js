@@ -6,7 +6,6 @@ import { StartRequest, FinishRequest } from 'ducks/request';
 const genRandom = () => `${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 6)}`;
 
 export const AddPhotoNote = photoNote => dispatch => new Promise(async (resolve, reject) => {
-
   const photosRef = app.database().ref('/photos');
 
   const options = {

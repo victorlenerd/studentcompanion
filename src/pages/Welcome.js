@@ -39,7 +39,7 @@ class Welcome extends Component {
   }
 
   _loadData = async () => {
-    const { navigation: { replace }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
+    const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
 
     try {
       if (this.state.connected) {
@@ -53,28 +53,28 @@ class Welcome extends Component {
           const diffDays = paymentDate.diff(now, 'days');
 
           if (diffDays >= 0) {
-            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return replace('AcademicInfo');
+            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
 
-            if (user.deviceId !== DeviceInfo.getUniqueID()) return replace('ActivateMuitiDevice');
+            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
 
-            replace('Main');
+            navigate('Main');
           } else {
-            return replace('ActivateAccount');
+            return navigate('ActivateAccount');
           }
         } else {
           deleteCurrentUser();
-          return replace('SignIn');
+          return navigate('SignIn');
         }
       } else {
         const user = await getCurrentUserOffline();
         setCurrentUser(user);
 
         if (user !== null) {
-          replace('Main');
+          navigate('Main');
         }
       }
     } catch (err) {
-      replace('Intro');
+      navigate('Intro');
     }
   }
 

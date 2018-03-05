@@ -17,9 +17,9 @@ import {
 import RNFetchBlob from 'react-native-fetch-blob';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationActions } from 'react-navigation';
+import fs from 'fs';
 
-
-const { polyfill: { Blob }, fs } = RNFetchBlob;
+const { polyfill: { Blob } } = RNFetchBlob;
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 window.Blob = Blob;
 
@@ -40,6 +40,16 @@ export default class Reader extends Component {
 
       try {
         this.setState({ loading: true });
+        // let filePath = null;
+        // const fileUri = image.uri;
+
+        // if (Platform.OS === 'ios') {
+        //   const arr = fileUri.split('/');
+        //   filePath = `${dirs.DocumentDir}/${arr[arr.length - 1]}`;
+        // } else {
+        //   filePath = fileUri;
+        // }
+
         const imageData = await fs.readFile(image.uri, 'base64');
         const imageBlob = await Blob.build(imageData, { type: 'image/jpg;base64' }).then(blob => blob);
         const uploadResponse = await this.uploadPhoto(imageBlob, type);

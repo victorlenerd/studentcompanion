@@ -17,6 +17,7 @@ import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.soloader.SoLoader;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.rnfs.RNFSPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -41,6 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
           new RNCameraKitPackage(),
           new PickerPackage(),
           new RandomBytesPackage(),
+          new RNFSPackage(),
           new RNFirebasePackage(),
           new TextToSpeechPackage(),
           new RNFirebaseAnalyticsPackage(),

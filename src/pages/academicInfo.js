@@ -45,16 +45,16 @@ class AcademicInfo extends Component {
   }
 
   skip = () => {
-    const { navigation: { replace } } = this.props;
-    return replace('Main');
+    const { navigation: { navigate } } = this.props;
+    return navigate('Main');
   }
 
   done = async () => {
-    const { navigation: { replace }, setAcademicInfo, currentUser: { $id } } = this.props;
+    const { navigation: { navigate }, setAcademicInfo, currentUser: { $id } } = this.props;
     const { universityId, facultyId, departmentId, levelId } = this.state;
     if (universityId !== null && facultyId && departmentId && levelId) {
       await setAcademicInfo($id, { universityId, facultyId, departmentId, levelId });
-      return replace('Main');
+      return navigate('Main');
     }
 
     Alert.alert('Error', 'You have to select all the fields.', [{ text: 'Cancel', style: 'cancel' }]);
@@ -88,7 +88,7 @@ class AcademicInfo extends Component {
                 onPress={this.skip}
                 text="Skip For Now"
               />
-              <View>
+              <View style={{ marginTop: 50 }}>
                 <Text style={style.pickerLabels}>Choose University</Text>
                 <Picker
                   style={style.picker}
@@ -184,6 +184,7 @@ const style = StyleSheet.create({
   pickerLabels: {
     color: colors.white,
     fontSize: 16,
+    textAlign: 'center',
     fontWeight: '200'
   }
 });

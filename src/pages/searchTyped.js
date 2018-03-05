@@ -24,6 +24,10 @@ class SearchTyped extends Component {
     });
   }
 
+  componentDidMount() {
+    this.textInput.focus();
+  }
+
   componentWillReceiveProps(nextProps) {
     const { currentSearch } = nextProps;
     this.setState({ courses: currentSearch });
@@ -50,7 +54,7 @@ class SearchTyped extends Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={style.header}>
-          <TextInput placeholder="Search" style={[main.textInput, style.headerText]} autoFocus={true} onChangeText={debounce(this.setSearch, 500)} />
+          <TextInput ref={e => this.textInput = e} placeholder="Search" style={[main.textInput, style.headerText]} autoFocus={true} onChangeText={debounce(this.setSearch, 500)} />
         </View>
         {this.state.courses.length > 0 && <ListView title="Courses" openItem={this._openCourse} data={this.state.courses} hideHeader={true} hideEmptyState={true} hideLoader={true} />}
         <Loader />

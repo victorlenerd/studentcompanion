@@ -60,7 +60,7 @@ class TextExtractor extends Component {
   }
 
   snap = async () => {
-    const image = await this.camera.capture(false);
+    const image = await this.camera.capture(true);
     this.setState({ ready: true, image });
   }
 

@@ -22,6 +22,8 @@ target 'StudentCompanion' do
     :path => '../node_modules/react-native-fetch-blob'
 
   pod 'react-native-camera-kit', :path => '../node_modules/react-native-camera-kit'
+  
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   pod 'RSKImageCropper'
   pod 'QBImagePickerController'

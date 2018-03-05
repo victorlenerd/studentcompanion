@@ -7,6 +7,7 @@ import {
   Platform,
   Alert,
   AppState,
+  BackHandler,
   Dimensions
 } from 'react-native';
 
@@ -76,7 +77,9 @@ class Note extends Component {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
 
-    AppState.addEventListener('change', this._handleAppStateChange);
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,6 +109,7 @@ class Note extends Component {
 
   componentWillUnmount() {
     Tts.stop();
+    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _handleAppStateChange = nextAppState => {

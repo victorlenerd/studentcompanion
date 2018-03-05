@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, BackHandler, Text, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 
 import papers from 'containers/papers';
 import questions from 'containers/questions';
-import courses from 'containers/courses'
+import courses from 'containers/courses';
 
 import { main, colors } from 'shared/styles';
 
@@ -11,6 +11,16 @@ import { main, colors } from 'shared/styles';
 @questions
 @courses
 class ChoosePapers extends Component {
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
+  }
+
   _openPaper = async paper => {
     const { navigation: { navigate }, setCurrentPaper, getQuestions, getQuestionsOffline } = this.props;
     setCurrentPaper(paper);
