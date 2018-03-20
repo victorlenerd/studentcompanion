@@ -9,47 +9,34 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  ScrollView,
+  Modal,
   BackHandler
 } from 'react-native';
 
-import { CameraKitCamera } from 'react-native-camera-kit';
+import { CameraKitCamera, CameraKitGalleryView, CameraKitGallery } from 'react-native-camera-kit';
 import { main, colors } from 'shared/styles';
+import EmptyState from 'components/emptyState';
+import connection from 'containers/connection';
+import Loader from 'components/loader';
+import Swiper from 'react-native-swiper';
 
 const { width } = Dimensions.get('window');
 
+@connection
 class TextExtractor extends Component {
   state = {
     ready: false,
     cameraLight: 'auto',
     image: null,
+    extractedNotes: [],
+    useCamera: null,
+    selectedPhotos: [],
+    modalVisible: false,
     docType: null
   }
 
   componentWillMount() {
-    if (Platform.OS !== 'ios') {
-      Alert.alert(
-        'Type Of Document',
-        'What Type Of Document Do You Want To Snap ?',
-        [
-          { text: 'Typed', onPress: () => this.setState({ docType: 0 }) },
-          { text: 'Hand Written', onPress: () => this.setState({ docType: 1 }) },
-          { text: 'Canel', style: 'cancel', onPress: () => this.props.navigation.goBack() }
-        ], { cancelable: false });
-    } else {
-      ActionSheetIOS.showActionSheetWithOptions({
-        title: 'Type Of Document',
-        message: 'What Type Of Document Do You Want To Snap ?',
-        options: ['Typed', 'Hand Written', 'Canel'],
-        cancelButtonIndex: 2
-      }, index => {
-        if (index !== 2) {
-          return this.setState({ docType: index });
-        }
-
-        this.props.navigation.goBack();
-      });
-    }
-
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });
@@ -59,13 +46,65 @@ class TextExtractor extends Component {
     BackHandler.removeEventListener('hardwareBackPress');
   }
 
+  add = () => {
+    if (Platform.OS !== 'ios') {
+      Alert.alert(
+        'Type Of Document',
+        'What Type Of Document Do You Want To Snap ?',
+        [
+          { text: 'Typed', onPress: () => this.setState({ docType: 0 }, () => this.choosePhotoOption()) },
+          { text: 'Hand Written', onPress: () => this.setState({ docType: 1 }, () => this.choosePhotoOption()) },
+          { text: 'Canel', style: 'cancel', onPress: () => {} }
+        ], { cancelable: false });
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions({
+        title: 'Type Of Document',
+        message: 'What Type Of Document Do You Want To Snap ?',
+        options: ['Typed', 'Hand Written', 'Canel'],
+        cancelButtonIndex: 2
+      }, index => {
+        if (index !== 2) {
+          return this.setState({ docType: index }, () => this.choosePhotoOption());
+        }
+      });
+    }
+  }
+
+  choosePhotoOption = () => {
+    if (Platform.OS !== 'ios') {
+      Alert.alert(
+        'Photo Upload', 'Choose where to get photos.',
+        [
+          { text: 'Gallery', onPress: () => this.setState({ useCamera: 0, modalVisible: true }) },
+          { text: 'Camera', onPress: () => this.setState({ useCamera: 1, modalVisible: true }) },
+          { text: 'Cancel', style: 'cancel', onPress: () => {} },
+        ], { cancelable: false });
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions({
+        title: 'Photo Upload',
+        message: 'Where to get photo?',
+        options: ['Open Gallery', 'Open Camera', 'Cancel'],
+        cancelButtonIndex: 2
+      }, index => {
+        if (index !== 2) {
+          return this.setState({ useCamera: index, modalVisible: true });
+        }
+      });
+    }
+  }
+
   snap = async () => {
     const image = await this.camera.capture(true);
     this.setState({ ready: true, image });
   }
 
   cancel = () => {
-    this.props.navigation.goBack();
+    this.setState({
+      docType: null,
+      useCamera: null,
+      selectedPhotos: [],
+      modalVisible: false
+    });
   }
 
   changeFlashLight = async () => {
@@ -113,33 +152,25 @@ class TextExtractor extends Component {
     return null;
   }
 
-  renderCamera = () => {
-    if (this.state.ready) {
-      return (
-        <Image style={{ flex: 1, backgroundColor: colors.brightBlue }} resizeMode="contain" source={{ uri: this.state.image.uri }} />
-      );
-    }
-
+  renderSelected = () => {
     return (
-      <CameraKitCamera
-        ref={cam => this.camera = cam}
-        style={{
-            flex: 1,
-            backgroundColor: '#000000'
-        }}
-        cameraOptions={{
-            flashMode: 'auto',
-            focusMode: 'on',
-            zoomMode: 'on',
-            ratioOverlayColor: colors.brightBlue
-        }}
-      />
-    );
-  }
-
-  renderControls = () => {
-    if (this.state.ready) {
-      return (
+      <View style={{ flex: 1 }}>
+        {this.state.ready && this.state.useCamera === 1 &&
+        <Image style={{ flex: 1, backgroundColor: colors.brightBlue }} resizeMode="contain" source={{ uri: this.state.image.uri }} />}
+        {this.state.ready && this.state.useCamera === 0 &&
+        <Swiper loop={false} loadMinimal={true} containerStyle={{ flex: 1 }}>
+          {this.state.selectedPhotos.map((img, i) => {
+            return (
+              <View key={() => i} style={{ flex: 1 }}>
+                <Image
+                  source={{ uri: img.uri, cache: true }}
+                  resizeMode="center"
+                  style={{ flex: 1 }}
+                />
+              </View>
+            );
+          })}
+        </Swiper>}
         <View style={styles.controlSpaces}>
           <TouchableOpacity onPress={e => { this.setState({ ready: false }); }} style={[styles.actionBtn, { }]}>
             <Image style={styles.actionIcon} source={require('../assets/cross.png')} resizeMode="contain" />
@@ -147,8 +178,8 @@ class TextExtractor extends Component {
           <TouchableOpacity
             onPress={e => {
               this.props.navigation.navigate('Reader', {
-                  image: this.state.image,
-                  type: this.state.docType
+                images: this.state.useCamera === 1 ? [this.state.image] : this.state.selectedPhotos,
+                type: this.state.docType
               });
             }}
             style={[styles.actionBtn, {}]}
@@ -156,32 +187,136 @@ class TextExtractor extends Component {
             <Image style={styles.actionIcon} source={require('../assets/mark.png')} resizeMode="contain" />
           </TouchableOpacity>
         </View>
-      );
-    }
+      </View>
+    );
+  }
 
+  renderControls = () => {
     return (
       <View style={styles.controlSpaces}>
         <TouchableOpacity style={[styles.otherButton]} onPress={this.cancel}>
           <Text style={{ fontSize: 18, color: '#FFC221' }}>CANCEL</Text>
         </TouchableOpacity>
+        {this.state.useCamera === 1 &&
         <TouchableOpacity onPress={this.snap} style={[styles.talkButton]}>
           <View style={styles.innerCircle} />
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        {this.state.useCamera === 1 &&
         <TouchableOpacity style={[styles.otherButton]} onPress={this.changeFlashLight}>
           {this.renderFlashLightIcon()}
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        {this.state.useCamera === 0 &&
+        <TouchableOpacity
+          style={[styles.otherButton]}
+          onPress={async () => {
+            try {
+              const { images } = await CameraKitGallery.getImagesForIds(this.state.selectedPhotos);
+              this.setState({
+                ready: true,
+                selectedPhotos: images
+              });
+            } catch (err) {
+              throw err;
+            }
+          }}
+        >
+          <Text style={{ fontSize: 18, color: '#FFC221' }}>DONE</Text>
+        </TouchableOpacity>}
       </View>
     );
   }
 
+  renderModal = () => {
+    const { useCamera, modalVisible } = this.state;
+    return (
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => {}}
+      >
+        {this.state.ready && this.renderSelected()}
+        {!this.state.ready &&
+        <View style={styles.camSpace}>
+          {useCamera === 1 && <CameraKitCamera
+            ref={cam => this.camera = cam}
+            style={{
+              flex: 1,
+              backgroundColor: '#000000'
+            }}
+            cameraOptions={{
+              flashMode: 'auto',
+              focusMode: 'on',
+              zoomMode: 'on',
+              ratioOverlayColor: colors.brightBlue
+            }}
+          />}
+          {useCamera === 0 && <CameraKitGalleryView
+            ref={gallery => this.gallery = gallery}
+            style={{ flex: 1, marginTop: 20, marginHorizontal: 20 }}
+            minimumInteritemSpacing={10}
+            minimumLineSpacing={10}
+            columnCount={3}
+            onTapImage={event => {
+              const { nativeEvent: { selected } } = event;
+              if (this.state.selectedPhotos.indexOf(selected) !== -1) {
+                return this.setState({
+                  selectedPhotos: this.state.selectedPhotos.filter(f => f !== selected)
+                });
+              }
+
+              return this.setState({
+                selectedPhotos: this.state.selectedPhotos.concat(selected)
+              });
+            }}
+          />}
+          {this.renderControls()}
+        </View>}
+        <Loader />
+      </Modal>
+    );
+  };
+
+  renderSection() {
+    if (this.state.extractedNotes.length > 0) {
+      return (
+        <ScrollView style={{ flex: 1 }}>
+          {this.state.extractedNotes.map((photoNote, index) => {
+            return (<View />);
+          })}
+          <View style={{ height: 200 }} />
+        </ScrollView>
+      );
+    }
+
+    return (<EmptyState message="You have not extrated text from any photos." />);
+  }
+
+  renderOfflineBanner() {
+    if (!this.props.isConnected) {
+      return (
+        <View style={{ width, height: 80, paddingLeft: 20, justifyContent: 'center', backgroundColor: colors.red }}>
+          <Text style={{ color: colors.white, fontSize: 22, fontWeight: '300' }}>You are offline!</Text>
+        </View>
+      );
+    }
+  }
+
   render() {
-    if (this.state.docType === null) return this.state.docType;
     return (
       <View style={main.container}>
-        <View style={styles.camSpace}>
-          {this.renderCamera()}
-          {this.renderControls()}
+        {this.renderOfflineBanner()}
+        {this.renderModal()}
+        {this.renderSection()}
+        <View style={[main.fabHome, { width }]}>
+          <TouchableOpacity
+            onPress={this.add}
+            style={main.Fab}
+          >
+            <Image source={require('../assets/add_white.png')} style={main.fabIcon} />
+          </TouchableOpacity>
         </View>
+        <Loader />
       </View>
     );
   }
@@ -189,7 +324,11 @@ class TextExtractor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: colors.lightBlue,
+    borderTopColor: colors.accent,
+    borderTopWidth: 2
   },
   camSpace: {
     flex: 1
@@ -223,7 +362,7 @@ const styles = StyleSheet.create({
   },
   controlSpaces: {
     width,
-    height: 100,
+    paddingVertical: 5,
     paddingHorizontal: 20,
     backgroundColor: colors.brightBlue,
     flexDirection: 'row',

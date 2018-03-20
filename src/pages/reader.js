@@ -17,7 +17,7 @@ import {
 import RNFetchBlob from 'react-native-fetch-blob';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { NavigationActions } from 'react-navigation';
-import fs from 'fs';
+import fs from 'react-native-fs';
 
 const { polyfill: { Blob } } = RNFetchBlob;
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
@@ -30,39 +30,51 @@ export default class Reader extends Component {
     state = {
       loading: false,
       body: '',
+      type: null,
       editedBody: [],
       modalVisible: false,
       uploadUrl: 'https://westeurope.api.cognitive.microsoft.com/vision/v1.0/recognizeText?',
     }
 
     async componentWillMount() {
-      const { params: { image, type } } = this.props.navigation.state;
+      const { params: { images, type } } = this.props.navigation.state;
+      this.setState({ type });
 
-      try {
-        this.setState({ loading: true });
-        // let filePath = null;
-        // const fileUri = image.uri;
+      this.ImageToBodyGenerator = function* () {
+        for (let i = 0; i < images.length; i += 1) {
+          yield images[i];
+        }
+      };
 
-        // if (Platform.OS === 'ios') {
-        //   const arr = fileUri.split('/');
-        //   filePath = `${dirs.DocumentDir}/${arr[arr.length - 1]}`;
-        // } else {
-        //   filePath = fileUri;
-        // }
 
-        const imageData = await fs.readFile(image.uri, 'base64');
-        const imageBlob = await Blob.build(imageData, { type: 'image/jpg;base64' }).then(blob => blob);
-        const uploadResponse = await this.uploadPhoto(imageBlob, type);
-        const response = (type === 0) ? await this.receivePhotoData(uploadResponse) : uploadResponse;
-        const body = this.prepareResponse(response);
-        this.setState({ loading: false, body });
-      } catch (err) {
-        Alert.alert('File Upload Error', err.message, [{
-          label: 'OK'
-        }]);
-      }
+      this.setState({ loading: true });
+      this.imgageToBodyIterator();
+    }
 
-      this.setState({ loading: false });
+    imgageToBodyIterator = async () => {
+      const imgageToBodyIterate = this.ImageToBodyGenerator();
+
+      const recurseBody = async bodies => {
+        const nextImg = imgageToBodyIterate.next();
+
+        if (!nextImg.done) {
+          const body = await this.imageToBody(nextImg.value);
+          return recurseBody(bodies.concat(body));
+        }
+
+        this.setState({ loading: false, body: bodies.join() });
+      };
+
+
+      recurseBody([]);
+    }
+
+    imageToBody = async ({ uri }) => {
+      const imageData = await fs.readFile(uri, 'base64');
+      const imageBlob = await Blob.build(imageData, { type: 'image/jpg;base64' }).then(blob => blob);
+      const uploadResponse = await this.uploadPhoto(imageBlob, this.state.type);
+      const response = (this.state.type === 0) ? await this.receivePhotoData(uploadResponse) : uploadResponse;
+      return this.prepareResponse(response);
     }
 
     uploadPhoto = (imageBlob, imageType) => new Promise((resolve, reject) => {
@@ -214,6 +226,13 @@ export default class Reader extends Component {
               </KeyboardAwareScrollView>
             </View>
           </Modal>
+          <ScrollView style={styles.container}>
+            <View style={{ marginBottom: 100, marginTop: 100 }}>
+              {bodies.map((text, i) => {
+                    return (<Text style={styles.bodyText}>{text}.</Text>);
+                })}
+            </View>
+          </ScrollView>
           <View style={styles.topTrans}>
             <TouchableOpacity style={styles.actionBttn} onPress={this.editNote}>
               <Image source={require('../assets/pencil.png')} style={styles.icon} />
@@ -224,13 +243,6 @@ export default class Reader extends Component {
               <Text style={styles.actionTxt}>SAVE</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView style={styles.container}>
-            <View style={{ marginBottom: 100, marginTop: 100 }}>
-              {bodies.map((text, i) => {
-                    return (<Text style={styles.bodyText}>{text}.</Text>);
-                })}
-            </View>
-          </ScrollView>
         </View>
       );
     }
@@ -244,16 +256,12 @@ const styles = StyleSheet.create({
   },
 
   topTrans: {
-    width: width,
     paddingHorizontal: 20,
-    height: 80,
+    paddingVertical: 20,
     zIndex: 10,
-    top: 0,
-    right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    position: 'absolute',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000000',
     shadowOffset: {
@@ -296,6 +304,7 @@ const styles = StyleSheet.create({
   },
 
   actionBttn: {
+    flex: 0.5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
