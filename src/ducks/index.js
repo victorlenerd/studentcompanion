@@ -15,6 +15,7 @@ import { UserReducer } from './user';
 import { CommentsReducer } from './comments';
 import { ReaderReducer } from './reader';
 import { SearchReducer } from './search';
+import { UploadPhotosReducer } from './photoNotes';
 
 const reducers = combineReducers({
   courseState: CourseReducer,
@@ -31,7 +32,8 @@ const reducers = combineReducers({
   userState: UserReducer,
   commentsState: CommentsReducer,
   searchState: SearchReducer,
-  readerState: ReaderReducer
+  readerState: ReaderReducer,
+  uploadPhotosState: UploadPhotosReducer
 });
 
 export default reducers;

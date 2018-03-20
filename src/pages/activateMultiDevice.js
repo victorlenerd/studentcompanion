@@ -67,7 +67,7 @@ class ActivateMultipleDevice extends Component {
           You cannot use your account on more than one device. You can deactivate the original device and activate this new device.
         </Text>
         <Button onPress={this.sendActivationCode} text="Activate New Device" />
-        <ButtonInActive onPress={this.signOut} text="No Not Now." />
+        <ButtonInActive onPress={this.signout} text="No Not Now." />
       </View>
     );
   }

@@ -24,7 +24,7 @@ class Pass extends Component {
       const done = await updateDeviceId(this.state.code);
       if (done) {
         Alert.alert('Success', 'Device Activation Success.', [{ text: 'Cancel', style: 'cancel' }]);
-        return navigate('Main');
+        return navigate('Welcome');
       }
 
       Alert.alert('An Error Occured', 'The code you used is not valid.', [{ text: 'Cancel', style: 'cancel' }]);

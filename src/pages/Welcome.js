@@ -54,7 +54,6 @@ class Welcome extends Component {
 
           if (diffDays >= 0) {
             if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
-
             if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
 
             navigate('Main');
