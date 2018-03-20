@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import DeviceInfo from 'react-native-device-info';
 
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
@@ -24,6 +25,7 @@ class SignIn extends Component {
   componentWillReceiveProps(nextProps) {
     const { currentUser, validEmail, navigation: { navigate } } = nextProps;
     if (validEmail(currentUser.email)) navigate('Home');
+    if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
   }
 
   signIn = async () => {
