@@ -9,7 +9,8 @@ const UPDATE_NOTE = 'UPDATE_NOTE';
 const REMOVE_NOTE = 'REMOVE_NOTE';
 
 const initialState = {
-  notes: {}
+  notes: {},
+  currentNote: null
 };
 
 const generateId = () => {
@@ -48,6 +49,15 @@ export const UpdateNote = note => async dispatch => {
   dispatch(SaveNotes());
 };
 
+export const RemoveNote = noteId => async dispatch => {
+  dispatch({
+    type: REMOVE_NOTE,
+    noteId
+  });
+
+  dispatch(SaveNotes());
+};
+
 export const SaveNotes = () => (dispatch, getState) => {
   const { notes } = getState();
   AsyncStorage.setItem('@UPQ:EXTRACTED_NOTES', JSON.stringify(notes));
@@ -65,7 +75,7 @@ export const LoadNotes = () => async (dispatch, getState) => Promise(async (reso
   });
 });
 
-export const extractedNotesReducer = (state = initialState, action) => {
+export const ExtractedNotesReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_NOTES:
       return { notes: action.notes };
