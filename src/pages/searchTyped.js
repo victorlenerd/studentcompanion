@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { TextInput, View, StyleSheet, Dimensions, BackHandler } from 'react-native';
+import {
+  Keyboard,
+  TextInput,
+  View,
+  StyleSheet,
+  Dimensions,
+  BackHandler
+} from 'react-native';
 
 import Loader from 'components/loader';
 import ListView from 'components/listView';
@@ -34,6 +41,7 @@ class SearchTyped extends Component {
   }
 
   componentWillUnmount() {
+    Keyboard.dismiss();
     BackHandler.removeEventListener('hardwareBackPress');
   }
 

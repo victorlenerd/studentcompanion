@@ -24,8 +24,8 @@ class SignIn extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, validEmail, navigation: { navigate } } = nextProps;
-    if (validEmail(currentUser.email)) navigate('Home');
-    if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
+    if (currentUser.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
+    if (validEmail(currentUser.email)) return navigate('Home');
   }
 
   signIn = async () => {

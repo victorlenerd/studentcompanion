@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import reader from 'containers/reader';
@@ -11,14 +12,24 @@ class NoteToolbarOptions extends Component {
     themeMode: 'light',
     showVoicePane: false,
     playing: false,
+    showEdit: false,
+    showSave: false,
     commentCount: 0
   }
 
+  componentWillMount() {
+    const { showEdit, showSave } = this.props;
+    if (this.state.showEdit !== showEdit) this.setState({ showEdit });
+    if (this.state.showSave !== showSave) this.setState({ showSave });
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { themeMode, showVoicePane, playing, commentCount } = nextProps;
+    const { showEdit, showSave, themeMode, showVoicePane, playing, commentCount } = nextProps;
     if (this.state.themeMode !== themeMode) this.setState({ themeMode });
     if (this.state.showVoicePane !== showVoicePane) this.setState({ showVoicePane });
     if (this.state.playing !== playing) this.setState({ playing });
+    if (this.state.showEdit !== showEdit) this.setState({ showEdit });
+    if (this.state.showSave !== showSave) this.setState({ showSave });
     this.setState({ commentCount });
   }
 
@@ -41,6 +52,14 @@ class NoteToolbarOptions extends Component {
 
   openComments = () => {
     this.props.navigation.navigate('Comments');
+  }
+
+  save = () => {
+    this.props.setSave(true);
+  }
+
+  edit = () => {
+    this.props.setEdit(true);
   }
 
   renderCommentsCount = () => {
@@ -92,6 +111,8 @@ class NoteToolbarOptions extends Component {
   }
 
   render() {
+    const { extracted } = this.props;
+
     return (
       <View style={style.container}>
         <TouchableOpacity onPress={this.setTheme}>
@@ -102,16 +123,44 @@ class NoteToolbarOptions extends Component {
           {this.renderPlayButton()}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={this.openComments}>
-          <View>
-            {this.renderCommentsCount()}
-            <Image resizeMode="contain" style={style.menuIcon} source={require('../assets/bubble-white.png')} />
-          </View>
-        </TouchableOpacity>
+        {!extracted &&
+          <TouchableOpacity onPress={this.openComments}>
+            <View>
+              {this.renderCommentsCount()}
+              <Image resizeMode="contain" style={style.menuIcon} source={require('../assets/bubble-white.png')} />
+            </View>
+          </TouchableOpacity>}
+
+        {extracted && this.state.showEdit &&
+          <TouchableOpacity onPress={this.edit}>
+            <Text style={style.menuTxt}>EDIT</Text>
+          </TouchableOpacity>}
+
+        {extracted && this.state.showSave &&
+          <TouchableOpacity onPress={this.save}>
+            <Text style={style.menuTxt}>SAVE</Text>
+          </TouchableOpacity>}
       </View>
     );
   }
 }
+
+
+NoteToolbarOptions.propTypes = {
+  showVoicePane: PropTypes.bool,
+  playing: PropTypes.bool,
+  commentCount: PropTypes.number,
+  themeMode: PropTypes.string,
+  navigation: PropTypes.object,
+  extracted: PropTypes.bool,
+  showEdit: PropTypes.bool,
+  showSave: PropTypes.bool,
+  setPlayMode: PropTypes.func,
+  setShowVoicePane: PropTypes.func,
+  setThemeMode: PropTypes.func,
+  setSave: PropTypes.func,
+  setEdit: PropTypes.func
+};
 
 const style = StyleSheet.create({
   container: {
@@ -119,9 +168,11 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  menuText: {
-    color: colors.white,
-    fontSize: 12
+  menuTxt: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 20
   },
   menuIcon: {
     width: 22,

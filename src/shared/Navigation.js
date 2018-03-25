@@ -87,19 +87,22 @@ const MainNavigator = DrawerNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: {
-      headerTitle: 'Home'
+      headerTitle: 'Home',
+      gesturesEnabled: false,
     }
   },
   Search: {
     screen: SearchCoursesScreen,
     navigationOptions: {
-      headerTitle: 'Browse'
+      headerTitle: 'Browse',
+      gesturesEnabled: false,
     }
   },
   SearchTyped: {
     screen: SearchTypedScreen,
     navigationOptions: {
-      headerTitle: 'Search'
+      headerTitle: 'Search',
+      gesturesEnabled: false,
     }
   },
   ChooseFaculty: {
@@ -135,19 +138,22 @@ const MainNavigator = DrawerNavigator({
   Feedback: {
     screen: FeedbackScreen,
     navigationOptions: {
-      headerTitle: 'Feedback'
+      headerTitle: 'Feedback',
+      gesturesEnabled: false
     }
   },
   SavedCourses: {
     screen: SavedCoursesScreen,
     navigationOptions: {
-      headerTitle: 'Library'
+      headerTitle: 'Library',
+      gesturesEnabled: false
     }
   },
   UploadPhotos: {
     screen: UploadPhotosScreen,
     navigationOptions: {
-      headerTitle: 'Upload Photos'
+      headerTitle: 'Upload Photos',
+      gesturesEnabled: false
     }
   },
   Comments: {
@@ -168,19 +174,19 @@ const MainNavigator = DrawerNavigator({
   TextExtractor: {
     screen: TextExtractorScreen,
     navigationOptions: {
-      headerTitle: 'Extract Text'
+      headerTitle: 'Extract Text',
     }
   },
   Reader: {
     screen: ReaderScreen,
-    navigationOptions: {
-      headerTitle: 'Extract Text'
-    }
+    navigationOptions: ({ navigation }) => ({
+      headerRight: <NoteToobarOptions extracted={true} navigation={navigation} />,
+    })
   },
   Course: {
     screen: CourseNavigator,
     navigationOptions: {
-      headerTitle: 'Course'
+      headerTitle: 'Course',
     }
   }
 }, {
@@ -197,7 +203,8 @@ const Navigation = StackNavigator({
   AcademicInfo: {
     screen: AcademicInfoScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   UploadPhoto: {
@@ -209,19 +216,22 @@ const Navigation = StackNavigator({
   Payment: {
     screen: PaymentScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   ActivateAccount: {
     screen: ActivateAccountScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   ActivateMuitiDevice: {
     screen: ActivateMuitiDeviceScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   ForgotPassword: {
@@ -233,30 +243,35 @@ const Navigation = StackNavigator({
   Pass: {
     screen: PassScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   SignIn: {
     screen: SignInScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   Intro: {
     screen: IntroScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   SignUp: {
     screen: SignUpScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false,
     }
   },
   Main: {
     screen: MainNavigator,
     navigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       headerStyle: {
         backgroundColor: colors.brightBlue,
       },

@@ -19,6 +19,7 @@
     "formatter": "prettier --single-quote --trailing-comma=es5 --print-width=120 --write \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
+    "@tradle/react-native-http": "^2.0.0",
     "assert": "^1.4.1",
     "asyncstorage-down": "^4.0.1",
     "browserify-zlib": "^0.1.4",
@@ -37,6 +38,7 @@
     "process": "^0.11.10",
     "prop-types": "^15.6.0",
     "querystring-es3": "^0.2.1",
+    "raven-js": "^3.23.3",
     "react": "16.0.0",
     "react-native": "0.51.0",
     "react-native-animatable": "^1.1.1",
@@ -106,7 +108,7 @@
     "dns": "dns.js",
     "net": "react-native-tcp",
     "domain": "domain-browser",
-    "http": "react-native-http",
+    "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
     "path": "path-browserify",
@@ -132,7 +134,7 @@
     "dns": "dns.js",
     "net": "react-native-tcp",
     "domain": "domain-browser",
-    "http": "react-native-http",
+    "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
     "path": "path-browserify",

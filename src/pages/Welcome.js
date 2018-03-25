@@ -20,21 +20,21 @@ class Welcome extends Component {
   async componentWillMount() {
     const { setConnection } = this.props;
 
-    const dispatchConnected = isConnected => {
-      setConnection(isConnected);
-      this.setState({ connected: isConnected });
-      this._loadData();
-    };
-
     const { type } = await NetInfo.getConnectionInfo();
     const connected = type !== 'none';
     setConnection(connected);
     this.setState({ connected });
     this._loadData();
-    NetInfo.isConnected.addEventListener('connectionChange', dispatchConnected);
+
+    this.timer = setTimeout(() => {
+      this.setState({ connected: false });
+      setConnection(false);
+      this._loadData();
+    }, 15000);
   }
 
-  componentWillUnmount() {
+  clearListeners() {
+    clearTimeout(this.timer);
     NetInfo.isConnected.removeEventListener('connectionChange');
   }
 
@@ -53,15 +53,24 @@ class Welcome extends Component {
           const diffDays = paymentDate.diff(now, 'days');
 
           if (diffDays >= 0) {
-            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) return navigate('AcademicInfo');
-            if (user.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
+            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {
+              this.clearListeners();
+              return navigate('AcademicInfo');
+            }
+            if (user.deviceId !== DeviceInfo.getUniqueID()) {
+              this.clearListeners();
+              return navigate('ActivateMuitiDevice');
+            }
 
+            this.clearListeners();
             navigate('Main');
           } else {
+            this.clearListeners();
             return navigate('ActivateAccount');
           }
         } else {
           deleteCurrentUser();
+          this.clearListeners();
           return navigate('SignIn');
         }
       } else {
@@ -69,10 +78,12 @@ class Welcome extends Component {
         setCurrentUser(user);
 
         if (user !== null) {
+          this.clearListeners();
           navigate('Main');
         }
       }
     } catch (err) {
+      this.clearListeners();
       navigate('Intro');
     }
   }

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 
 class DrawerIcon extends Component {
   render() {
     return (
       <TouchableOpacity
         onPress={() => {
+          Keyboard.dismiss();
           this.props.navigation.navigate('DrawerToggle');
         }}
       >

@@ -47,18 +47,20 @@ class UploadPhotos extends Component {
   }
 
   async componentWillMount() {
-    const { currentUser: { $id }, getPhotoNotes } = this.props;
-    try {
-      this.setState({ userId: $id });
-      const results = await getPhotoNotes($id);
-      this._setPhotoNotes(results);
-    } catch (err) {
-      Alert.alert('Err!', err.message, [{ text: 'Cancel', style: 'cancel' }]);
-    }
+    const { isConnected, currentUser: { $id }, getPhotoNotes } = this.props;
+    if (isConnected) {
+      try {
+        this.setState({ userId: $id });
+        const results = await getPhotoNotes($id);
+        this._setPhotoNotes(results);
+      } catch (err) {
+        Alert.alert('Err!', err.message, [{ text: 'Cancel', style: 'cancel' }]);
+      }
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        this.props.navigation.goBack();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -158,27 +160,25 @@ class UploadPhotos extends Component {
   _renderSection() {
     if (this.state.photoNotes.length > 0) {
       return (
-        <ScrollView style={{ flex: 1 }}>
-          {this.state.photoNotes.map((photoNote, index) => {
-            return (<UploadListItem key={() => index} photoNote={photoNote} setCurrent={this._setCurrent} />);
+        <View style={{ flex: 1 }}>
+          {!this.props.isConnected &&
+            <View style={{ width, height: 80, paddingLeft: 20, justifyContent: 'center', backgroundColor: colors.red }}>
+              <Text style={{ color: colors.white, fontSize: 22, fontWeight: '300' }}>You are offline!</Text>
+            </View>
+          }
+          <ScrollView style={{ flex: 1 }}>
+            {this.state.photoNotes.map((photoNote, index) => {
+            return (<UploadListItem key={photoNote.$id} photoNote={photoNote} setCurrent={this._setCurrent} />);
           })}
-          <View style={{ height: 200 }} />
-        </ScrollView>
+            <View style={{ height: 200 }} />
+          </ScrollView>
+        </View>
       );
     }
 
     return (<EmptyState message="You have not uploaded any photos." />);
   }
 
-  renderOfflineBanner() {
-    if (!this.props.isConnected) {
-      return (
-        <View style={{ width, height: 80, paddingLeft: 20, justifyContent: 'center', backgroundColor: colors.red }}>
-          <Text style={{ color: colors.white, fontSize: 22, fontWeight: '300' }}>You are offline!</Text>
-        </View>
-      );
-    }
-  }
 
   render() {
     return (
@@ -192,12 +192,20 @@ class UploadPhotos extends Component {
           borderTopWidth: 2,
         }}
       >
-        {this.renderOfflineBanner()}
         {this._renderModal()}
         {this._renderSection()}
         <View style={[main.fabHome, { width }]}>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected) {
+                return Alert.alert(
+                  'Offline',
+                  'You cannot upload photos on offline mode!',
+                  [
+                    { text: 'OK', style: 'cancel', onPress: () => {} }
+                  ], { cancelable: false });
+              }
+
               this.setState({
                 modalVisible: true,
               });

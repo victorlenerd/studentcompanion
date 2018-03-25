@@ -4,20 +4,24 @@ import {
   Text,
   StyleSheet,
   Alert,
-  Image,
   Modal,
   TextInput,
   ScrollView,
   Dimensions,
-  AsyncStorage,
-  TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
 
 import RNFetchBlob from 'react-native-fetch-blob';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { NavigationActions } from 'react-navigation';
 import fs from 'react-native-fs';
+
+import { colors, main } from 'shared/styles';
+import connection from 'containers/connection';
+import extractedNotes from 'containers/extractedNotes';
+import reader from 'containers/reader';
+import Loader from 'components/loader';
+import TextExtractorControls from 'components/textExtractorControls';
+import Tts from 'react-native-tts';
 
 const { polyfill: { Blob } } = RNFetchBlob;
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
@@ -26,29 +30,83 @@ window.Blob = Blob;
 const api_key = '4555c0926c414a4895603a2ee29c7c46';
 const { width } = Dimensions.get('window');
 
+@reader
+@extractedNotes
+@connection
 export default class Reader extends Component {
     state = {
       loading: false,
+      autoFocus: false,
       body: '',
+      isSaved: false,
       type: null,
+      note: {},
+      title: null,
       editedBody: [],
       modalVisible: false,
+      playing: false,
+      sentences: [],
+      themeMode: 'light',
+      currentSentence: 0,
       uploadUrl: 'https://westeurope.api.cognitive.microsoft.com/vision/v1.0/recognizeText?',
     }
 
     async componentWillMount() {
-      const { params: { images, type } } = this.props.navigation.state;
-      this.setState({ type });
+      const { setShowEdit, navigation: { state: { params: { images, type, isSaved, note } } } } = this.props;
+      if (!isSaved) {
+        this.setState({ type });
 
-      this.ImageToBodyGenerator = function* () {
-        for (let i = 0; i < images.length; i += 1) {
-          yield images[i];
+        this.ImageToBodyGenerator = function* () {
+          for (let i = 0; i < images.length; i += 1) {
+            yield images[i];
+          }
+        };
+
+        this.setState({ loading: true });
+        this.imgageToBodyIterator();
+      } else {
+        const { title, body } = note;
+        setShowEdit(true);
+        this.setState({ isSaved, title, body, note, sentences: body.split('. ') });
+      }
+    }
+
+    componentWillReceiveProps(nextProps) {
+      const { save, edit, themeMode, playing, setPlayMode } = nextProps;
+
+      if (save) this.saveNote();
+      if (edit) {
+        this.editNote();
+      }
+
+      if (themeMode !== this.state.themeMode) {
+        this.setState({ themeMode });
+      }
+
+      if (this.state.isSaved && this.state.playing !== playing && playing) {
+        Tts.speak(this.state.sentences[this.state.currentSentence]);
+        this.setState({ playing });
+      }
+
+      if (this.state.isSaved && this.state.playing !== playing && !playing) {
+        Tts.stop();
+        this.setState({ playing });
+      }
+
+      Tts.addEventListener('tts-finish', event => {
+        if (this.state.currentSentence < this.state.sentences.length - 1 && this.state.playing) {
+          const currentSentence = this.state.currentSentence + 1;
+          this.setState({ currentSentence });
+          Tts.speak(this.state.sentences[currentSentence]);
+        } else {
+          this.setState({ currentSentence: 0 });
+          setPlayMode(false);
         }
-      };
+      });
+    }
 
-
-      this.setState({ loading: true });
-      this.imgageToBodyIterator();
+    componentWillUnmount() {
+      Tts.stop();
     }
 
     imgageToBodyIterator = async () => {
@@ -62,9 +120,10 @@ export default class Reader extends Component {
           return recurseBody(bodies.concat(body));
         }
 
+        this.props.setShowSave(true);
+        this.props.setShowEdit(true);
         this.setState({ loading: false, body: bodies.join() });
       };
-
 
       recurseBody([]);
     }
@@ -140,35 +199,30 @@ export default class Reader extends Component {
     });
 
     saveNote = async () => {
-      const time = Date.now();
-      const data = {
-        body: this.state.body,
-        time,
-      };
+      const { addNote, setSave, setShowSave } = this.props;
+      setSave(false);
+      if (this.state.title !== null) {
+        const time = Date.now();
+        const note = {
+          title: this.state.title,
+          body: this.state.body,
+          time,
+        };
 
-      try {
-        let notes = await AsyncStorage.getItem('@WOKOSORO:NOTES_');
-        if (notes === null) {
-          notes = [];
-          notes.push(data);
-          await AsyncStorage.setItem('@WOKOSORO:NOTES_', JSON.stringify(notes));
-        } else {
-          notes = JSON.parse(notes);
-          notes.push(data);
-          await AsyncStorage.setItem('@WOKOSORO:NOTES_', JSON.stringify(notes));
+        try {
+          const noteId = addNote(note);
+          note.id = noteId;
+          this.setState({ isSaved: true, note, sentences: note.body.split('.') });
+          setShowSave(false);
+        } catch (err) {
+          Alert.alert('File Error Error', err.message, [{
+            label: 'OK'
+          }]);
         }
-
-        this.props.navigation.dispatch(
-          NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'Notes' })
-            ]
-          })
-        );
-      } catch (err) {
-        Alert.alert('File Error Error', err.message, [{
-          label: 'OK'
+      } else {
+        Alert.alert('Missing Title', 'Please Add A Title To Note', [{
+          label: 'OK',
+          onPress: () => this.textInput.focus(),
         }]);
       }
     }
@@ -181,7 +235,7 @@ export default class Reader extends Component {
     }
 
     render() {
-      const { loading, body } = this.state;
+      const { loading, body, isSaved } = this.state;
       const bodies = body.split('. ');
       if (loading) {
         return (
@@ -193,27 +247,35 @@ export default class Reader extends Component {
 
       return (
         <View style={{ flex: 1 }}>
+          <View style={styles.header}>
+            {!isSaved &&
+              <TextInput
+                ref={e => this.textInput = e}
+                placeholder="Add Title"
+                style={[main.textInput, styles.headerText]}
+                autoFocus={this.state.autoFocus}
+                onChangeText={title => this.setState({ title })}
+              />
+            }
+            {isSaved && <Text style={styles.listHeaderText}>{this.state.title}</Text>}
+          </View>
           <Modal
             animationType="slide"
             transparent={false}
             visible={this.state.modalVisible}
           >
-            <View style={[styles.container, { paddingTop: 80 }]}>
-              <View style={[styles.topTrans, { backgroundColor: '#0E86FA' }]}>
-                <TouchableOpacity style={styles.actionBttn} onPress={() => { this.setState({ body: this.state.editedBody.join(' '), modalVisible: false }); }}>
-                  <Text style={[styles.actionTxt, { color: '#fff' }]}>DONE</Text>
-                </TouchableOpacity>
-              </View>
-              <KeyboardAwareScrollView>
-                <View>
-                  {this.state.editedBody.map((text, i) => {
+            <KeyboardAwareScrollView>
+              <View style={{ padding: 20 }}>
+                {this.state.editedBody.map((text, i) => {
                     return (
                       <TextInput
+                        autoFocus={i === 0}
+                        key={i}
                         onChange={e => {
                             const bodies = this.state.editedBody;
                             bodies[i] = e.nativeEvent.text;
                             this.setState({
-                                editedBody: bodies
+                              editedBody: bodies
                             });
                         }}
                         multiline={true}
@@ -222,27 +284,36 @@ export default class Reader extends Component {
                       />
                     );
                   })}
-                </View>
-              </KeyboardAwareScrollView>
-            </View>
+              </View>
+            </KeyboardAwareScrollView>
+            <TextExtractorControls
+              edittingStage={true}
+              cancel={() => {
+                  this.props.setEdit(false);
+                  this.setState({ modalVisible: false });
+                }}
+              done={() => {
+                  this.props.setEdit(false);
+                  this.setState({ body: this.state.editedBody.join(' '), modalVisible: false }, () => {
+                    if (this.state.isSaved) {
+                      const note = {
+                        body: this.state.body,
+                        title: this.state.title
+                      };
+                      this.props.updateNote(this.state.note.id, note);
+                    }
+                  });
+                }}
+            />
           </Modal>
-          <ScrollView style={styles.container}>
-            <View style={{ marginBottom: 100, marginTop: 100 }}>
+          <ScrollView style={[styles.container, { backgroundColor: this.state.themeMode === 'light' ? '#fff' : '#333' }]}>
+            <View style={{ marginBottom: 100, marginTop: 20 }}>
               {bodies.map((text, i) => {
-                    return (<Text style={styles.bodyText}>{text}.</Text>);
+                  return (<Text key={i} style={[styles.bodyText, { color: this.state.themeMode === 'light' ? '#000' : '#fff' }]}>{text}.</Text>);
                 })}
             </View>
           </ScrollView>
-          <View style={styles.topTrans}>
-            <TouchableOpacity style={styles.actionBttn} onPress={this.editNote}>
-              <Image source={require('../assets/pencil.png')} style={styles.icon} />
-              <Text style={styles.actionTxt}>EDIT</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionBttn} onPress={this.saveNote}>
-              <Image source={require('../assets/save.png')} style={styles.icon} />
-              <Text style={styles.actionTxt}>SAVE</Text>
-            </TouchableOpacity>
-          </View>
+          <Loader />
         </View>
       );
     }
@@ -255,11 +326,25 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
+  header: {
+    width,
+    padding: 20,
+    height: 80,
+    backgroundColor: colors.accent,
+  },
+
+  headerText: {
+    width: width - 40,
+    height: 50,
+    fontSize: 22,
+    color: colors.white,
+    alignItems: 'center'
+  },
+
   topTrans: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    zIndex: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: colors.primary,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -286,28 +371,32 @@ const styles = StyleSheet.create({
   controlSpaces: {
     width,
     height: 100,
-    backgroundColor: '#0E86FA',
+    backgroundColor: colors.accent,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },
 
   icon: {
-    width: 20,
-    height: 20,
-    marginRight: 10
+    width: 16,
+    height: 16,
+    marginRight: 15
   },
 
   actionTxt: {
     fontSize: 16,
-    color: '#0E86FA'
+    color: colors.accent,
+  },
+
+  listHeaderText: {
+    color: colors.white,
+    fontSize: 22,
+    fontWeight: '300'
   },
 
   actionBttn: {
-    flex: 0.5,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginLeft: 50
+    justifyContent: 'center',
   }
 });

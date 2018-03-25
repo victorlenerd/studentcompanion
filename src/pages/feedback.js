@@ -6,6 +6,7 @@ import {
   Alert,
   Dimensions,
   StatusBar,
+  Keyboard,
   BackHandler
 } from 'react-native';
 
@@ -36,6 +37,7 @@ class Feedback extends Component {
   }
 
   componentWillUnmount() {
+    Keyboard.dismiss();
     BackHandler.removeEventListener('hardwareBackPress');
   }
 

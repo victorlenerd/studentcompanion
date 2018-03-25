@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Alert, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Alert,
+  StatusBar,
+  Keyboard
+} from 'react-native';
 import { main, colors } from 'shared/styles';
 
 import Loader from 'components/loader';
@@ -11,6 +18,10 @@ class Pass extends Component {
   constructor(props) {
     super(props);
     this.state = { code: '' };
+  }
+
+  componentWillUnmount() {
+    Keyboard.dismiss();
   }
 
   done = async () => {

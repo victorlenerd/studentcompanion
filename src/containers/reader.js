@@ -7,6 +7,10 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    setShowSave: showSave => dispatch(reader.ShowSave(showSave)),
+    setShowEdit: showEdit => dispatch(reader.ShowEdit(showEdit)),
+    setSave: save => dispatch(reader.Save(save)),
+    setEdit: edit => dispatch(reader.Edit(edit)),
     setVoiceRate: rate => dispatch(reader.SetVoiceRate(rate)),
     setCommentsCount: rate => dispatch(reader.SetCommentCount(rate)),
     setThemeMode: theme => dispatch(reader.SetThemeMode(theme)),

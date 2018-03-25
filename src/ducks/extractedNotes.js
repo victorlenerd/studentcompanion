@@ -3,6 +3,8 @@ import {
   AsyncStorage
 } from 'react-native';
 
+import objToArr from 'shared/objToArr';
+
 const SET_NOTES = 'SET_NOTES';
 const ADD_NOTE = 'ADD_NOTE';
 const UPDATE_NOTE = 'UPDATE_NOTE';
@@ -18,16 +20,7 @@ const generateId = () => {
   return `${Math.floor(Math.random() * 9)}${alpha.charAt(Math.floor(Math.random() * 25))}${Math.floor(Math.random() * 25)}${alpha.charAt(Math.floor(Math.random() * 25))}${Math.floor(Math.random() * 9)}${alpha.charAt(Math.floor(Math.random() * 25))}`;
 };
 
-const objToArr = obj => {
-  let results = [];
-  const keys = Object.keys(obj);
-  results = keys.map(key => {
-    return Object.assign({}, obj[key], { id: key });
-  });
-  return results;
-};
-
-export const AddNote = note => async dispatch => {
+export const AddNote = note => dispatch => {
   const id = generateId();
   note.id = id;
 
@@ -38,18 +31,21 @@ export const AddNote = note => async dispatch => {
   });
 
   dispatch(SaveNotes());
+
+  return id;
 };
 
-export const UpdateNote = note => async dispatch => {
+export const UpdateNote = (noteId, note) => dispatch => {
   dispatch({
     type: UPDATE_NOTE,
+    noteId,
     note
   });
 
   dispatch(SaveNotes());
 };
 
-export const RemoveNote = noteId => async dispatch => {
+export const RemoveNote = noteId => dispatch => {
   dispatch({
     type: REMOVE_NOTE,
     noteId
@@ -58,16 +54,18 @@ export const RemoveNote = noteId => async dispatch => {
   dispatch(SaveNotes());
 };
 
-export const SaveNotes = () => (dispatch, getState) => {
-  const { notes } = getState();
-  AsyncStorage.setItem('@UPQ:EXTRACTED_NOTES', JSON.stringify(notes));
+export const SaveNotes = () => async (dispatch, getState) => {
+  const { extractedNotesState: { notes } } = getState();
+  const stored = await AsyncStorage.setItem('@UPQ:EXTRACTED_NOTES', JSON.stringify(notes));
+  return stored;
 };
 
 
-export const LoadNotes = () => async (dispatch, getState) => Promise(async (resolve, reject) => {
+export const LoadNotes = () => async (dispatch, getState) => new Promise(async (resolve, reject) => {
   const notesStr = await AsyncStorage.getItem('@UPQ:EXTRACTED_NOTES');
-  const notes = JSON.parse(notesStr);
+  const notes = JSON.parse(notesStr) || [];
   const notesArr = objToArr(notes);
+
   resolve(notesArr);
   dispatch({
     type: SET_NOTES,
@@ -79,12 +77,14 @@ export const ExtractedNotesReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_NOTES:
       return { notes: action.notes };
-    case ADD_NOTE:
-      return Object.assign({}, state, { notes: { [action.noteId]: action.note } });
+    case ADD_NOTE: {
+      const notes = Object.assign({}, state.notes, { [action.noteId]: action.note });
+      return Object.assign({}, state, { notes: notes });
+    }
     case UPDATE_NOTE: {
       const note = state.notes[action.noteId];
-      note.body = action.body;
-      const notes = Object.assign({}, state.notes, note);
+      note.body = action.note.body;
+      const notes = Object.assign({}, state.notes, { [action.noteId]: note });
       return Object.assign({}, state, { notes });
     }
     case REMOVE_NOTE: {
