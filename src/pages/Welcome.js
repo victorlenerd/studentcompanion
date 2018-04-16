@@ -4,6 +4,7 @@ import { View, Image, NetInfo, StatusBar } from 'react-native';
 import moment from 'moment';
 
 import DeviceInfo from 'react-native-device-info';
+import FCM from 'react-native-fcm';
 import connection from 'containers/connection';
 import users from 'containers/users';
 import Loader from 'components/loader';
@@ -19,7 +20,7 @@ class Welcome extends Component {
 
   async componentWillMount() {
     const { setConnection } = this.props;
-
+    // const token = await FCM.getFCMToken();
     const { type } = await NetInfo.getConnectionInfo();
     const connected = type !== 'none';
     setConnection(connected);
@@ -31,6 +32,9 @@ class Welcome extends Component {
       setConnection(false);
       this._loadData();
     }, 15000);
+
+    // await FCM.requestPermissions();
+    // console.warn('token', token);
   }
 
   clearListeners() {
@@ -53,10 +57,10 @@ class Welcome extends Component {
           const diffDays = paymentDate.diff(now, 'days');
 
           if (diffDays >= 0) {
-            if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {
-              this.clearListeners();
-              return navigate('AcademicInfo');
-            }
+            // if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {
+            //   this.clearListeners();
+            //   return navigate('AcademicInfo');
+            // }
             if (user.deviceId !== DeviceInfo.getUniqueID()) {
               this.clearListeners();
               return navigate('ActivateMuitiDevice');

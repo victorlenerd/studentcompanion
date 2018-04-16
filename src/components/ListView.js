@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image, FlatList, Dimensions, StyleSheet, StatusBar } from 'react-native';
+import { Keyboard, View, Text, TouchableOpacity, Image, FlatList, Dimensions, StyleSheet, StatusBar } from 'react-native';
 import { main, colors } from 'shared/styles';
 import Loader from 'components/loader';
 
@@ -72,6 +72,7 @@ class ListView extends Component {
         <FlatList
           data={this.state.data}
           keyExtractor={this._keyExtractor}
+          onScrollBeginDrag={() => Keyboard.dismiss()}
           ListHeaderComponent={this._renderListHeader}
           ListEmptyComponent={this._renderEmpty}
           renderItem={this._renderItem}

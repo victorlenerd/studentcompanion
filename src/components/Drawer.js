@@ -63,12 +63,11 @@ class Drawer extends Component {
               style={main.nav}
               onPress={() => {
                 Share.share({
-                  title: 'Share This App With',
-                  url:
-                    Platform.OS === 'ios'
-                      ? 'https://itunes.apple.com/ng/app/student-companion/id1238513973?mt=8'
-                      : 'https://play.google.com/store/apps/details?id=com.courseapp',
-                  content: 'Hey, download the StudentCompanion app.',
+                  title: 'Share This App',
+                  url: 'https://studentcompanion.xyz',
+                  message: 'Hey, download the StudentCompanion app. https://studentcompanion.xyz',
+                }, {
+                  dialogTitle: 'Share This App'
                 });
               }}
             >

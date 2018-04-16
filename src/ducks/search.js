@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
 
@@ -12,9 +13,9 @@ const initialState = {
 export const SearchReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SEARCH_RESULTS: {
-      const { data, search } = action;
+      const { data } = action;
       return Object.assign({}, state, {
-        results: { [search]: data },
+        results: data
       });
     }
 
@@ -29,11 +30,10 @@ export const SearchReducer = (state = initialState, action) => {
   return state;
 };
 
-export const SetResults = (data, search) => {
+export const SetResults = data => {
   return {
     type: SET_SEARCH_RESULTS,
-    data,
-    search
+    data
   };
 };
 
@@ -46,22 +46,32 @@ export const SetCurrentSearchResults = data => {
 
 export const Search = search => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const { searchState: { results } } = getState();
-  if (results[search] && results[search].length > 0) {
-    dispatch(SetCurrentSearchResults(results[search]));
-    return resolve(results[search]);
+  const options = {
+    keys: ['name', 'code', 'departmentName', 'universityName', 'facultyName'],
+  };
+  let fuse;
+  let searchResults;
+
+  if (results && results.length > 0) {
+    fuse = new Fuse(results, options);
+    searchResults = fuse.search(search);
+    dispatch(SetCurrentSearchResults(searchResults));
+    return resolve(searchResults);
   }
 
   dispatch(StartRequest());
 
-  const courseRef = app.database().ref('/courses').orderByChild('name').startAt(search)
-    .endAt(`${search}/uf8ff`);
+  const courseRef = app.database().ref('/courses');
 
   courseRef.once('value', snapshot => {
     const data = toArray(snapshot.val()) || [];
     dispatch(SetResults(data));
-    dispatch(SetCurrentSearchResults(data));
-    dispatch(FinishRequest());
-    resolve(data);
-  });
 
+    fuse = new Fuse(data, options);
+    searchResults = fuse.search(search);
+
+    dispatch(SetCurrentSearchResults(searchResults));
+    dispatch(FinishRequest());
+    resolve(searchResults);
+  });
 });

@@ -17,6 +17,7 @@ import { ReaderReducer } from './reader';
 import { SearchReducer } from './search';
 import { UploadPhotosReducer } from './photoNotes';
 import { ExtractedNotesReducer } from './extractedNotes';
+import { DrawerIconReducer } from './drawerIcon';
 
 const reducers = combineReducers({
   courseState: CourseReducer,
@@ -34,6 +35,7 @@ const reducers = combineReducers({
   commentsState: CommentsReducer,
   searchState: SearchReducer,
   readerState: ReaderReducer,
+  drawerIconState: DrawerIconReducer,
   uploadPhotosState: UploadPhotosReducer,
   extractedNotesState: ExtractedNotesReducer
 });

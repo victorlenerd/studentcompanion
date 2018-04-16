@@ -95,7 +95,7 @@ const MainNavigator = DrawerNavigator({
     screen: SearchCoursesScreen,
     navigationOptions: {
       headerTitle: 'Browse',
-      gesturesEnabled: false,
+      gesturesEnabled: true,
     }
   },
   SearchTyped: {
@@ -108,25 +108,29 @@ const MainNavigator = DrawerNavigator({
   ChooseFaculty: {
     screen: ChooseFacultyScreen,
     navigationOptions: {
-      headerTitle: 'Choose Facuty'
+      headerTitle: 'Choose Facuty',
+      gesturesEnabled: true,
     }
   },
   ChooseDepartment: {
     screen: ChooseDepartmentScreen,
     navigationOptions: {
-      headerTitle: 'Choose Department'
+      headerTitle: 'Choose Department',
+      gesturesEnabled: true,
     }
   },
   ChooseLevel: {
     screen: ChooseLevelScreen,
     navigationOptions: {
-      headerTitle: 'Choose Level'
+      headerTitle: 'Choose Level',
+      gesturesEnabled: true,
     }
   },
   ChooseCourse: {
     screen: ChooseCourseScreen,
     navigationOptions: {
-      headerTitle: 'Choose Courses'
+      headerTitle: 'Choose Courses',
+      gesturesEnabled: true,
     }
   },
   CourseHome: {

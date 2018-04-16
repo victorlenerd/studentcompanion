@@ -25,7 +25,7 @@ class SignUp extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, validEmail, navigation: { navigate } } = nextProps;
-    if (validEmail(currentUser.email)) navigate('AcademicInfo');
+    if (validEmail(currentUser.email)) navigate('Main');
   }
 
   signUp = async () => {

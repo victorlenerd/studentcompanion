@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, BackHandler, Platform } from 'react-native';
 
 import ListView from 'components/listView';
 import levels from 'containers/levels';
+import drawerIcon from 'containers/drawerIcon';
 
 @levels
+@drawerIcon
 class ChooseLevel extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ class ChooseLevel extends Component {
   }
 
   async componentWillMount() {
-    const { getLevelsByDepartmentId, navigation: { state: { params: { departmentId } } } } = this.props;
+    const { setMenu, getLevelsByDepartmentId, navigation: { state: { params: { departmentId } }, navigate } } = this.props;
 
     try {
       const levels = await getLevelsByDepartmentId(departmentId);
@@ -22,6 +24,20 @@ class ChooseLevel extends Component {
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
+
+    if (Platform.OS === 'ios') {
+      setMenu(false, 'ChooseDepartment');
+    } else {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        navigate('ChooseDepartment');
+        return true;
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    const { setMenu } = this.props;
+    setMenu(true, null);
   }
 
   _openCourses = ({ $id }) => {
