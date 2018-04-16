@@ -167,13 +167,15 @@ dependencies {
     }
     compile 'com.android.support:multidex:1.0.0'
     compile project(':react-native-tts')
+    compile project(':react-native-fcm')
     compile project(':react-native-device-info') 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.facebook.react:react-native:+'
     // From node_modules
-    compile 'com.google.android.gms:play-services-base:11.6.0'
-    compile project(':react-native-push-notification')
+    compile ('com.google.android.gms:play-services-base:11.6.0') {
+        force = true;
+    }
     compile('com.google.android.gms:play-services-gcm:11.6.0') {
         force = true
     }

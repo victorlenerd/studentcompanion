@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.crashlytics.android.Crashlytics;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import io.fabric.sdk.android.Fabric;
 import io.invertase.firebase.RNFirebasePackage;
 import net.no_mad.tts.TextToSpeechPackage;
@@ -26,6 +25,7 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -45,9 +45,9 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFSPackage(),
           new RNFirebasePackage(),
           new TextToSpeechPackage(),
+          new FIRMessagingPackage(),
           new RNFirebaseAnalyticsPackage(),
           new RNFirebaseCrashPackage(),
-          new ReactNativePushNotificationPackage(),
           new RNDeviceInfo(),
           new RNFetchBlobPackage()
       );
