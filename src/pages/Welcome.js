@@ -48,7 +48,6 @@ class Welcome extends Component {
     try {
       if (this.state.connected) {
         const user = await getCurrentUser();
-
         if (user !== null) {
           setCurrentUser(user);
 
@@ -56,21 +55,25 @@ class Welcome extends Component {
           const paymentDate = moment(user.nextPaymentDate);
           const diffDays = paymentDate.diff(now, 'days');
 
-          if (diffDays >= 0) {
-            // if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {
-            //   this.clearListeners();
-            //   return navigate('AcademicInfo');
-            // }
-            if (user.deviceId !== DeviceInfo.getUniqueID()) {
-              this.clearListeners();
-              return navigate('ActivateMuitiDevice');
-            }
+          if (user.verified && user.vericationCode) {
+            if (diffDays >= 0) {
+              // if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {
+              //   this.clearListeners();
+              //   return navigate('AcademicInfo');
+              // }
+              if (user.deviceId !== DeviceInfo.getUniqueID()) {
+                this.clearListeners();
+                return navigate('ActivateMuitiDevice');
+              }
 
-            this.clearListeners();
-            navigate('Main');
+              this.clearListeners();
+              navigate('Main');
+            } else {
+              this.clearListeners();
+              return navigate('ActivateAccount');
+            }
           } else {
-            this.clearListeners();
-            return navigate('ActivateAccount');
+            navigate('ActivateEmail');
           }
         } else {
           deleteCurrentUser();

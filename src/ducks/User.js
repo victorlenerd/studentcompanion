@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import { AsyncStorage } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
@@ -130,6 +131,10 @@ export const SetCurrentUserOffline = user => dispatch => dispatch({ type: 'SET_C
 
 export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
   const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
+
+  const user = firebase.auth().currentUser;
+
+  console.log('firebase-user', user);
 
   if (saved_data === null) {
     return resolve(null);

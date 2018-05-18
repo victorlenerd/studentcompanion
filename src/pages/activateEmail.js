@@ -8,7 +8,7 @@ import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
 
 @users
-class ActivateMultipleDevice extends PureComponent {
+class ActivateEmail extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,9 +27,9 @@ class ActivateMultipleDevice extends PureComponent {
   }
 
   sendActivationCode = async () => {
-    const { sendDeviceActivationCode, currentUser: { email, $id } } = this.props;
+    const { sendEmailVerificationCode, currentUser: { email, $id } } = this.props;
     try {
-      await sendDeviceActivationCode(email, $id);
+      await sendEmailVerificationCode(email, $id);
       this.setState({ codeSent: true });
     } catch (err) {
       Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);
@@ -44,10 +44,10 @@ class ActivateMultipleDevice extends PureComponent {
       return (
         <View style={{ marginTop: 100, marginBottom: 100 }}>
           <Text style={{ color: colors.white, fontSize: 32, textAlign: 'center', fontWeight: '200' }}>
-            Device Acivation Code.
+            Email Verification.
           </Text>
           <Text style={{ color: colors.white, fontSize: 18, textAlign: 'center', marginBottom: 25, marginTop: 25 }}>
-            A six digit code has been sent to your email to activate this device.
+            A code has been sent to your email to verify your email address.
           </Text>
           <Button
             onPress={() => navigate('Pass')}
@@ -61,12 +61,12 @@ class ActivateMultipleDevice extends PureComponent {
     return (
       <View style={{ marginTop: 100, marginBottom: 100 }}>
         <Text style={{ color: colors.white, fontSize: 32, textAlign: 'center', fontWeight: '200' }}>
-          Activate This Device.
+          Verify Your Email Address.
         </Text>
         <Text style={{ color: colors.white, fontSize: 18, textAlign: 'center', marginBottom: 25, marginTop: 25 }}>
-          You cannot use your account on more than one device. You can deactivate the original device and activate this new device.
+          Please verify your email address to continue using this service. A verification code will be sent to your email address.
         </Text>
-        <Button onPress={this.sendActivationCode} text="Activate New Device" />
+        <Button onPress={this.sendActivationCode} text="Verify Email" />
         <ButtonInActive onPress={this.signout} text="No Not Now." />
       </View>
     );
@@ -94,4 +94,4 @@ class ActivateMultipleDevice extends PureComponent {
   }
 }
 
-export default ActivateMultipleDevice;
+export default ActivateEmail;

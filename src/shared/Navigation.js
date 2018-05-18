@@ -34,6 +34,9 @@ import ChoosePapersScreen from 'pages/choosePapers';
 import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
 
+import ActivateEmailScreen from 'pages/activateEmail';
+import VerifyEmailScreen from 'pages/verifyEmail';
+
 import Drawer from 'components/drawer';
 import NoteToobarOptions from 'components/noteToobarOptions';
 import DrawerIcon from 'components/drawerIcon';
@@ -226,6 +229,20 @@ const Navigation = StackNavigator({
   },
   ActivateAccount: {
     screen: ActivateAccountScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false,
+    }
+  },
+  ActivateEmail: {
+    screen: ActivateEmailScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false,
+    }
+  },
+  VerifyEmail: {
+    screen: VerifyEmailScreen,
     navigationOptions: {
       header: null,
       gesturesEnabled: false,
