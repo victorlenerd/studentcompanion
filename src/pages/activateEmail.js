@@ -27,9 +27,9 @@ class ActivateEmail extends PureComponent {
   }
 
   sendActivationCode = async () => {
-    const { sendEmailVerificationCode, currentUser: { email, $id } } = this.props;
+    const { sendEmailVerificationCode, currentUser: { $id, email, name } } = this.props;
     try {
-      await sendEmailVerificationCode(email, $id);
+      await sendEmailVerificationCode(email, $id, name);
       this.setState({ codeSent: true });
     } catch (err) {
       Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);
@@ -50,7 +50,7 @@ class ActivateEmail extends PureComponent {
             A code has been sent to your email to verify your email address.
           </Text>
           <Button
-            onPress={() => navigate('Pass')}
+            onPress={() => navigate('VerifyEmail')}
             text="Ok, Got It!"
           />
           <ButtonInActive onPress={this.sendActivationCode} text="Resend Code Now." />

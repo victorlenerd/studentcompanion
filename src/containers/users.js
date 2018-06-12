@@ -1,5 +1,14 @@
 import { connect } from 'react-redux';
-import { GetCurrentUser, GetCurrentUserOffline, DeleteCurrentUser, SignOut, SetCurrentUserOffline, SendDeviceActivationCode, SetAcademicInfo } from 'ducks/user';
+import {
+  GetCurrentUser,
+  GetCurrentUserOffline,
+  DeleteCurrentUser,
+  SignOut,
+  SetCurrentUserOffline,
+  SendDeviceActivationCode,
+  SetAcademicInfo,
+  SendEmailVerificationCode
+} from 'ducks/user';
 import { SendFeedback } from 'ducks/feedback';
 
 const mapDispatchToProps = dispatch => {
@@ -9,7 +18,8 @@ const mapDispatchToProps = dispatch => {
     setAcademicInfo: (id, data) => dispatch(SetAcademicInfo(id, data)),
     getCurrentUserOffline: () => dispatch(GetCurrentUserOffline()),
     deleteCurrentUser: () => dispatch(DeleteCurrentUser()),
-    sendDeviceActivationCode: (email, $id) => dispatch(SendDeviceActivationCode(email, $id)),
+    sendDeviceActivationCode: (email, $id, name) => dispatch(SendDeviceActivationCode(email, $id, name)),
+    sendEmailVerificationCode: (email, $id, name) => dispatch(SendEmailVerificationCode(email, $id, name)),
     sendFeedback: (userId, message) => dispatch(SendFeedback(userId, message)),
     signOut: () => dispatch(SignOut())
   };

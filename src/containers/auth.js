@@ -1,5 +1,12 @@
 import { connect } from 'react-redux';
-import { Login, Register, SendResetPasswordEmail, UpdateUserDeviceId, UserExist } from 'ducks/user';
+import {
+  Login,
+  Register,
+  SendResetPasswordEmail,
+  UpdateUserDeviceId,
+  UserExist,
+  UpdateEmailVerification
+} from 'ducks/user';
 
 const mapStateToProps = store => {
   return {
@@ -15,7 +22,8 @@ const mapDispatchToProps = dispatch => {
     register: ({ name, email, phoneNumber, password }) => dispatch(Register({ name, email, phoneNumber, password })),
     sendPasswordReset: email => dispatch(SendResetPasswordEmail(email)),
     userExist: email => dispatch(UserExist(email)),
-    updateDeviceId: code => dispatch(UpdateUserDeviceId(code))
+    updateDeviceId: code => dispatch(UpdateUserDeviceId(code)),
+    updateEmailVerification: code => dispatch(UpdateEmailVerification(code))
   };
 };
 

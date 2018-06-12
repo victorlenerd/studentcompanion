@@ -39,15 +39,15 @@ class ActivateAccount extends Component {
 
               <Button
                 onPress={() => {
-                  Linking.openURL(`https://paystack.com/pay/6n9b-1ng8g?email=${email}&name=${name}`);
+                  Linking.openURL(`https://paystack.com/pay/09a7m9phd3?email=${email}&name=${name}`);
                 }}
-                text="₦100 For A Month"
+                text="₦200 Monthly"
               />
               <Button
                 onPress={() => {
-                  Linking.openURL(`https://paystack.com/pay/2d28enjfhd?email=${email}&first name=${name}`);
+                  Linking.openURL(`https://paystack.com/pay/2d28enjfhd?email=${email}&name=${name}`);
                 }}
-                text="₦1000 For A Year"
+                text="₦1000 Annualy"
               />
             </View>
           </View>

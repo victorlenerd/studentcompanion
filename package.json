@@ -34,6 +34,8 @@
     "fuse.js": "^3.2.0",
     "https-browserify": "0.0.1",
     "lodash": "^4.17.4",
+    "mailgun-js": "^0.18.0",
+    "mailgun-validate-email": "^2.1.0",
     "moment": "^2.20.1",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",

@@ -73,6 +73,7 @@ class Welcome extends Component {
               return navigate('ActivateAccount');
             }
           } else {
+            this.clearListeners();
             navigate('ActivateEmail');
           }
         } else {

@@ -27,9 +27,9 @@ class ActivateMultipleDevice extends PureComponent {
   }
 
   sendActivationCode = async () => {
-    const { sendDeviceActivationCode, currentUser: { email, $id } } = this.props;
+    const { sendDeviceActivationCode, currentUser: { email, $id, name } } = this.props;
     try {
-      await sendDeviceActivationCode(email, $id);
+      await sendDeviceActivationCode(email, $id, name);
       this.setState({ codeSent: true });
     } catch (err) {
       Alert.alert('An Error Occured', err.message, [{ text: 'Cancel', style: 'cancel' }]);

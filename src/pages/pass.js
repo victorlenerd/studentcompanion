@@ -20,10 +20,6 @@ class Pass extends Component {
     this.state = { code: '' };
   }
 
-  componentWillUnmount() {
-    Keyboard.dismiss();
-  }
-
   done = async () => {
     const { updateDeviceId, navigation: { navigate } } = this.props;
 
@@ -34,6 +30,7 @@ class Pass extends Component {
     try {
       const done = await updateDeviceId(this.state.code);
       if (done) {
+        Keyboard.dismiss();
         return navigate('Welcome');
       }
 

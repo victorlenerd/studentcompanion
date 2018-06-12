@@ -1,10 +1,15 @@
-import firebase from 'firebase';
 import { AsyncStorage } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import moment from 'moment';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
+
+const api_key = 'key-d36c5ffa8ab21063ab1cc6dc7129abb5';
+const DOMAIN = 'sandboxc73baaefcbf142c3a7385773d9f0b7a3.mailgun.org';
+const mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
+
+const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
 
 const initialState = {
   currentUser: null
@@ -132,10 +137,6 @@ export const SetCurrentUserOffline = user => dispatch => dispatch({ type: 'SET_C
 export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reject) => {
   const saved_data = await AsyncStorage.getItem('@UPQ:CURRENT_USER');
 
-  const user = firebase.auth().currentUser;
-
-  console.log('firebase-user', user);
-
   if (saved_data === null) {
     return resolve(null);
   }
@@ -188,24 +189,76 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
   }
 });
 
-export const SendDeviceActivationCode = (email, $id) => dispatch => new Promise(async (resolve, reject) => {
+export const SendDeviceActivationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const { code } = await fetch('https://victor-com-ng.appspot.com/send_device_activate_code_upq', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to_email: email,
-      }),
-    }).then(response => response.json());
+    const code = codeGenerator();
+    const data = {
+      from: 'Student Companion <hello@studentcompanion.xyz>',
+      to: email,
+      subject: 'Student Companion Email Verification Code',
+      text: `Hello ${name}, your device activation code is: ${code}`
+    };
 
     const userRef = app.database().ref(`/users/${$id}`);
     userRef.update({ deviceActivationCode: code }, async err => {
       if (err !== null) reject(err);
-      resolve(true);
+
+      mailgun.messages().send(data, function(error) {
+        if (error) reject({ message: "Couldn't send the email." });
+        resolve(true);
+      });
     });
+  } catch (err) {
+    reject(err);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SendEmailVerificationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
+  try {
+    dispatch(StartRequest());
+    const code = codeGenerator();
+    const data = {
+      from: 'Student Companion <hello@studentcompanion.xyz>',
+      to: email,
+      subject: 'Student Companion Email Verification Code',
+      text: `Hello ${name}, your verification code is: ${code}`
+    };
+
+    const userRef = app.database().ref(`/users/${$id}`);
+    userRef.update({ vericationCode: code }, async err => {
+      if (err !== null) reject(err);
+
+      mailgun.messages().send(data, function(error) {
+        if (error) reject({ message: "Couldn't send the email." });
+        resolve(true);
+      });
+    });
+  } catch (err) {
+    reject(err);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const UpdateEmailVerification = code => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const { vericationCode, $id } = await dispatch(GetCurrentUser());
+    const usersRefs = app.database().ref(`/users/${$id}`);
+
+    if (vericationCode === code) {
+      usersRefs.update({ verified: true }, async err => {
+        if (err !== null) reject(err);
+        const newUser = await dispatch(GetCurrentUser());
+        dispatch(SetCurrentUser(newUser));
+        resolve(true);
+      });
+    } else {
+      resolve(false);
+    }
   } catch (err) {
     reject(err);
   }
