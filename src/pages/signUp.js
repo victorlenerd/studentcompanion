@@ -7,6 +7,11 @@ import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
 import auth from 'containers/auth';
 
+const api_key = 'pubkey-d516243872838e1a6d6133d01c4ae634';
+const DOMAIN = 'studentcompanion.xyz';
+const mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
+
+
 @auth
 class SignUp extends Component {
   constructor(props) {
@@ -36,7 +41,12 @@ class SignUp extends Component {
 
     if (!(firstName.length < 1 || lastName.length < 1 || !validEmail(email) || !validPhone(phoneNumber) || password.length < 6)) {
       try {
-        await register({ name: `${firstName} ${lastName}`, email, phoneNumber, password });
+        mailgun.validate(email, async (error, data) => {
+          console.log('data', data);
+          console.log('error', error);
+          if (!data.is_valid) return Alert.alert('Registration Error', 'Email is not valid.', [{ text: 'Cancel', style: 'cancel' }]);
+          await register({ name: `${firstName} ${lastName}`, email, phoneNumber, password });
+        });
       } catch (err) {
         Alert.alert('Registration Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
       }

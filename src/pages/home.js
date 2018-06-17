@@ -44,29 +44,6 @@ class Home extends Component {
               Search resources by topic or titles.
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              navigate('UploadPhotos');
-            }}
-            style={{
-              flex: 0.6,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Image
-              resizeMode="contain"
-              source={require('../assets/file-picture-accent.png')}
-              style={style.homeIcon}
-            />
-            <Text style={style.homeTitle}>Upload Photos</Text>
-            <Text style={style.homeSubtitle}>
-              Earn from uploads of your notes.
-            </Text>
-          </TouchableOpacity>
         </View>
         <View style={style.row}>
           <TouchableOpacity

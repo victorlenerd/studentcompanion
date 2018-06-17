@@ -56,9 +56,8 @@ class Drawer extends Component {
             <MenuItem label="Search" path="SearchTyped" navigation={this.props.navigation} />
             <MenuItem label="Browse" path="Search" navigation={this.props.navigation} />
             <MenuItem label="Library" path="SavedCourses" navigation={this.props.navigation} />
-            <MenuItem label="Extract Text" path="TextExtractor" navigation={this.props.navigation} />
+            <MenuItem label="Extract Notes" path="TextExtractor" navigation={this.props.navigation} />
             <MenuItem label="Feedback" path="Feedback" navigation={this.props.navigation} />
-            <MenuItem label="Upload Photos" path="UploadPhotos" navigation={this.props.navigation} />
             <TouchableOpacity
               style={main.nav}
               onPress={() => {

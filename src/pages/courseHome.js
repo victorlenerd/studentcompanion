@@ -26,10 +26,10 @@ class CourseHome extends Component {
   }
 
   async componentWillMount() {
-    const { navigation: { navigate, state: { params: { course } } }, getNotes, getPapers } = this.props;
+    const { navigation: { navigate, state: { params: { course } } }, getNotes } = this.props;
     const { $id } = course;
     const notes = await getNotes($id);
-    const papers = await getPapers($id);
+
     console.log('PAPERS', papers);
     const courseInLibrary = await this.inLibrary($id);
 
@@ -37,18 +37,16 @@ class CourseHome extends Component {
       return navigate('Course', { course });
     }
 
-    this.setState({ canAddToLibrary: true, notes, papers });
+    this.setState({ canAddToLibrary: true, notes });
   }
 
   saveCourse = async () => {
-    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, saveNotesOffline, savePapersOffline, saveQuestionsOffline } = this.props;
+    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, saveNotesOffline } = this.props;
     const { $id } = course;
 
     try {
       await saveCourseOffline(course);
       await saveNotesOffline($id, this.state.notes);
-      await savePapersOffline($id, this.state.papers);
-      await saveQuestionsOffline($id);
       Alert.alert('Success', `${course.name} Has Been Added To Your Library`, [{ text: 'Cancel', style: 'cancel' }]);
       return navigate('Course', { course });
     } catch (err) {
@@ -77,8 +75,6 @@ class CourseHome extends Component {
           <Text style={style.val}>{name}</Text>
           <Text style={style.label}>Number Of Notes</Text>
           <Text style={style.val}>{this.state.notes.length}</Text>
-          <Text style={style.label}>Number Of Past Questions</Text>
-          <Text style={style.val}>{this.state.papers.length}</Text>
           {this.state.canAddToLibrary && <Button text="Add To Library" onPress={this.saveCourse} />}
         </View>
         <Loader />

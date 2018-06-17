@@ -43,49 +43,6 @@ import DrawerIcon from 'components/drawerIcon';
 
 import { colors } from 'shared/styles';
 
-const ChooseNotes = StackNavigator({
-  Notes: {
-    screen: ChooseNotesScreen,
-    navigationOptions: {
-      header: null
-    }
-  }
-});
-
-const ChoosePapers = StackNavigator({
-  Papers: {
-    screen: ChoosePapersScreen,
-    navigationOptions: {
-      header: null
-    }
-  }
-});
-
-const CourseNavigator = TabNavigator({
-  ChooseNotes: {
-    screen: ChooseNotes,
-    navigationOptions: {
-      tabBarLabel: 'NOTES'
-    }
-  },
-  ChoosePapers: {
-    screen: ChoosePapers,
-    navigationOptions: {
-      tabBarLabel: 'PAST QUESTIONS'
-    }
-  }
-}, {
-  tabBarOptions: {
-    tabStyle: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    labelStyle: {
-      fontSize: 15,
-    }
-  }
-});
-
 const MainNavigator = DrawerNavigator({
   Home: {
     screen: HomeScreen,
@@ -191,9 +148,9 @@ const MainNavigator = DrawerNavigator({
     })
   },
   Course: {
-    screen: CourseNavigator,
+    screen: ChooseNotesScreen,
     navigationOptions: {
-      headerTitle: 'Course',
+      headerTitle: 'Notes',
     }
   }
 }, {
