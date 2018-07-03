@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
+import { View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 
 const { width, height } = Dimensions.get('window');
@@ -20,127 +20,93 @@ class Home extends Component {
     return (
       <View style={style.container}>
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
-        <View style={style.row}>
+        <ScrollView>
           <TouchableOpacity
-            onPress={() => {
-              navigate('SearchTyped');
-            }}
-            style={{
-              flex: 0.4,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onPress={() => { navigate('SearchTyped'); }}
+            style={style.homeMenu}
           >
             <Image
               resizeMode="contain"
               source={require('../assets/search-accent.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>Search</Text>
-            <Text style={style.homeSubtitle}>
-              Search resources by topic or titles.
-            </Text>
+            <View style={{ marginLeft: 20 }}>
+              <Text style={style.homeTitle}>Search</Text>
+              <Text style={style.homeSubtitle}>
+                Search resources by topic or titles.
+              </Text>
+            </View>
           </TouchableOpacity>
-        </View>
-        <View style={style.row}>
+
           <TouchableOpacity
-            onPress={() => {
-              navigate('TextExtractor');
-            }}
-            style={{
-              flex: 0.4,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onPress={() => { navigate('TextExtractor'); }}
+            style={style.homeMenu}
           >
             <Image
               resizeMode="contain"
               source={require('../assets/eye-accent.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>Extract Text</Text>
-            <Text style={style.homeSubtitle}>
-              Extract Text From Notes and Documents.
-            </Text>
+            <View style={{ marginLeft: 20 }}>
+              <Text style={style.homeTitle}>Extract Text</Text>
+              <Text style={style.homeSubtitle}>
+                Extract Text From Notes and Documents.
+              </Text>
+            </View>
           </TouchableOpacity>
+
           <TouchableOpacity
-            onPress={() => {
-              navigate('Search');
-            }}
-            style={{
-              flex: 0.6,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onPress={() => { navigate('Search'); }}
+            style={style.homeMenu}
           >
             <Image
               resizeMode="contain"
               source={require('../assets/stack-accent.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>Browse</Text>
-            <Text style={style.homeSubtitle}>
-              Browse by schools and departments.
-            </Text>
+            <View style={{ marginLeft: 20 }}>
+              <Text style={style.homeTitle}>Browse</Text>
+              <Text style={style.homeSubtitle}>
+                Browse by schools and departments.
+              </Text>
+            </View>
           </TouchableOpacity>
-        </View>
-        <View style={style.row}>
+
           <TouchableOpacity
-            onPress={() => {
-              navigate('SavedCourses');
-            }}
-            style={{
-              flex: 0.4,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onPress={() => { navigate('SavedCourses'); }}
+            style={style.homeMenu}
           >
             <Image
               resizeMode="contain"
               source={require('../assets/books-accent.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>Library</Text>
-            <Text style={style.homeSubtitle}>
-              Offline resources available on your phone.
-            </Text>
+            <View style={{ marginLeft: 20 }}>
+              <Text style={style.homeTitle}>Library</Text>
+              <Text style={style.homeSubtitle}>
+                Offline resources available on your phone.
+              </Text>
+            </View>
           </TouchableOpacity>
+
           <TouchableOpacity
-            onPress={() => {
-              navigate('Feedback');
-            }}
-            style={{
-              flex: 0.6,
-              borderWidth: 1,
-              borderColor: '#eee',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            onPress={() => { navigate('Feedback'); }}
+            style={style.homeMenu}
           >
             <Image
               resizeMode="contain"
               source={require('../assets/bubble-orange.png')}
               style={style.homeIcon}
             />
-            <Text style={style.homeTitle}>Feedback</Text>
-            <Text style={style.homeSubtitle}>
-              We would love to hear from you.
-            </Text>
+            <View style={{ marginLeft: 20 }}>
+              <Text style={style.homeTitle}>Feedback</Text>
+              <Text style={style.homeSubtitle}>
+                We would love to hear from you.
+              </Text>
+            </View>
           </TouchableOpacity>
-        </View>
+
+        </ScrollView>
       </View>
     );
   }
@@ -148,35 +114,43 @@ class Home extends Component {
 
 const style = StyleSheet.create({
   row: {
-    flex: 0.33,
-    flexDirection: 'column'
+    flex: 1,
+    flexDirection: 'row'
   },
   container: {
     width,
     height,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: colors.lightBlue,
     borderTopColor: colors.accent,
     borderTopWidth: 2,
   },
-  homeMenu: {},
+  homeMenu: {
+    flex: 1,
+    height: 100,
+    borderBottomWidth: 2,
+    paddingHorizontal: 20,
+    borderColor: '#eee',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   homeTitle: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: 'bold',
     color: colors.black,
-    marginTop: 20
   },
   homeIcon: {
-    width: 32,
-    height: 32
+    width: 26,
+    height: 26
   },
   homeSubtitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '200',
     color: colors.black,
-    textAlign: 'center',
-    marginTop: 20,
-    paddingHorizontal: 10
+    marginTop: 10,
+    paddingRight: 10
   }
 });
 

@@ -7,9 +7,9 @@ import {
   SetCurrentUserOffline,
   SendDeviceActivationCode,
   SetAcademicInfo,
-  SendEmailVerificationCode
+  SendEmailVerificationCode,
+  SendFeedback
 } from 'ducks/user';
-import { SendFeedback } from 'ducks/feedback';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => {
     deleteCurrentUser: () => dispatch(DeleteCurrentUser()),
     sendDeviceActivationCode: (email, $id, name) => dispatch(SendDeviceActivationCode(email, $id, name)),
     sendEmailVerificationCode: (email, $id, name) => dispatch(SendEmailVerificationCode(email, $id, name)),
-    sendFeedback: (userId, message) => dispatch(SendFeedback(userId, message)),
+    sendFeedback: (userId, name, email, message) => dispatch(SendFeedback(userId, name, email, message)),
     signOut: () => dispatch(SignOut())
   };
 };

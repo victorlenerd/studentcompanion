@@ -5,8 +5,8 @@ import moment from 'moment';
 import app, { toArray } from 'shared/firebase';
 import { StartRequest, FinishRequest } from './request';
 
-const api_key = 'key-d36c5ffa8ab21063ab1cc6dc7129abb5';
-const DOMAIN = 'sandboxc73baaefcbf142c3a7385773d9f0b7a3.mailgun.org';
+const api_key = 'key-93ca8e4ff39284ac39f1627abc5edd1d';
+const DOMAIN = 'studentcompanion.xyz';
 const mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
 
 const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
@@ -196,7 +196,7 @@ export const SendDeviceActivationCode = (email, $id, name) => dispatch => new Pr
     const data = {
       from: 'Student Companion <hello@studentcompanion.xyz>',
       to: email,
-      subject: 'Student Companion Email Verification Code',
+      subject: 'Student Companion Device Verification Code',
       text: `Hello ${name}, your device activation code is: ${code}`
     };
 
@@ -259,6 +259,35 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
     } else {
       resolve(false);
     }
+  } catch (err) {
+    reject(err);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const SendFeedback = (userId, name, email, feedback) => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+
+  try {
+    const data = {
+      from: 'Student Companion <hello@studentcompanion.xyz>',
+      to: 'vnwaokocha@gmail.com',
+      subject: `Feedback ${name}`,
+      text: `
+        ${feedback}
+
+
+        ${name}
+        ${email}
+        ${userId}
+      `
+    };
+
+    mailgun.messages().send(data, function(error) {
+      if (error) reject({ message: "Couldn't send feedback." });
+      resolve(true);
+    });
   } catch (err) {
     reject(err);
   }

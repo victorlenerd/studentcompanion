@@ -42,8 +42,6 @@ class SignUp extends Component {
     if (!(firstName.length < 1 || lastName.length < 1 || !validEmail(email) || !validPhone(phoneNumber) || password.length < 6)) {
       try {
         mailgun.validate(email, async (error, data) => {
-          console.log('data', data);
-          console.log('error', error);
           if (!data.is_valid) return Alert.alert('Registration Error', 'Email is not valid.', [{ text: 'Cancel', style: 'cancel' }]);
           await register({ name: `${firstName} ${lastName}`, email, phoneNumber, password });
         });

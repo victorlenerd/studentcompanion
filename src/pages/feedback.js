@@ -43,10 +43,10 @@ class Feedback extends Component {
 
   _submit = async () => {
     this.setState({ submitted: true });
-    const { sendFeedback, currentUser: { $id } } = this.props;
+    const { sendFeedback, currentUser: { $id, name, email } } = this.props;
     if (this.state.feedback.length > 1) {
       try {
-        await sendFeedback($id, this.state.feedback);
+        await sendFeedback($id, name, email, this.state.feedback);
         Alert.alert('Sent', 'Thanks for the feedback.', [{ text: 'Ok', style: 'cancel' }]);
         this.setState({ submitted: false });
       } catch (err) {

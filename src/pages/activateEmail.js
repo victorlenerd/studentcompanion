@@ -6,8 +6,10 @@ import Loader from 'components/loader';
 
 import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
+import connection from 'containers/connection';
 
 @users
+@connection
 class ActivateEmail extends PureComponent {
   constructor(props) {
     super(props);
