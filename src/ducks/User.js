@@ -338,6 +338,23 @@ export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId,
   dispatch(FinishRequest());
 });
 
+export const UpdateLibrary = (userId, courses) => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const usersRefs = app.database().ref(`/users/${userId}`);
+
+    usersRefs.update({ courses }, async err => {
+      if (err !== null) reject(err);
+      const newUser = await dispatch(GetCurrentUser());
+      dispatch(SetCurrentUser(newUser));
+      resolve(true);
+    });
+  } catch (err) {
+    reject(err);
+  }
+  dispatch(FinishRequest());
+});
+
 export const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:

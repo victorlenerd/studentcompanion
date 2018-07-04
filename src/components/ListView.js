@@ -113,6 +113,7 @@ const style = StyleSheet.create({
     height: 18
   },
   listName: {
+    flex: 0.8,
     fontSize: 18,
     color: colors.black
   },

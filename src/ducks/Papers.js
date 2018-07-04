@@ -21,7 +21,6 @@ export const SetPapers = (courseId, papers) => {
 export const GetPapers = courseId => (dispatch, getState) => new Promise((resolve, reject) => {
   const { paperState: { papers } } = getState();
   const cached = papers[courseId];
-  console.log('GetPapers::Cached', cached);
 
   if (cached) return resolve(cached);
 

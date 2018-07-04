@@ -9,19 +9,17 @@ import { Button } from 'components/buttons';
 import Loader from 'components/loader';
 
 import notes from 'containers/notes';
-import papers from 'containers/papers';
+import users from 'containers/users';
 import courses from 'containers/courses';
 import questions from 'containers/questions';
 
-@papers
+@users
 @notes
 @courses
 @questions
 class CourseHome extends Component {
   state = {
     notes: [],
-    papers: [],
-    photos: [],
     canAddToLibrary: false
   }
 
@@ -30,7 +28,6 @@ class CourseHome extends Component {
     const { $id } = course;
     const notes = await getNotes($id);
 
-    console.log('PAPERS', papers);
     const courseInLibrary = await this.inLibrary($id);
 
     if (courseInLibrary) {
@@ -41,13 +38,14 @@ class CourseHome extends Component {
   }
 
   saveCourse = async () => {
-    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, saveNotesOffline } = this.props;
+    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, updateLibrary, saveNotesOffline, currentUser: { $id: userId, courses: userCourses } } = this.props;
     const { $id } = course;
 
     try {
+      await updateLibrary(userId, (userCourses) ? userCourses.concat($id) : [$id]);
       await saveCourseOffline(course);
       await saveNotesOffline($id, this.state.notes);
-      Alert.alert('Success', `${course.name} Has Been Added To Your Library`, [{ text: 'Cancel', style: 'cancel' }]);
+      Alert.alert('Success', `${course.name} Has Been Added To Your Library`, [{ text: 'OK', style: 'cancel' }]);
       return navigate('Course', { course });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);

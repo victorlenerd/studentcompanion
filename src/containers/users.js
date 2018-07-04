@@ -8,7 +8,8 @@ import {
   SendDeviceActivationCode,
   SetAcademicInfo,
   SendEmailVerificationCode,
-  SendFeedback
+  SendFeedback,
+  UpdateLibrary
 } from 'ducks/user';
 
 const mapDispatchToProps = dispatch => {
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => {
     sendDeviceActivationCode: (email, $id, name) => dispatch(SendDeviceActivationCode(email, $id, name)),
     sendEmailVerificationCode: (email, $id, name) => dispatch(SendEmailVerificationCode(email, $id, name)),
     sendFeedback: (userId, name, email, message) => dispatch(SendFeedback(userId, name, email, message)),
+    updateLibrary: (userId, courses) => dispatch(UpdateLibrary(userId, courses)),
     signOut: () => dispatch(SignOut())
   };
 };

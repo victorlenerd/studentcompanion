@@ -47,8 +47,8 @@ class Feedback extends Component {
     if (this.state.feedback.length > 1) {
       try {
         await sendFeedback($id, name, email, this.state.feedback);
-        Alert.alert('Sent', 'Thanks for the feedback.', [{ text: 'Ok', style: 'cancel' }]);
-        this.setState({ submitted: false });
+        Alert.alert('Feedback Sent!', 'Thanks for the feedback.', [{ text: 'Ok', style: 'cancel' }]);
+        this.setState({ feedback: '', submitted: false });
       } catch (err) {
         Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
       }
