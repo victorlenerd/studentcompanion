@@ -6,6 +6,7 @@ import Loader from 'components/loader';
 
 import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
+import Tracking from 'shared/tracking';
 
 @users
 class ActivateMultipleDevice extends PureComponent {
@@ -14,6 +15,10 @@ class ActivateMultipleDevice extends PureComponent {
     this.state = {
       codeSent: false,
     };
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Activate_Device');
   }
 
   signout = async () => {

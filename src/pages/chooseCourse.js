@@ -4,6 +4,7 @@ import { Alert, BackHandler, Platform } from 'react-native';
 import ListView from 'components/listView';
 import courses from 'containers/courses';
 import drawerIcon from 'containers/drawerIcon';
+import Tracking from 'shared/tracking';
 
 @courses
 @drawerIcon
@@ -17,6 +18,8 @@ class ChooseCourse extends Component {
 
   async componentWillMount() {
     const { setMenu, getCoursesByOtherId, navigation: { state: { params: { levelId } }, navigate } } = this.props;
+
+    Tracking.setCurrentScreen('Page_Choose_Course');
 
     try {
       const coursesById = await getCoursesByOtherId('levelId', levelId);

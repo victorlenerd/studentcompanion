@@ -6,6 +6,7 @@ import { Button, ButtonInActive } from 'components/buttons';
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
 import auth from 'containers/auth';
+import Tracking from 'shared/tracking';
 
 const api_key = 'pubkey-d516243872838e1a6d6133d01c4ae634';
 const DOMAIN = 'studentcompanion.xyz';
@@ -26,6 +27,10 @@ class SignUp extends Component {
     };
 
     this.signUp = this.signUp.bind(this);
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Register');
   }
 
   componentWillReceiveProps(nextProps) {

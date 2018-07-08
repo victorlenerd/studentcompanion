@@ -13,6 +13,7 @@ import auth from 'containers/auth';
 import { main, colors } from 'shared/styles';
 import { Button } from 'components/buttons';
 import Loader from 'components/loader';
+import Tracking from 'shared/tracking';
 
 @auth
 class ForgotPassword extends Component {
@@ -21,6 +22,10 @@ class ForgotPassword extends Component {
     this.state = {
       email: '',
     };
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_ForgotPassword');
   }
 
   send = async () => {

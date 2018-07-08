@@ -14,7 +14,6 @@ import {
 
 import reverse from 'lodash/reverse';
 
-import objToArr from 'shared/objToArr';
 import { main, colors } from 'shared/styles';
 
 import connection from 'containers/connection';

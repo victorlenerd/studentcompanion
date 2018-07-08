@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetComments, PostComments } from 'ducks/comments';
+import { GetComments, PostComments, DeleteComment } from 'ducks/comments';
 
 const mapStateToProps = store => {
   return {
@@ -10,6 +10,7 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     getComments: noteId => dispatch(GetComments('note', noteId)),
+    deleteComment: comment => dispatch(DeleteComment(comment)),
     sendComment: comments => dispatch(PostComments(comments))
   };
 };

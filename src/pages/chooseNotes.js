@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, BackHandler, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import notes from 'containers/notes';
 import courses from 'containers/courses';
+import Tracking from 'shared/tracking';
 
 import { main, colors } from 'shared/styles';
 
@@ -9,6 +10,8 @@ import { main, colors } from 'shared/styles';
 @courses
 class ChooseNotes extends Component {
   componentWillMount() {
+    Tracking.setCurrentScreen('Page_Choose_Notes');
+
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });

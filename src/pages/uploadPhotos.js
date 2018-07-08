@@ -22,6 +22,7 @@ import UploadListItem from 'components/uploadListItem';
 import connection from 'containers/connection';
 import users from 'containers/users';
 import photos from 'containers/photos';
+import Tracking from 'shared/tracking';
 
 const { height, width } = Dimensions.get('window');
 
@@ -46,8 +47,12 @@ class UploadPhotos extends Component {
     };
   }
 
+
   async componentWillMount() {
     const { isConnected, currentUser: { $id }, getPhotoNotes } = this.props;
+
+    Tracking.setCurrentScreen('Page_Upload_Photo');
+
     if (isConnected) {
       try {
         this.setState({ userId: $id });

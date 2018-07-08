@@ -6,9 +6,12 @@ import Swiper from 'react-native-swiper';
 
 import { intro, colors } from 'shared/styles';
 import { Button } from 'components/buttons';
+import Tracking from 'shared/tracking';
 
 class Intro extends Component {
   componentDidMount() {
+    Tracking.setCurrentScreen('Page_Onboarding');
+
     setTimeout(this.bookImage.zoomIn, 1000);
   }
 

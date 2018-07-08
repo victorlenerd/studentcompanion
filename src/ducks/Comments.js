@@ -47,20 +47,31 @@ export const GetComments = (type, typeId) => (dispatch, getState) => new Promise
     });
 });
 
-export const PostComments = comment => (dispatch, getState) => new Promise((resolve, reject) => {
+export const PostComments = comment => dispatch => new Promise((resolve, reject) => {
   const commentsRef = app.database().ref('comments/');
   dispatch(StartRequest());
 
-  commentsRef
-    .push(comment)
-    .then(() => {
-      resolve(comment);
+  commentsRef.push(comment)
+    .then(({ key }) => {
+      console.log({ $id: key, ...comment });
+      resolve({ $id: key, ...comment });
       dispatch(FinishRequest());
     })
     .catch(err => {
       reject(err);
       dispatch(FinishRequest());
     });
+});
+
+export const DeleteComment = comment => dispatch => new Promise((resolve, reject) => {
+  const commentsRef = app.database().ref(`comments/${comment.$id}`);
+  dispatch(StartRequest());
+
+  commentsRef.remove()
+    .then(resolve)
+    .catch(reject);
+
+  dispatch(FinishRequest());
 });
 
 

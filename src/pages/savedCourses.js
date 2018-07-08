@@ -14,19 +14,20 @@ import { main, colors } from 'shared/styles';
 import Loader from 'components/loader';
 import courses from 'containers/courses';
 import notes from 'containers/notes';
-import papers from 'containers/papers';
-import questions from 'containers/questions';
+import connection from 'containers/connection';
+import Tracking from 'shared/tracking';
 
 const { width, height } = Dimensions.get('window');
 
 @courses
 @notes
-@papers
-@questions
+@connection
 class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
     const { getCoursesOffline } = this.props;
+
+    Tracking.setCurrentScreen('Page_Library');
 
     try {
       const offineCourses = await getCoursesOffline();
@@ -45,15 +46,17 @@ class SavedCourses extends Component {
   }
 
   _openCourse = async course => {
-    const { navigation: { navigate }, setCurrentCourse, getNotesOffline, getPapersOffline, getQuestionsOffline } = this.props;
+    const { navigation: { navigate }, setCurrentCourse, getNotes, getNotesOffline, isConnected } = this.props;
     setCurrentCourse(course);
 
     try {
-      const results = await Promise.all([
-        getNotesOffline(course.$id),
-        getPapersOffline(course.$id),
-        getQuestionsOffline(course.$id),
-      ]);
+      let results;
+
+      if (isConnected) {
+        results = await getNotes(course.$id);
+      } else {
+        results = getNotesOffline(course.$id);
+      }
 
       navigate('Course', results);
     } catch (err) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator, DrawerNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
 import WelcomeScreen from 'pages/welcome';
 import IntroScreen from 'pages/intro';
@@ -29,7 +29,6 @@ import ReaderScreen from 'pages/reader';
 import SearchTypedScreen from 'pages/searchTyped';
 
 import ChooseNotesScreen from 'pages/chooseNotes';
-import ChoosePapersScreen from 'pages/choosePapers';
 
 import NoteScreen from 'pages/note';
 import QuestionsScreen from 'pages/questions';
@@ -109,8 +108,7 @@ const MainNavigator = DrawerNavigator({
   SavedCourses: {
     screen: SavedCoursesScreen,
     navigationOptions: {
-      headerTitle: 'Library',
-      gesturesEnabled: false
+      headerTitle: 'Library'
     }
   },
   UploadPhotos: {

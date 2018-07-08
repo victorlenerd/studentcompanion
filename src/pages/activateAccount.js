@@ -7,8 +7,14 @@ import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
 import { Button } from 'components/buttons';
 
+import Tracking from 'shared/tracking';
+
 @users
 class ActivateAccount extends Component {
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Device_Activation');
+  }
+
   render() {
     const { currentUser: { email, name } } = this.props;
 

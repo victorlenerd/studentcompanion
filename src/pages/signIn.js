@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
-
+import Tracking from 'shared/tracking';
 import auth from 'containers/auth';
 import user from 'containers/users';
 
@@ -20,6 +20,10 @@ class SignIn extends Component {
       email: '',
       password: ''
     };
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Login');
   }
 
   componentWillReceiveProps(nextProps) {

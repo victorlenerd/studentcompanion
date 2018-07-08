@@ -7,6 +7,7 @@ import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
 import { Button, ButtonInActive } from 'components/buttons';
 import connection from 'containers/connection';
+import Tracking from 'shared/tracking';
 
 @users
 @connection
@@ -16,6 +17,10 @@ class ActivateEmail extends PureComponent {
     this.state = {
       codeSent: false,
     };
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Email_Verification');
   }
 
   signout = async () => {

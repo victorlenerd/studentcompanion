@@ -13,6 +13,7 @@ import { main, colors } from 'shared/styles';
 import Loader from 'components/loader';
 import { Button } from 'components/buttons';
 import auth from 'containers/auth';
+import Tracking from 'shared/tracking';
 
 @auth
 class VerifyEmail extends PureComponent {
@@ -22,6 +23,8 @@ class VerifyEmail extends PureComponent {
   }
 
   componentWillUnmount() {
+    Tracking.setCurrentScreen('Page_Verify_Email');
+
     Keyboard.dismiss();
   }
 

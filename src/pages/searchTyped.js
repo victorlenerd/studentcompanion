@@ -15,6 +15,7 @@ import search from 'containers/search';
 import courses from 'containers/courses';
 import { main, colors } from 'shared/styles';
 import debounce from 'lodash/debounce';
+import Tracking from 'shared/tracking';
 
 const { width } = Dimensions.get('window');
 
@@ -26,6 +27,8 @@ class SearchTyped extends Component {
   }
 
   componentWillMount() {
+    Tracking.setCurrentScreen('Page_Search_Courses');
+
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });

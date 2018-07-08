@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
+import Tracking from 'shared/tracking';
 
 const { width, height } = Dimensions.get('window');
 
+
 class Home extends Component {
   componentWillMount() {
+    Tracking.setCurrentScreen('Page_Home');
+
     BackHandler.addEventListener('hardwareBackPress', () => {
       return true;
     });

@@ -15,6 +15,7 @@ import { Button } from 'components/buttons';
 import Loader from 'components/loader';
 import users from 'containers/users';
 import connection from 'containers/connection';
+import Tracking from 'shared/tracking';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +32,8 @@ class Feedback extends Component {
 
 
   componentWillMount() {
+    Tracking.setCurrentScreen('Page_Feedback');
+
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });

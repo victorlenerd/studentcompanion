@@ -11,6 +11,8 @@ import Loader from 'components/loader';
 import { colors } from 'shared/styles';
 import * as Animatable from 'react-native-animatable';
 
+import Tracking from 'shared/tracking';
+
 @users
 @connection
 class Welcome extends Component {
@@ -19,6 +21,8 @@ class Welcome extends Component {
   }
 
   async componentWillMount() {
+    Tracking.setCurrentScreen('Page_Welcome');
+
     const { setConnection } = this.props;
     // const token = await FCM.getFCMToken();
     const { type } = await NetInfo.getConnectionInfo();

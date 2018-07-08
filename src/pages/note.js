@@ -21,6 +21,7 @@ import comments from 'containers/comments';
 import reader from 'containers/reader';
 
 import VoiceRatePane from 'components/voiceRatePane';
+import Tracking from 'shared/tracking';
 
 const { height } = Dimensions.get('window');
 
@@ -50,6 +51,8 @@ class Note extends Component {
   async componentWillMount() {
     const { getComments, currentNote, setCommentsCount, setPlayMode } = this.props;
     const { $id } = currentNote;
+
+    Tracking.setCurrentScreen('Page_Note');
 
     this.setState({
       currentSentence: 0,

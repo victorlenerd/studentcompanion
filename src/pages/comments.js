@@ -3,14 +3,14 @@ import {
   View,
   ScrollView,
   Alert,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 
 import { colors } from 'shared/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import users from 'containers/users';
-import papers from 'containers/papers';
 import notes from 'containers/notes';
 import comments from 'containers/comments';
 import connection from 'containers/connection';
@@ -18,11 +18,12 @@ import connection from 'containers/connection';
 import CommentForm from 'components/commentForm';
 import CommentListItem from 'components/commentListItem';
 import Loader from 'components/loader';
-
+import Tracking from 'shared/tracking';
 import EmptyState from 'components/emptyState';
 
+const { height } = Dimensions.get('window');
+
 @notes
-@papers
 @users
 @connection
 @comments
@@ -38,6 +39,9 @@ class Comments extends Component {
 
   async componentWillMount() {
     const { getComments, currentNote: { $id: noteId } } = this.props;
+
+    Tracking.setCurrentScreen('Page_Comments');
+
     try {
       const noteComments = await getComments(noteId);
       this.setState({ comments: noteComments });
@@ -61,10 +65,24 @@ class Comments extends Component {
     };
 
     try {
-      await sendComment(newComment);
+      const C = await sendComment(newComment);
       this.setState({
         isReply: false,
         repliedComment: {},
+        comments: this.state.comments.concat(C)
+      });
+    } catch (err) {
+      Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
+    }
+  }
+
+  deleteComment = async comment => {
+    const { deleteComment } = this.props;
+
+    try {
+      await deleteComment(comment);
+      this.setState({
+        comments: this.state.comments.filter(C => C.$id !== comment.$id)
       });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
@@ -78,11 +96,16 @@ class Comments extends Component {
 
     return (
       <View style={style.container}>
-        <View style={{ flex: 1 }}>
-          <ScrollView style={{ padding: 20 }}>
+        <View style={{ flex: 1, height }}>
+          <ScrollView style={{ height }}>
             {this.state.comments.map((comment, index) => {
               return (
-                <CommentListItem key={() => index} comment={comment} setReplyComment={(isReply, repliedComment) => this.setState({ isReply, repliedComment })} />
+                <CommentListItem
+                  key={comment.$id}
+                  comment={comment}
+                  deleteComment={this.deleteComment}
+                  setReplyComment={(isReply, repliedComment) => this.setState({ isReply, repliedComment })}
+                />
               );
             })}
           </ScrollView>
@@ -94,7 +117,7 @@ class Comments extends Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView style={{ height }}>
         {this._renderSection()}
         <Loader />
       </KeyboardAwareScrollView>
@@ -105,6 +128,7 @@ class Comments extends Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
+    height: height - 80,
     flexDirection: 'column',
     backgroundColor: colors.lightBlue,
     borderTopColor: colors.accent,

@@ -4,6 +4,7 @@ import { Alert, BackHandler, Platform } from 'react-native';
 import ListView from 'components/listView';
 import levels from 'containers/levels';
 import drawerIcon from 'containers/drawerIcon';
+import Tracking from 'shared/tracking';
 
 @levels
 @drawerIcon
@@ -17,6 +18,8 @@ class ChooseLevel extends Component {
 
   async componentWillMount() {
     const { setMenu, getLevelsByDepartmentId, navigation: { state: { params: { departmentId } }, navigate } } = this.props;
+
+    Tracking.setCurrentScreen('Page_Choose_Level');
 
     try {
       const levels = await getLevelsByDepartmentId(departmentId);

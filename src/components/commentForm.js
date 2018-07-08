@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Text, TextInput, StyleSheet, View, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { Alert, Text, TextInput, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 
 import { main, colors } from 'shared/styles';
 
@@ -54,7 +54,7 @@ class CommentForm extends Component {
         </View>
         <View style={style.submitButtonContainer}>
           <TouchableOpacity onPress={this.submit}>
-            <Image source={require('../assets/send.png')} style={style.sendBttn} />
+            <Text style={{ color: colors.primary, fontWeight: '600' }}>SEND</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -81,7 +81,7 @@ const style = StyleSheet.create({
   input: {
     height: 60,
     paddingLeft: 10,
-    fontSize: 18
+    fontSize: 16
   },
   inputContainer: {
     flex: 0.8,
@@ -110,3 +110,4 @@ const style = StyleSheet.create({
 });
 
 export default CommentForm;
+

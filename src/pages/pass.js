@@ -12,12 +12,17 @@ import { main, colors } from 'shared/styles';
 import Loader from 'components/loader';
 import { Button } from 'components/buttons';
 import auth from 'containers/auth';
+import Tracking from 'shared/tracking';
 
 @auth
 class Pass extends Component {
   constructor(props) {
     super(props);
     this.state = { code: '' };
+  }
+
+  componentWillMount() {
+    Tracking.setCurrentScreen('Page_Device_Activation_Code');
   }
 
   done = async () => {

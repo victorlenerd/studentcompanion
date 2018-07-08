@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import moment from 'moment';
-
+import users from 'containers/users';
 import { colors } from 'shared/styles';
 
+@users
 class CommentListItem extends Component {
   componentWillMount() {
     moment.updateLocale('en', {
@@ -47,33 +48,50 @@ class CommentListItem extends Component {
   };
 
   render() {
-    const { comment } = this.props;
+    const { comment, currentUser: { $id: userId } } = this.props;
 
     return (
       <View style={{ flex: 1, marginBottom: 1, padding: 20, backgroundColor: colors.white }}>
         {this.renderReplied(comment)}
-        <Text style={{ fontSize: 12, marginBottom: 10, color: colors.black }}>{comment.name}</Text>
+        <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row' }}>
+          <Text style={{ fontSize: 12, marginBottom: 10, color: colors.black }}>{comment.name}</Text>
+          <Text style={{ fontSize: 12, color: colors.gray }}>{moment(comment.dateAdded).fromNow()}</Text>
+        </View>
+
         <Text style={{ fontSize: 16, color: colors.black }}>{comment.comment}</Text>
         <View
           style={{
             flex: 1,
-            marginTop: 15,
+            marginTop: 10,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              this.props.setReplyComment({
-                isReply: true,
-                repliedComment: comment,
-              });
-            }}
-          >
-            <Text style={{ fontSize: 12, color: colors.primary }}>REPLY</Text>
-          </TouchableOpacity>
-          <Text style={{ fontSize: 12, color: colors.gray }}>{moment(comment.dateAdded).fromNow()}</Text>
+          {comment.userId !== userId &&
+            <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.setReplyComment({
+                    isReply: true,
+                    repliedComment: comment,
+                  });
+                }}
+              >
+                <Text style={{ fontSize: 12, color: colors.primary }}>REPLY</Text>
+              </TouchableOpacity>
+            </View>}
+
+          {comment.userId === userId &&
+            <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.deleteComment(comment);
+                }}
+              >
+                <Text style={{ fontSize: 12, color: colors.primary }}>DELETE</Text>
+              </TouchableOpacity>
+            </View>}
         </View>
       </View>
     );
@@ -87,13 +105,13 @@ CommentListItem.propTypes = {
 
 const style = StyleSheet.create({
   isRepliedContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
     borderBottomColor: '#eee',
     borderBottomWidth: 1,
     borderTopColor: '#eee',
     borderTopWidth: 1,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   replyTxt: {
     fontSize: 8,

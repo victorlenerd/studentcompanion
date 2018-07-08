@@ -11,6 +11,7 @@ import ListView from 'components/listView';
 
 import users from 'containers/users';
 import universities from 'containers/universities';
+import Tracking from 'shared/tracking';
 
 @users
 @universities
@@ -24,6 +25,8 @@ class SearchCourses extends Component {
 
   async componentWillMount() {
     const { getUniversities } = this.props;
+
+    Tracking.setCurrentScreen('Page_Browse_Courses');
 
     try {
       const universities = await getUniversities();

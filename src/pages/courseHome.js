@@ -12,6 +12,7 @@ import notes from 'containers/notes';
 import users from 'containers/users';
 import courses from 'containers/courses';
 import questions from 'containers/questions';
+import Tracking from 'shared/tracking';
 
 @users
 @notes
@@ -29,6 +30,8 @@ class CourseHome extends Component {
     const notes = await getNotes($id);
 
     const courseInLibrary = await this.inLibrary($id);
+
+    Tracking.setCurrentScreen('Page_Course_Home');
 
     if (courseInLibrary) {
       return navigate('Course', { course });
