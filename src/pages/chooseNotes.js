@@ -69,7 +69,11 @@ class ChooseNotes extends Component {
 
   render() {
     return (
-      <View style={main.container}>
+      <View style={[main.container, {
+        borderTopColor: colors.accent,
+        borderTopWidth: 2
+      }]}
+      >
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View style={[main.content, { flex: 1, padding: 0 }]}>
           <View style={{ flex: 1, backgroundColor: colors.white, flexDirection: 'column', elevation: 2 }}>

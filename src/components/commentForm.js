@@ -41,21 +41,23 @@ class CommentForm extends Component {
     return (
       <View style={style.container}>
         {this.renderIsReply()}
-        <View style={style.inputContainer}>
-          <TextInput
-            placeholder="Enter you comment"
-            autoCapitalize="none"
-            multiline={true}
-            underlineColorAndroid="rgba(0, 0, 0, 0)"
-            value={this.state.comment}
-            style={[main.textInput, style.input]}
-            onChange={e => this.setState({ comment: e.nativeEvent.text })}
-          />
-        </View>
-        <View style={style.submitButtonContainer}>
-          <TouchableOpacity onPress={this.submit}>
-            <Text style={{ color: colors.primary, fontWeight: '600' }}>SEND</Text>
-          </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={style.inputContainer}>
+            <TextInput
+              placeholder="Enter you comment"
+              autoCapitalize="none"
+              multiline={true}
+              underlineColorAndroid="rgba(0, 0, 0, 0)"
+              value={this.state.comment}
+              style={[main.textInput, style.input]}
+              onChange={e => this.setState({ comment: e.nativeEvent.text })}
+            />
+          </View>
+          <View style={style.submitButtonContainer}>
+            <TouchableOpacity onPress={this.submit}>
+              <Text style={{ color: colors.primary, fontWeight: '600' }}>SEND</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -72,8 +74,7 @@ CommentForm.propTypes = {
 const style = StyleSheet.create({
   container: {
     width,
-    height: 60,
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: colors.white,
     borderTopColor: '#eee',
     borderTopWidth: 1,

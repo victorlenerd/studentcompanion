@@ -72,10 +72,7 @@ class CommentListItem extends Component {
             <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row' }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.setReplyComment({
-                    isReply: true,
-                    repliedComment: comment,
-                  });
+                  this.props.setReplyComment(true, comment);
                 }}
               >
                 <Text style={{ fontSize: 12, color: colors.primary }}>REPLY</Text>

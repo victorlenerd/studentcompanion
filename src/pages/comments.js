@@ -4,6 +4,7 @@ import {
   ScrollView,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
   Dimensions
 } from 'react-native';
 
@@ -96,8 +97,8 @@ class Comments extends Component {
 
     return (
       <View style={style.container}>
-        <View style={{ flex: 1, height }}>
-          <ScrollView style={{ height }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView style={{ flex: 1 }}>
             {this.state.comments.map((comment, index) => {
               return (
                 <CommentListItem
@@ -117,10 +118,10 @@ class Comments extends Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView style={{ height }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         {this._renderSection()}
         <Loader />
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -128,7 +129,6 @@ class Comments extends Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    height: height - 80,
     flexDirection: 'column',
     backgroundColor: colors.lightBlue,
     borderTopColor: colors.accent,
