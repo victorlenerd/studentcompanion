@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
-import { View, Text, BackHandler, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  BackHandler,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar
+} from 'react-native';
 import notes from 'containers/notes';
 import courses from 'containers/courses';
-import Tracking from 'shared/tracking';
+import drawerIcon from 'containers/drawerIcon';
 
+import Tracking from 'shared/tracking';
 import { main, colors } from 'shared/styles';
 
 @notes
 @courses
+@drawerIcon
 class ChooseNotes extends Component {
   componentWillMount() {
+    const { setMenu, navigation: { state: { params: { fromPage } } } } = this.props;
+
     Tracking.setCurrentScreen('Page_Choose_Notes');
+
+    setMenu(false, fromPage);
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
@@ -22,8 +35,9 @@ class ChooseNotes extends Component {
   }
 
   _openNote = note => {
-    const { navigation: { navigate }, setCurrentNote } = this.props;
+    const { setMenu, navigation: { navigate }, setCurrentNote } = this.props;
     setCurrentNote(note);
+    setMenu(false, 'Course');
     navigate('Note');
   }
 

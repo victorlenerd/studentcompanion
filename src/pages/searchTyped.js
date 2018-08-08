@@ -13,14 +13,18 @@ import ListView from 'components/listView';
 
 import search from 'containers/search';
 import courses from 'containers/courses';
+import drawerIcon from 'containers/drawerIcon';
+
 import { main, colors } from 'shared/styles';
-import debounce from 'lodash/debounce';
 import Tracking from 'shared/tracking';
+
+import debounce from 'lodash/debounce';
 
 const { width } = Dimensions.get('window');
 
 @search
 @courses
+@drawerIcon
 class SearchTyped extends Component {
   state = {
     courses: []
@@ -28,7 +32,7 @@ class SearchTyped extends Component {
 
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Search_Courses');
-
+    this.props.setMenu(false, 'Home');
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });

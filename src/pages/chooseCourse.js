@@ -38,15 +38,11 @@ class ChooseCourse extends Component {
     }
   }
 
-  componentWillUnmount() {
-    const { setMenu } = this.props;
-    setMenu(true, null);
-  }
-
   _openCourse = course => {
-    const { setCurrentCourse, navigation: { navigate, state: { params: { facultyId, departmentId, universityId, levelId } } } } = this.props;
+    const { setMenu, setCurrentCourse, navigation: { navigate, state: { params: { facultyId, departmentId, universityId, levelId } } } } = this.props;
     setCurrentCourse(course);
-    navigate('CourseHome', { course, departmentId, facultyId, universityId, levelId });
+    setMenu(false, 'ChooseCourse');
+    navigate('CourseHome', { fromPage: 'ChooseCourse', course, departmentId, facultyId, universityId, levelId });
   }
 
   render() {

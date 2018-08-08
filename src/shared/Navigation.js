@@ -9,15 +9,9 @@ import SignUpScreen from 'pages/signUp';
 import SignInScreen from 'pages/signIn';
 import ForgotPassword from 'pages/forgotPassword';
 
-import AcademicInfoScreen from 'pages/academicInfo';
 import ActivateAccountScreen from 'pages/activateAccount';
 import ActivateMuitiDeviceScreen from 'pages/activateMultiDevice';
 import PaymentScreen from 'pages/payment';
-import UploadPhotoScreen from 'pages/uploadProfilePhoto';
-import SearchCoursesScreen from 'pages/searchCourses';
-import ChooseFacultyScreen from 'pages/chooseFaculty';
-import ChooseDepartmentScreen from 'pages/chooseDepartment';
-import ChooseLevelScreen from 'pages/chooseLevel';
 import ChooseCourseScreen from 'pages/chooseCourse';
 import CourseHomeScreen from 'pages/courseHome';
 import CommentsScreen from 'pages/comments';
@@ -50,39 +44,11 @@ const MainNavigator = DrawerNavigator({
       gesturesEnabled: false,
     }
   },
-  Search: {
-    screen: SearchCoursesScreen,
-    navigationOptions: {
-      headerTitle: 'Browse',
-      gesturesEnabled: true,
-    }
-  },
   SearchTyped: {
     screen: SearchTypedScreen,
     navigationOptions: {
       headerTitle: 'Search',
       gesturesEnabled: false,
-    }
-  },
-  ChooseFaculty: {
-    screen: ChooseFacultyScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Facuty',
-      gesturesEnabled: true,
-    }
-  },
-  ChooseDepartment: {
-    screen: ChooseDepartmentScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Department',
-      gesturesEnabled: true,
-    }
-  },
-  ChooseLevel: {
-    screen: ChooseLevelScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Level',
-      gesturesEnabled: true,
     }
   },
   ChooseCourse: {
@@ -158,19 +124,6 @@ const MainNavigator = DrawerNavigator({
 const Navigation = StackNavigator({
   Welcome: {
     screen: WelcomeScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
-  AcademicInfo: {
-    screen: AcademicInfoScreen,
-    navigationOptions: {
-      header: null,
-      gesturesEnabled: false,
-    }
-  },
-  UploadPhoto: {
-    screen: UploadPhotoScreen,
     navigationOptions: {
       header: null
     }

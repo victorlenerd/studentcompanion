@@ -18,6 +18,7 @@ import { main, colors } from 'shared/styles';
 
 import connection from 'containers/connection';
 import extractedNotes from 'containers/extractedNotes';
+import drawerIcon from 'containers/drawerIcon';
 
 import CameraGallery from 'components/cameraGallery';
 import SelectedExtractedImages from 'components/selectedExtractedImages';
@@ -29,6 +30,7 @@ const { width, height } = Dimensions.get('window');
 
 @extractedNotes
 @connection
+@drawerIcon
 class TextExtractor extends Component {
   state = {
     ready: false,
@@ -40,7 +42,9 @@ class TextExtractor extends Component {
   }
 
   async componentWillMount() {
-    const { loadNotes } = this.props;
+    const { loadNotes, setMenu } = this.props;
+    setMenu(false, 'Home');
+
     const ExtractedNotes = await loadNotes();
     this.setState({ extractedNotes: reverse(ExtractedNotes) });
 

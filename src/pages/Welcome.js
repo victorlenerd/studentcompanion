@@ -4,7 +4,6 @@ import { View, Image, NetInfo, StatusBar } from 'react-native';
 import moment from 'moment';
 
 import DeviceInfo from 'react-native-device-info';
-import FCM from 'react-native-fcm';
 import connection from 'containers/connection';
 import users from 'containers/users';
 import Loader from 'components/loader';

@@ -12,9 +12,11 @@ import {
 
 import { main, colors } from 'shared/styles';
 import Loader from 'components/loader';
+
 import courses from 'containers/courses';
 import notes from 'containers/notes';
 import connection from 'containers/connection';
+import drawerIcon from 'containers/drawerIcon';
 import Tracking from 'shared/tracking';
 
 const { width, height } = Dimensions.get('window');
@@ -22,12 +24,15 @@ const { width, height } = Dimensions.get('window');
 @courses
 @notes
 @connection
+@drawerIcon
 class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
-    const { getCoursesOffline } = this.props;
+    const { setMenu, getCoursesOffline } = this.props;
 
     Tracking.setCurrentScreen('Page_Library');
+
+    setMenu(false, 'Home');
 
     try {
       const offineCourses = await getCoursesOffline();
@@ -58,11 +63,13 @@ class SavedCourses extends Component {
         results = getNotesOffline(course.$id);
       }
 
-      navigate('Course', results);
+      navigate('Course', { ...results, fromPage: 'SavedCourses' });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
   }
+
+  _deleteCourse = course => {}
 
   _renderSection = () => {
     if (this.state.courses.length) {
@@ -79,7 +86,6 @@ class SavedCourses extends Component {
                   }}
                 >
                   <Text style={{ color: colors.black, fontSize: 18 }}>{course.name}</Text>
-                  <Text style={{ color: colors.black, fontSize: 14 }}>{course.code}</Text>
                 </TouchableOpacity>
               );
             })}

@@ -3,9 +3,11 @@ import { View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions,
 import { colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
 
+import drawerIcon from 'containers/drawerIcon';
+
 const { width, height } = Dimensions.get('window');
 
-
+@drawerIcon
 class Home extends Component {
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Home');
@@ -13,6 +15,8 @@ class Home extends Component {
     BackHandler.addEventListener('hardwareBackPress', () => {
       return true;
     });
+
+    this.props.setMenu(true, null);
   }
 
   componentWillUnmount() {
@@ -55,23 +59,6 @@ class Home extends Component {
               <Text style={style.homeTitle}>Extract Text</Text>
               <Text style={style.homeSubtitle}>
                 Extract Text From Notes and Documents.
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => { navigate('Search'); }}
-            style={style.homeMenu}
-          >
-            <Image
-              resizeMode="contain"
-              source={require('../assets/stack-accent.png')}
-              style={style.homeIcon}
-            />
-            <View style={{ marginLeft: 20 }}>
-              <Text style={style.homeTitle}>Browse</Text>
-              <Text style={style.homeSubtitle}>
-                Browse by schools and departments.
               </Text>
             </View>
           </TouchableOpacity>

@@ -14,6 +14,7 @@ import { main, colors } from 'shared/styles';
 import { Button } from 'components/buttons';
 import Loader from 'components/loader';
 import users from 'containers/users';
+import drawerIcon from 'containers/drawerIcon';
 import connection from 'containers/connection';
 import Tracking from 'shared/tracking';
 
@@ -21,6 +22,7 @@ const { width, height } = Dimensions.get('window');
 
 @users
 @connection
+@drawerIcon
 class Feedback extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +35,7 @@ class Feedback extends Component {
 
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Feedback');
-
+    this.props.setMenu(false, 'Home');
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
     });

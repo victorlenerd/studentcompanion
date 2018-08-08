@@ -1,34 +1,40 @@
 PODS:
-  - Firebase/Core (4.8.0):
-    - FirebaseAnalytics (= 4.0.5)
-    - FirebaseCore (= 4.0.13)
-  - Firebase/Crash (4.8.0):
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.5)
+  - Firebase/Core (4.0.0):
+    - FirebaseAnalytics (= 4.0.0)
+    - FirebaseCore (= 4.0.0)
+  - Firebase/Crash (4.0.0):
     - Firebase/Core
-    - FirebaseCrash (= 2.0.2)
-  - Firebase/Messaging (4.8.0):
+    - FirebaseCrash (= 2.0.0)
+  - Firebase/Messaging (4.0.0):
     - Firebase/Core
-    - FirebaseMessaging (= 2.0.8)
-  - FirebaseAnalytics (4.0.5):
+    - FirebaseMessaging (= 2.0.0)
+  - FirebaseAnalytics (4.0.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-    - nanopb (~> 0.3)
-  - FirebaseCore (4.0.13):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseCrash (2.0.2):
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - FirebaseCore (4.0.0):
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - FirebaseCrash (2.0.0):
     - FirebaseAnalytics (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - Protobuf (~> 3.1)
-  - FirebaseInstanceID (2.0.8):
+  - FirebaseInstanceID (2.0.10):
     - FirebaseCore (~> 4.0)
-  - FirebaseMessaging (2.0.8):
+  - FirebaseMessaging (2.0.0):
     - FirebaseAnalytics (~> 4.0)
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - Protobuf (~> 3.1)
+  - Folly (2016.10.31.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.4)
   - Google (2.0.4):
     - Google/Core (= 2.0.4)
   - Google/Core (2.0.4):
@@ -41,66 +47,70 @@ PODS:
   - GoogleNetworkingUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
   - GoogleSymbolUtilities (1.1.2)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - GoogleToolboxForMac/Logger (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/NSData+zlib (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GoogleToolboxForMac/Defines (2.1.4)
+  - GoogleToolboxForMac/Logger (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - "GoogleToolboxForMac/NSData+zlib (2.1.4)":
+    - GoogleToolboxForMac/Defines (= 2.1.4)
   - GoogleUtilities (1.3.2):
     - GoogleSymbolUtilities (~> 1.1)
-  - nanopb (0.3.8):
-    - nanopb/decode (= 0.3.8)
-    - nanopb/encode (= 0.3.8)
-  - nanopb/decode (0.3.8)
-  - nanopb/encode (0.3.8)
-  - Protobuf (3.5.0)
+  - Protobuf (3.6.0)
   - QBImagePickerController (3.4.0)
-  - React (0.51.0):
-    - React/Core (= 0.51.0)
+  - React (0.56.0):
+    - React/Core (= 0.56.0)
   - react-native-camera-kit (5.3.22):
     - React
   - react-native-fetch-blob (0.10.6):
     - React/Core
-  - React/BatchedBridge (0.51.0):
+  - React/Core (0.56.0):
+    - yoga (= 0.56.0.React)
+  - React/CxxBridge (0.56.0):
+    - Folly (= 2016.10.31.00)
     - React/Core
-    - React/cxxreact_legacy
-  - React/Core (0.51.0):
-    - yoga (= 0.51.0.React)
-  - React/cxxreact_legacy (0.51.0):
-    - React/jschelpers_legacy
-  - React/DevSupport (0.51.0):
+    - React/cxxreact
+  - React/cxxreact (0.56.0):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.10.31.00)
+    - React/jschelpers
+    - React/jsinspector
+  - React/DevSupport (0.56.0):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.51.0)
-  - React/jschelpers_legacy (0.51.0)
-  - React/RCTBlob (0.51.0):
+  - React/fishhook (0.56.0)
+  - React/jschelpers (0.56.0):
+    - Folly (= 2016.10.31.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.56.0)
+  - React/PrivateDatabase (0.56.0)
+  - React/RCTBlob (0.56.0):
     - React/Core
-  - React/RCTImage (0.51.0):
+  - React/RCTImage (0.56.0):
     - React/Core
     - React/RCTNetwork
-  - React/RCTNetwork (0.51.0):
+  - React/RCTNetwork (0.56.0):
     - React/Core
-  - React/RCTText (0.51.0):
+  - React/RCTText (0.56.0):
     - React/Core
-  - React/RCTWebSocket (0.51.0):
+  - React/RCTWebSocket (0.56.0):
     - React/Core
     - React/fishhook
     - React/RCTBlob
   - RNFS (2.9.11):
     - React
-  - RSKImageCropper (2.0.0)
-  - yoga (0.51.0.React)
+  - RSKImageCropper (2.1.0)
+  - yoga (0.56.0.React)
 
 DEPENDENCIES:
-  - Firebase/Core
+  - Firebase/Core (= 4.0.0)
   - Firebase/Crash
   - Firebase/Messaging
+  - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - Google
   - QBImagePickerController
   - react-native-camera-kit (from `../node_modules/react-native-camera-kit`)
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
-  - React/BatchedBridge (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
+  - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
   - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTNetwork (from `../node_modules/react-native`)
@@ -110,41 +120,67 @@ DEPENDENCIES:
   - RSKImageCropper
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - boost-for-react-native
+    - DoubleConversion
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseCore
+    - FirebaseCrash
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - glog
+    - Google
+    - GoogleInterchangeUtilities
+    - GoogleNetworkingUtilities
+    - GoogleSymbolUtilities
+    - GoogleToolboxForMac
+    - GoogleUtilities
+    - Protobuf
+    - QBImagePickerController
+    - RSKImageCropper
+
 EXTERNAL SOURCES:
+  Folly:
+    :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   React:
-    :path: ../node_modules/react-native
+    :path: "../node_modules/react-native"
   react-native-camera-kit:
-    :path: ../node_modules/react-native-camera-kit
+    :path: "../node_modules/react-native-camera-kit"
   react-native-fetch-blob:
-    :path: ../node_modules/react-native-fetch-blob
+    :path: "../node_modules/react-native-fetch-blob"
   RNFS:
-    :path: ../node_modules/react-native-fs
+    :path: "../node_modules/react-native-fs"
   yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
+    :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Firebase: 710decbbc6d9d48530e9a5dba3209740c3532e05
-  FirebaseAnalytics: 5b02a63ead2c3f0259cfc7f15e053e440587ecf8
-  FirebaseCore: 3c02ec652db3d03fdc8bc6d9154af3e20d64b6f5
-  FirebaseCrash: cded0fc566c03651aea606a101bc156085f333ca
-  FirebaseInstanceID: 81df5805a08001e69138664bdd02c6719a9ac80f
-  FirebaseMessaging: dfdcd307c2382290a1e297a81d0f18370f5b1bcd
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
+  Firebase: 284eea779b73fdff309791817da7c68bff8dd572
+  FirebaseAnalytics: 6f08e746f7d66f5452931bc2e822b5df9c66b64a
+  FirebaseCore: 85ad466044c2f013cdb167f85d426d15b128114a
+  FirebaseCrash: 994131fbe670dfb63debfad7ed5a41224b67b798
+  FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
+  FirebaseMessaging: 227406c05b0dc9290702d2e9f18ab5528f0c2cf2
+  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   Google: d536877ec602555b755cc28ce6fed104825c693c
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleNetworkingUtilities: 3edd3a8161347494f2da60ea0deddc8a472d94cb
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GoogleUtilities: 8bbc733218aad26306f9d4a253823986110e3358
-  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
-  React: 352f02f1db6e4744f9a758527e13e3fdefbbd6ba
-  react-native-camera-kit: d03b36448a109fdac8894c8803299788de9d3e42
-  react-native-fetch-blob: 2bef9be702de8726f4d7bf58d2345579aaaee60d
-  RNFS: 422c45bbeb7efc41e9d39fbfaa8a533f94cd3e45
-  RSKImageCropper: d9a1acbc0600bf8decc8f0d21895872c99a9e4cf
-  yoga: b5d96400ca8b2936965a7a6516da7c1177f432a3
+  React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-camera-kit: b8be082835610287985ce574a8d02460e5a48372
+  react-native-fetch-blob: 63394b1d7b0781547b3e4463b3195790177b1222
+  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
+  RSKImageCropper: 0d0c6d8525a2381f03fde32a47c6703817a2feed
+  yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 2fa0391d7994e24db11abd7bda6cc4e963721318
+PODFILE CHECKSUM: 2585e6159b1530f25abf4f28373c513dc517d7ab
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.5.3

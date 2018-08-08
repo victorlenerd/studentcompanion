@@ -8,17 +8,17 @@ target 'StudentCompanion' do
   # Pods for StudentCompanion
   pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
   pod 'React', :path => '../node_modules/react-native', :subspecs => [
-    'BatchedBridge',
     'Core',
+    'CxxBridge',
+    'DevSupport',
     'RCTText',
     'RCTImage',
     'RCTNetwork',
-    'RCTWebSocket',
-    'DevSupport'
+    'RCTWebSocket'
   ]
 
   pod 'Google'
-  pod 'Firebase/Core'
+  pod 'Firebase/Core', '4.0.0'
   pod 'Firebase/Crash'
   pod 'Firebase/Messaging'	
   
@@ -31,6 +31,9 @@ target 'StudentCompanion' do
 
   pod 'RSKImageCropper'
   pod 'QBImagePickerController'
+
+  # Third party deps podspec link
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   target 'StudentCompanionTests' do
     inherit! :search_paths
@@ -50,4 +53,16 @@ target 'StudentCompanion-tvOS' do
     # Pods for testing
   end
 
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    # Build React Native with DEBUG enabled
+    if target.name == 'React'
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'DEBUG=1'
+      end
+    end
+  end
 end

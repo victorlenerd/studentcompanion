@@ -13,11 +13,13 @@ import users from 'containers/users';
 import courses from 'containers/courses';
 import questions from 'containers/questions';
 import Tracking from 'shared/tracking';
+import drawerIcon from 'containers/drawerIcon';
 
 @users
 @notes
 @courses
 @questions
+@drawerIcon
 class CourseHome extends Component {
   state = {
     notes: [],
@@ -25,9 +27,11 @@ class CourseHome extends Component {
   }
 
   async componentWillMount() {
-    const { navigation: { navigate, state: { params: { course } } }, getNotes } = this.props;
+    const { navigation: { navigate, state: { params: { course, fromPage } } }, setMenu, getNotes } = this.props;
     const { $id } = course;
     const notes = await getNotes($id);
+
+    setMenu(false, fromPage);
 
     const courseInLibrary = await this.inLibrary($id);
 
