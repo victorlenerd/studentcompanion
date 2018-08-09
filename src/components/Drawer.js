@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  Platform,
   Share,
 } from 'react-native';
 

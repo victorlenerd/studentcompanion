@@ -25,7 +25,6 @@ import SearchTypedScreen from 'pages/searchTyped';
 import ChooseNotesScreen from 'pages/chooseNotes';
 
 import NoteScreen from 'pages/note';
-import QuestionsScreen from 'pages/questions';
 
 import ActivateEmailScreen from 'pages/activateEmail';
 import VerifyEmailScreen from 'pages/verifyEmail';
@@ -95,9 +94,6 @@ const MainNavigator = DrawerNavigator({
     navigationOptions: ({ navigation }) => ({
       headerRight: <NoteToobarOptions navigation={navigation} />
     })
-  },
-  Questions: {
-    screen: QuestionsScreen,
   },
   TextExtractor: {
     screen: TextExtractorScreen,

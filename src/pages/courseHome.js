@@ -38,7 +38,7 @@ class CourseHome extends Component {
     Tracking.setCurrentScreen('Page_Course_Home');
 
     if (courseInLibrary) {
-      return navigate('Course', { course });
+      return navigate('Course', { course, fromPage: 'SearchTyped' });
     }
 
     this.setState({ canAddToLibrary: true, notes });

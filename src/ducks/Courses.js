@@ -14,6 +14,18 @@ const initialState = {
   library: []
 };
 
+export const GetCourse = courseId => dispatch => new Promise((resolve, reject) => {
+  dispatch(StartRequest());
+  const coursesRef = app
+    .database()
+    .ref(`/courses/${courseId}`);
+
+  coursesRef.once('value', snapshot => {
+    const course = toArray(snapshot.val());
+    resolve(course);
+    dispatch(FinishRequest());
+  });
+});
 
 export const GetCoursesByOtherId = (idName, dbId) => (dispatch, getState) => new Promise((resolve, reject) => {
   const { courseState: { coursesById } } = getState();
@@ -72,6 +84,23 @@ export const SaveCourseOffline = course => dispatch => new Promise(async (resolv
 
   try {
     await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(courses));
+    resolve(course);
+  } catch (err) {
+    reject(err.message);
+  }
+
+  dispatch(FinishRequest());
+});
+
+export const RemoveCourseOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  const courses = await dispatch(GetCoursesOffline());
+  const newCourses = courses.filter(c => c.id !== courseId);
+
+  dispatch(SetLibrary(newCourses));
+
+  try {
+    await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(newCourses));
     resolve(course);
   } catch (err) {
     reject(err.message);

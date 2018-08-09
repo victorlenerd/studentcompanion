@@ -4,6 +4,7 @@ import { StartRequest, FinishRequest } from './request';
 
 const NOTES = 'NOTES';
 const SET_CURRENT_NOTE = 'SET_CURRENT_NOTE';
+const REMOVE_NOTE = 'REMOVE_NOTE';
 
 const initialState = {
   currentNote: {},
@@ -77,6 +78,18 @@ export const SaveNotesOffline = (courseId, notes) => dispatch => new Promise(asy
   dispatch(FinishRequest());
 });
 
+export const RemoveNoteOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    await AsyncStorage.removeItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`);
+    dispatch({ type: REMOVE_NOTE, courseId });
+    resolve();
+  } catch (err) {
+    reject(err);
+  }
+  dispatch(FinishRequest());
+});
+
 export const SetCurrentNote = note => {
   return {
     type: SET_CURRENT_NOTE,
@@ -88,9 +101,21 @@ export const NotesReducer = (state = initialState, action) => {
   switch (action.type) {
     case NOTES: {
       const { courseId, notes } = action;
-      return Object.assign({}, state, {
-        notes: { [courseId]: notes }
+      const oldNotes = state.notes;
+      const newNotes = Object.assign({}, oldNotes, {
+        [courseId]: notes
       });
+
+      return Object.assign({}, state, {
+        notes: newNotes
+      });
+    }
+
+    case REMOVE_NOTE: {
+      const { courseId } = action;
+      const { notes } = state;
+      delete notes[courseId];
+      return notes;
     }
 
     case SET_CURRENT_NOTE:

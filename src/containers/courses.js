@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetCoursesByOtherId, GetCoursesOffline, SaveCourseOffline, SetCurrentCourse } from 'ducks/courses';
+import { GetCoursesByOtherId, GetCourse, GetCoursesOffline, SaveCourseOffline, SetCurrentCourse, RemoveCourseOffline } from 'ducks/courses';
 
 const mapStateToProps = store => {
   return {
@@ -10,10 +10,12 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getCourse: id => dispatch(GetCourse(id)),
     getCoursesOffline: () => dispatch(GetCoursesOffline()),
     getCoursesByOtherId: (idName, dbId) => dispatch(GetCoursesByOtherId(idName, dbId)),
     getCoursesByDepartmentId: departmentId => dispatch(GetCoursesByOtherId('departmentId', departmentId)),
     saveCourseOffline: course => dispatch(SaveCourseOffline(course)),
+    removeCourseOffline: courseId => dispatch(RemoveCourseOffline(courseId)),
     setCurrentCourse: course => dispatch(SetCurrentCourse(course))
   };
 };

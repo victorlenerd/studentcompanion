@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   BackHandler,
-  Alert,
+  Image,
+  Alert
 } from 'react-native';
 
 import { main, colors } from 'shared/styles';
@@ -17,10 +18,12 @@ import courses from 'containers/courses';
 import notes from 'containers/notes';
 import connection from 'containers/connection';
 import drawerIcon from 'containers/drawerIcon';
+import user from 'containers/users';
 import Tracking from 'shared/tracking';
 
 const { width, height } = Dimensions.get('window');
 
+@user
 @courses
 @notes
 @connection
@@ -28,14 +31,39 @@ const { width, height } = Dimensions.get('window');
 class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
-    const { setMenu, getCoursesOffline } = this.props;
+    const { setMenu, getCoursesOffline, saveCourseOffline, saveNotesOffline, currentUser, getCourse, getNotes } = this.props;
 
     Tracking.setCurrentScreen('Page_Library');
-
     setMenu(false, 'Home');
+
+    let remoteCourses;
+    const { $id, updateLibrary } = currentUser;
+
+    if (currentUser.courses) {
+      remoteCourses = [];
+    }
+
+    // await saveCourseOffline(course);
+    // await saveNotesOffline($id, this.state.notes);
 
     try {
       const offineCourses = await getCoursesOffline();
+      const offlineCoursesId = offineCourses.map(({ id }) => id);
+      const notSavedOffline = remoteCourses.filter(({ id }) => offlineCoursesId.indexOf(id) === -1);
+      const notSavedOnline = offlineCoursesId.filter(({ id }) => remoteCourses.indexOf(id) === -1);
+
+      if (notSavedOffline.length !== notSavedOnline.length) await updateLibrary($id, notSavedOffline.concat(notSavedOnline));
+
+      if (notSavedOffline.length > 1) {
+        console.log(notSavedOffline);
+        const scourses = notSavedOffline.map(async ({ $id: cid }) => await getCourse(cid));
+        const cnotes = notSavedOffline.map(async ({ $id: cid }) => await getNotes(cid));
+        scourses.forEach(async (c, i) => {
+          await saveCourseOffline(c);
+          await saveNotesOffline(c.$id, cnotes[i]);
+        });
+      }
+
       this.setState({ courses: offineCourses });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
@@ -69,7 +97,22 @@ class SavedCourses extends Component {
     }
   }
 
-  _deleteCourse = course => {}
+  _deleteCourse = ({ name, id }) => {
+    const { removeNoteOffline, removeCourseOffline } = this.props;
+
+    Alert.alert('Delete Course', `Are you sure you want to remove ${name} from you library`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Yes',
+          onPress: async () => {
+            await removeNoteOffline(id);
+            await removeCourseOffline(id);
+            this.setState({
+              courses: this.state.courses.filter(c => c.id !== id)
+            });
+          } }
+      ]);
+  }
 
   _renderSection = () => {
     if (this.state.courses.length) {
@@ -80,12 +123,16 @@ class SavedCourses extends Component {
               return (
                 <TouchableOpacity
                   key={course.$id}
-                  style={{ padding: 20, marginBottom: 2, backgroundColor: colors.white }}
+                  style={{ padding: 20, marginBottom: 2, backgroundColor: colors.white, flexDirection: 'row', justifyContent: 'space-between' }}
                   onPress={() => {
                     this._openCourse(course);
                   }}
                 >
-                  <Text style={{ color: colors.black, fontSize: 18 }}>{course.name}</Text>
+                  <Text style={{ color: colors.black, fontSize: 18, flex: 0.9 }}>{course.name}</Text>
+
+                  <TouchableOpacity onPress={() => this._deleteCourse(course)}>
+                    <Image source={require('../assets/bin.png')} style={{ width: 20, height: 20 }} />
+                  </TouchableOpacity>
                 </TouchableOpacity>
               );
             })}
