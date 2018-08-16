@@ -31,16 +31,19 @@ const { width, height } = Dimensions.get('window');
 class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
-    const { setMenu, getCoursesOffline, saveCourseOffline, saveNotesOffline, currentUser, getCourse, getNotes } = this.props;
+    const { setMenu, getCoursesOffline, saveCourseOffline, saveNotesOffline, currentUser, updateLibrary, getCourse, getNotes } = this.props;
 
     Tracking.setCurrentScreen('Page_Library');
     setMenu(false, 'Home');
 
     let remoteCourses;
-    const { $id, updateLibrary } = currentUser;
+    const { $id } = currentUser;
 
-    if (currentUser.courses) {
+
+    if (!currentUser.courses) {
       remoteCourses = [];
+    } else {
+      remoteCourses = currentUser.courses;
     }
 
     // await saveCourseOffline(course);
@@ -52,19 +55,28 @@ class SavedCourses extends Component {
       const notSavedOffline = remoteCourses.filter(({ id }) => offlineCoursesId.indexOf(id) === -1);
       const notSavedOnline = offlineCoursesId.filter(({ id }) => remoteCourses.indexOf(id) === -1);
 
-      if (notSavedOffline.length !== notSavedOnline.length) await updateLibrary($id, notSavedOffline.concat(notSavedOnline));
+      if (notSavedOffline.length !== notSavedOnline.length) {
+        await updateLibrary($id, notSavedOffline.concat(notSavedOnline));
+        if (notSavedOffline.length >= 1) {
+          const getAllCourses = notSavedOffline.map(cid => getCourse(cid));
+          const getAllNotes = notSavedOffline.map(cid => getNotes(cid));
+          const allCourses = await Promise.all(getAllCourses);
+          const allNotes = await Promise.all(getAllNotes);
 
-      if (notSavedOffline.length > 1) {
-        console.log(notSavedOffline);
-        const scourses = notSavedOffline.map(async ({ $id: cid }) => await getCourse(cid));
-        const cnotes = notSavedOffline.map(async ({ $id: cid }) => await getNotes(cid));
-        scourses.forEach(async (c, i) => {
-          await saveCourseOffline(c);
-          await saveNotesOffline(c.$id, cnotes[i]);
-        });
+          allCourses.forEach((course, i) => {
+            course.id = notSavedOffline[i];
+            this.setState({
+              courses: this.state.courses.concat(course)
+            }, () => {
+              const courseNotes = [].concat.apply([], ...allNotes).filter(n => n.courseId === course.id);
+              saveNotesOffline(course.id, courseNotes);
+              saveCourseOffline(course);
+            });
+          });
+        }
+      } else {
+        this.setState({ courses: offineCourses });
       }
-
-      this.setState({ courses: offineCourses });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -86,9 +98,9 @@ class SavedCourses extends Component {
       let results;
 
       if (isConnected) {
-        results = await getNotes(course.$id);
+        results = await getNotes(course.id);
       } else {
-        results = getNotesOffline(course.$id);
+        results = getNotesOffline(course.id);
       }
 
       navigate('Course', { ...results, fromPage: 'SavedCourses' });
@@ -122,7 +134,7 @@ class SavedCourses extends Component {
             {this.state.courses.map(course => {
               return (
                 <TouchableOpacity
-                  key={course.$id}
+                  key={course.id}
                   style={{ padding: 20, marginBottom: 2, backgroundColor: colors.white, flexDirection: 'row', justifyContent: 'space-between' }}
                   onPress={() => {
                     this._openCourse(course);

@@ -246,14 +246,16 @@ export const SendEmailVerificationCode = (email, $id, name) => dispatch => new P
 export const UpdateEmailVerification = code => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
-    const { vericationCode, $id } = await dispatch(GetCurrentUser());
+    const user = await dispatch(GetCurrentUser());
+    const { vericationCode, $id } = user;
     const usersRefs = app.database().ref(`/users/${$id}`);
 
     if (vericationCode === code) {
       usersRefs.update({ verified: true }, async err => {
         if (err !== null) reject(err);
-        const newUser = await dispatch(GetCurrentUser());
-        dispatch(SetCurrentUser(newUser));
+        user.verified = true;
+        user.vericationCode = code;
+        dispatch(SetCurrentUserOffline(user));
         resolve(true);
       });
     } else {
@@ -318,26 +320,6 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
   dispatch(FinishRequest());
 });
 
-export const SetAcademicInfo = (userId, { universityId, facultyId, departmentId, levelId }) => dispatch => new Promise(async (resolve, reject) => {
-  dispatch(StartRequest());
-  try {
-    const usersRefs = app.database().ref(`/users/${userId}`);
-
-    usersRefs.update({
-      universityId,
-      facultyId,
-      departmentId,
-      levelId
-    }, err => {
-      if (err !== null) reject(err);
-      resolve();
-    });
-  } catch (err) {
-    reject(err);
-  }
-  dispatch(FinishRequest());
-});
-
 export const UpdateLibrary = (userId, courses) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
@@ -345,8 +327,6 @@ export const UpdateLibrary = (userId, courses) => dispatch => new Promise(async 
 
     usersRefs.update({ courses }, async err => {
       if (err !== null) reject(err);
-      const newUser = await dispatch(GetCurrentUser());
-      dispatch(SetCurrentUser(newUser));
       resolve(true);
     });
   } catch (err) {

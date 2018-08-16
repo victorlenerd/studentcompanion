@@ -9,6 +9,7 @@ import { Button, ButtonInActive } from 'components/buttons';
 import Tracking from 'shared/tracking';
 import auth from 'containers/auth';
 import user from 'containers/users';
+import moment from 'moment';
 
 @user
 @auth
@@ -27,9 +28,26 @@ class SignIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentUser, validEmail, navigation: { navigate } } = nextProps;
+    const { currentUser, navigation: { navigate } } = nextProps;
     if (currentUser.deviceId !== DeviceInfo.getUniqueID()) return navigate('ActivateMuitiDevice');
-    if (validEmail(currentUser.email)) return navigate('Home');
+
+    const now = moment();
+    const paymentDate = moment(currentUser.nextPaymentDate);
+    const diffDays = paymentDate.diff(now, 'days');
+
+    if (currentUser.verified && currentUser.vericationCode) {
+      if (diffDays >= 0) {
+        if (currentUser.deviceId !== DeviceInfo.getUniqueID()) {
+          return navigate('ActivateMuitiDevice');
+        }
+
+        navigate('Main');
+      } else {
+        return navigate('ActivateAccount');
+      }
+    } else {
+      navigate('ActivateEmail');
+    }
   }
 
   signIn = async () => {

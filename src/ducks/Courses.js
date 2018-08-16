@@ -21,7 +21,7 @@ export const GetCourse = courseId => dispatch => new Promise((resolve, reject) =
     .ref(`/courses/${courseId}`);
 
   coursesRef.once('value', snapshot => {
-    const course = toArray(snapshot.val());
+    const course = snapshot.val();
     resolve(course);
     dispatch(FinishRequest());
   });
@@ -101,7 +101,7 @@ export const RemoveCourseOffline = courseId => dispatch => new Promise(async (re
 
   try {
     await AsyncStorage.setItem('@UPQ:OFFLINE_COURSES', JSON.stringify(newCourses));
-    resolve(course);
+    resolve(newCourses);
   } catch (err) {
     reject(err.message);
   }
