@@ -27,11 +27,11 @@ class CourseHome extends Component {
   }
 
   async componentWillMount() {
-    const { navigation: { navigate, state: { params: { course, fromPage } } }, setMenu, getNotes } = this.props;
+    const { navigation: { navigate, state: { params: { course } } }, setMenu, getNotes, currentUser: { courses: userCourses } } = this.props;
     const { $id } = course;
     const notes = await getNotes($id);
 
-    setMenu(false, fromPage);
+    setMenu(false, 'SearchTyped');
 
     const courseInLibrary = await this.inLibrary($id);
 
@@ -45,11 +45,10 @@ class CourseHome extends Component {
   }
 
   saveCourse = async () => {
-    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, updateLibrary, saveNotesOffline, currentUser: { $id: userId, courses: userCourses } } = this.props;
+    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, saveNotesOffline } = this.props;
     const { $id } = course;
 
     try {
-      await updateLibrary(userId, (userCourses) ? userCourses.concat($id) : [$id]);
       await saveCourseOffline(course);
       await saveNotesOffline($id, this.state.notes);
       Alert.alert('Success', `${course.name} Has Been Added To Your Library`, [{ text: 'OK', style: 'cancel' }]);

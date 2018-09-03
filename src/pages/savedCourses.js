@@ -31,52 +31,49 @@ const { width, height } = Dimensions.get('window');
 class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
-    const { setMenu, getCoursesOffline, saveCourseOffline, saveNotesOffline, currentUser, updateLibrary, getCourse, getNotes } = this.props;
+    const { setMenu, getCoursesOffline } = this.props;
 
     Tracking.setCurrentScreen('Page_Library');
     setMenu(false, 'Home');
-
-    let remoteCourses;
-    const { $id } = currentUser;
-
-
-    if (!currentUser.courses) {
-      remoteCourses = [];
-    } else {
-      remoteCourses = currentUser.courses;
-    }
 
     // await saveCourseOffline(course);
     // await saveNotesOffline($id, this.state.notes);
 
     try {
       const offineCourses = await getCoursesOffline();
-      const offlineCoursesId = offineCourses.map(({ id }) => id);
-      const notSavedOffline = remoteCourses.filter(({ id }) => offlineCoursesId.indexOf(id) === -1);
-      const notSavedOnline = offlineCoursesId.filter(({ id }) => remoteCourses.indexOf(id) === -1);
+      this.setState({ courses: offineCourses });
 
-      if (notSavedOffline.length !== notSavedOnline.length) {
-        await updateLibrary($id, notSavedOffline.concat(notSavedOnline));
-        if (notSavedOffline.length >= 1) {
-          const getAllCourses = notSavedOffline.map(cid => getCourse(cid));
-          const getAllNotes = notSavedOffline.map(cid => getNotes(cid));
-          const allCourses = await Promise.all(getAllCourses);
-          const allNotes = await Promise.all(getAllNotes);
+      // const offlineCoursesId = offineCourses.map(({ id, $id: cid }) => id || cid);
+      // const notSavedOffline = remoteCourses.filter(({ id, $id: cid }) => offlineCoursesId.indexOf(id || cid) === -1);
+      // const notSavedOnline = offlineCoursesId.filter(({ id, $id: cid }) => remoteCourses.indexOf(id || cid) === -1);
 
-          allCourses.forEach((course, i) => {
-            course.id = notSavedOffline[i];
-            this.setState({
-              courses: this.state.courses.concat(course)
-            }, () => {
-              const courseNotes = [].concat.apply([], ...allNotes).filter(n => n.courseId === course.id);
-              saveNotesOffline(course.id, courseNotes);
-              saveCourseOffline(course);
-            });
-          });
-        }
-      } else {
-        this.setState({ courses: offineCourses });
-      }
+      // this.setState({
+      //   allNotesIds: notSavedOffline.concat(notSavedOnline)
+      // });
+
+      // if (notSavedOnline.length > 1) {
+      //   await updateLibrary($id, notSavedOffline.concat(notSavedOnline));
+      // }
+
+      // if (notSavedOffline.length >= 1) {
+      //   const getAllCourses = notSavedOffline.map(cid => getCourse(cid));
+      //   const getAllNotes = notSavedOffline.map(cid => getNotes(cid));
+      //   const allCourses = await Promise.all(getAllCourses);
+      //   const allNotes = await Promise.all(getAllNotes);
+
+      //   allCourses.forEach((course, i) => {
+      //     course.id = notSavedOffline[i];
+      //     this.setState({
+      //       courses: this.state.courses.concat(course)
+      //     }, () => {
+      //       const courseNotes = [].concat.apply([], ...allNotes).filter(n => n.courseId === course.id);
+      //       saveNotesOffline(course.id, courseNotes);
+      //       saveCourseOffline(course);
+      //     });
+      //   });
+      // } else {
+      //   this.setState({ courses: offineCourses });
+      // }
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -95,15 +92,13 @@ class SavedCourses extends Component {
     setCurrentCourse(course);
 
     try {
-      let results;
-
       if (isConnected) {
-        results = await getNotes(course.id);
+        await getNotes(course.$id);
       } else {
-        results = getNotesOffline(course.id);
+        getNotesOffline(course.$id);
       }
 
-      navigate('Course', { ...results, fromPage: 'SavedCourses' });
+      navigate('Course', { fromPage: 'SavedCourses' });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -131,10 +126,10 @@ class SavedCourses extends Component {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
           <ScrollView style={{ flex: 1 }}>
-            {this.state.courses.map(course => {
+            {this.state.courses.map((course, i) => {
               return (
                 <TouchableOpacity
-                  key={course.id}
+                  key={i}
                   style={{ padding: 20, marginBottom: 2, backgroundColor: colors.white, flexDirection: 'row', justifyContent: 'space-between' }}
                   onPress={() => {
                     this._openCourse(course);

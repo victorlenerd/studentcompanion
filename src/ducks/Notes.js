@@ -8,6 +8,7 @@ const REMOVE_NOTE = 'REMOVE_NOTE';
 
 const initialState = {
   currentNote: {},
+  readNotes: [],
   notes: {}
 };
 
@@ -90,6 +91,40 @@ export const RemoveNoteOffline = courseId => dispatch => new Promise(async (reso
   dispatch(FinishRequest());
 });
 
+export const GetReadNotes = () => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+  try {
+    const read_notes = await AsyncStorage.getItem('@UPQ:READ_NOTES');
+    let rnotes = [];
+    if (read_notes !== null) rnotes = JSON.parse(read_notes);
+    resolve(rnotes);
+  } catch (err) {
+    reject(err);
+  }
+  dispatch(FinishRequest());
+});
+
+export const UpdateReadNotes = note => dispatch => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
+
+  try {
+    const read_notes = await AsyncStorage.getItem('@UPQ:READ_NOTES');
+    let rnotes = [];
+
+    if (read_notes !== null) rnotes = JSON.parse(read_notes);
+    const noteExists = rnotes.filter(rn => rn.$id === note.$id);
+
+    if (noteExists.length > 0) return resolve();
+
+    const notes = [note, rnotes[0], rnotes[1] ];
+    await AsyncStorage.setItem('@UPQ:READ_NOTES', JSON.stringify(notes));
+  } catch (err) {
+    reject(err);
+  }
+
+  dispatch(FinishRequest());
+});
+
 export const SetCurrentNote = note => {
   return {
     type: SET_CURRENT_NOTE,
@@ -114,12 +149,14 @@ export const NotesReducer = (state = initialState, action) => {
     case REMOVE_NOTE: {
       const { courseId } = action;
       const { notes } = state;
-      delete notes[courseId];
-      return notes;
+      const allNotes = { ...notes };
+      allNotes[courseId] = undefined;
+      return allNotes;
     }
 
     case SET_CURRENT_NOTE:
       return Object.assign({}, state, {
+        readNotes: state.readNotes.concat(action.note.$id),
         currentNote: action.note,
       });
     default:

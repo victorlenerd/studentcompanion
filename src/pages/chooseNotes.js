@@ -19,14 +19,12 @@ import { main, colors } from 'shared/styles';
 @drawerIcon
 class ChooseNotes extends Component {
   componentWillMount() {
-    const { setMenu, navigation: { state: { params: { fromPage } } } } = this.props;
-
+    const { setMenu, navigation } = this.props;
     Tracking.setCurrentScreen('Page_Choose_Notes');
 
-    setMenu(false, fromPage);
-
+    setMenu(false, 'SavedCourses');
     BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
+      navigation.goBack();
     });
   }
 
@@ -35,15 +33,16 @@ class ChooseNotes extends Component {
   }
 
   _openNote = note => {
-    const { setMenu, navigation: { navigate }, setCurrentNote } = this.props;
+    const { setMenu, navigation: { navigate }, setCurrentNote, updateReadNotes } = this.props;
     setCurrentNote(note);
+    updateReadNotes(note);
     setMenu(false, 'Course');
     navigate('Note');
   }
 
   _renderSection() {
-    const { currentCourse: { $id }, notes } = this.props;
-    const courseNotes = notes[$id];
+    const { currentCourse: { $id }, notes: Notes } = this.props;
+    const courseNotes = Notes[$id];
     if (courseNotes && courseNotes.length > 0) {
       return (
         <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -83,10 +82,11 @@ class ChooseNotes extends Component {
 
   render() {
     return (
-      <View style={[main.container, {
-        borderTopColor: colors.accent,
-        borderTopWidth: 2
-      }]}
+      <View
+        style={[main.container, {
+          borderTopColor: colors.accent,
+          borderTopWidth: 2
+        }]}
       >
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View style={[main.content, { flex: 1, padding: 0 }]}>

@@ -22,7 +22,7 @@ class ListView extends Component {
     this.setState({ data, isConnected });
   }
 
-  _keyExtractor = (item, index) => index;
+  _keyExtractor = (item, index) => item.$id;
 
   _renderItem = ({ item, index }) => {
     return (

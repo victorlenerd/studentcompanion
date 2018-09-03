@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetNotes, SetNotes, GetNotesOffline, SaveNotesOffline, SetCurrentNote, RemoveNoteOffline } from 'ducks/notes';
+import { GetNotes, SetNotes, GetNotesOffline, SaveNotesOffline, SetCurrentNote, RemoveNoteOffline, UpdateReadNotes, GetReadNotes } from 'ducks/notes';
 
 const mapStateToProps = store => {
   return {
@@ -15,7 +15,9 @@ const mapDispatchToProps = dispatch => {
     getNotesOffline: courseId => dispatch(GetNotesOffline(courseId)),
     saveNotesOffline: (courseId, notes) => dispatch(SaveNotesOffline(courseId, notes)),
     removeNoteOffline: courseId => dispatch(RemoveNoteOffline(courseId)),
-    setCurrentNote: note => dispatch(SetCurrentNote(note))
+    setCurrentNote: note => dispatch(SetCurrentNote(note)),
+    updateReadNotes: note => dispatch(UpdateReadNotes(note)),
+    getReadNotes: () => dispatch(GetReadNotes())
   };
 };
 

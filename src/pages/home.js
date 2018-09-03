@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
+import { Alert, View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
-
 import drawerIcon from 'containers/drawerIcon';
+import notes from 'containers/notes';
 
 const { width, height } = Dimensions.get('window');
 
+@notes
 @drawerIcon
 class Home extends Component {
-  componentWillMount() {
+  constructor() {
+    super();
+    this.state = {
+      rencentReads: []
+    };
+  }
+
+  async componentWillMount() {
     Tracking.setCurrentScreen('Page_Home');
+    const { getReadNotes } = this.props;
+
+    try {
+      const rencentReads = await getReadNotes();
+      this.setState({ rencentReads });
+    } catch (err) {
+      Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
+    }
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       return true;
@@ -23,12 +39,40 @@ class Home extends Component {
     BackHandler.removeEventListener('hardwareBackPress');
   }
 
+  openNote(note) {
+    const { setMenu, navigation: { navigate }, setCurrentNote } = this.props;
+    setCurrentNote(note);
+    setMenu(false, 'Home');
+    navigate('Note');
+  }
+
   render() {
     const { navigation: { navigate } } = this.props;
     return (
       <View style={style.container}>
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
-        <ScrollView>
+        <ScrollView style={{ flex: 1 }}>
+          {this.state.rencentReads.length > 0 &&
+            <View style={{ padding: 15 }}>
+              <Text style={style.homeTitle}>Continue Reading</Text>
+              {this.state.rencentReads.map((rr, i) => {
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => this.openNote(rr)}
+                    style={[style.homeMenu, { height: 80, paddingHorizontal: 10 }]}
+                  >
+                    <View style={style.number}>
+                      <Text style={{ color: '#fff' }}>{i + 1}</Text>
+                    </View>
+                    <View style={{ marginLeft: 20 }}>
+                      <Text style={style.homeSubtitle}>{rr.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          }
           <TouchableOpacity
             onPress={() => { navigate('SearchTyped'); }}
             style={style.homeMenu}
@@ -82,7 +126,7 @@ class Home extends Component {
 
           <TouchableOpacity
             onPress={() => { navigate('Feedback'); }}
-            style={style.homeMenu}
+            style={[style.homeMenu, { marginBottom: 100 }]}
           >
             <Image
               resizeMode="contain"
@@ -117,6 +161,22 @@ const style = StyleSheet.create({
     borderTopColor: colors.accent,
     borderTopWidth: 2,
   },
+  recentReadsMain: {
+    flex: 1,
+    height: 150,
+    padding: 20,
+    backgroundColor: colors.accent
+  },
+  recentReadsTitle: {
+    fontSize: 18,
+    color: '#fff'
+  },
+  recentReadBox: {
+    flex: 1,
+    height: 100,
+    marginTop: 10,
+    backgroundColor: '#fff'
+  },
   homeMenu: {
     flex: 1,
     height: 100,
@@ -142,6 +202,14 @@ const style = StyleSheet.create({
     color: colors.black,
     marginTop: 10,
     paddingRight: 10
+  },
+  number: {
+    backgroundColor: colors.accent,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
