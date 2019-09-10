@@ -55,4 +55,4 @@ buck-out/
 */fastlane/screenshots
 
 # CocoaPods
-Pods
+ios/Pods/

@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-camera-kit/ios/lib/ReactNativeCameraKit/CKGalleryCollectionViewCell.h
