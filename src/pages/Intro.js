@@ -5,7 +5,7 @@ import * as Animatable from 'react-native-animatable';
 import Swiper from 'react-native-swiper';
 
 import { intro, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import Tracking from 'shared/tracking';
 
 class Intro extends Component {

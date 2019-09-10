@@ -6,7 +6,7 @@ import {
   UpdateUserDeviceId,
   UserExist,
   UpdateEmailVerification
-} from 'ducks/user';
+} from 'ducks/User';
 
 const mapStateToProps = store => {
   return {

@@ -11,7 +11,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import auth from 'containers/auth';
 import { main, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import Loader from 'components/loader';
 import Tracking from 'shared/tracking';
 

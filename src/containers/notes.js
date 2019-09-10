@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetNotes, SetNotes, GetNotesOffline, SaveNotesOffline, SetCurrentNote, RemoveNoteOffline, UpdateReadNotes, GetReadNotes } from 'ducks/notes';
+import { GetNotes, SetNotes, GetNotesOffline, SaveNotesOffline, SetCurrentNote, RemoveNoteOffline, UpdateReadNotes, GetReadNotes } from 'ducks/Notes';
 
 const mapStateToProps = store => {
   return {

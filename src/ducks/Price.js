@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
-import { SetCurrentUser } from './user';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
+import { SetCurrentUser } from './User';
 
 const SET_PRICE = 'SET_PRICE';
 

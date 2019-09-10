@@ -3,29 +3,35 @@ package com.studentcompanion;
 import android.app.Application;
 import android.util.Log;
 
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 import io.invertase.firebase.RNFirebasePackage;
-import net.no_mad.tts.TextToSpeechPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
-import io.invertase.firebase.crash.RNFirebaseCrashPackage;
+import io.invertase.firebase.functions.RNFirebaseFunctionsPackage;
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
+
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.facebook.react.ReactApplication;
-import com.wix.RNCameraKit.RNCameraKitPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
-import com.facebook.soloader.SoLoader;
+import com.wix.RNCameraKit.RNCameraKitPackage;
+import net.no_mad.tts.TextToSpeechPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
+import com.facebook.soloader.SoLoader;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
-import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
-import com.evollu.react.fcm.FIRMessagingPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -38,18 +44,24 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new RNCameraKitPackage(),
-          new PickerPackage(),
-          new RandomBytesPackage(),
-          new RNFSPackage(),
-          new RNFirebasePackage(),
-          new TextToSpeechPackage(),
-          new FIRMessagingPackage(),
-          new RNFirebaseAnalyticsPackage(),
-          new RNFirebaseCrashPackage(),
-          new RNDeviceInfo(),
-          new RNFetchBlobPackage()
+            new MainReactPackage(),
+            new RandomBytesPackage(),
+            new RNCameraKitPackage(),
+            new TextToSpeechPackage(),
+            new RNFetchBlobPackage(),
+            new NetInfoPackage(),
+            new ReanimatedPackage(),
+            new RNDeviceInfo(),
+            new PickerPackage(),
+            new RNGestureHandlerPackage(),
+            new ImagePickerPackage(),
+            new RNFSPackage(),
+            new RNFirebaseAnalyticsPackage(),
+            new RNFirebaseAuthPackage(),
+            new RNFirebaseFunctionsPackage(),
+            new RNFirebaseDatabasePackage(),
+            new RNFirebasePackage(),
+            new FIRMessagingPackage()
       );
     }
 

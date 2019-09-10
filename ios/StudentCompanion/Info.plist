@@ -25,7 +25,7 @@
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
-		<string>774a1ab617ec8d3d0d8bb1e2acf9a43e58380d79</string>
+		<string>AIzaSyDo19yEJbWARiYZPu7TjaX8Hki_QUdcry8</string>
 		<key>Kits</key>
 		<array>
 			<dict>
@@ -46,6 +46,8 @@
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
+				<key>NSAllowsArbitraryLoads</key>
+    		<true/>
 			</dict>
 		</dict>
 	</dict>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Dimensions, StyleSheet, TextInput, Picker, Alert } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, ButtonInActive } from 'components/buttons';
+import { Button, ButtonInActive } from 'components/Buttons';
 import { colors, main } from 'shared/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
@@ -73,7 +73,7 @@ class UploadForm extends Component {
                 autoCapitalize="none"
                 placeholder="Faculty"
                 onChange={e => this.setState({ faculty: e.nativeEvent.text })}
-                style={[main.textInput, style.input, (this.state.submitted && this.state.faculty.length < 1) ? { backgroundColor: colors.red } :  {}]}
+                style={[main.textInput, style.input, (this.state.submitted && this.state.faculty.length < 1) ? { backgroundColor: colors.red } : {}]}
               />
             </View>
             <View style={style.formRow}>

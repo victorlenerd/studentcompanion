@@ -1,7 +1,7 @@
-import app, { toArray } from 'shared/firebase';
+import app, { toArray } from 'shared/Firebase';
 
 import { RNS3 } from 'react-native-aws3';
-import { StartRequest, FinishRequest } from 'ducks/request';
+import { StartRequest, FinishRequest } from 'ducks/Request';
 
 const SET_UPLOADED_PHOTOS = 'SET_UPLOADED_PHOTOS';
 

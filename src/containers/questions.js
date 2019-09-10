@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetQuestionsOffline, GetQuestions, SetCurrentQuestion, SetQuestions, SaveQuestionsOffline } from 'ducks/questions';
+import { GetQuestionsOffline, GetQuestions, SetCurrentQuestion, SetQuestions, SaveQuestionsOffline } from 'ducks/Questions';
 
 const mapStateToProps = store => {
   return {

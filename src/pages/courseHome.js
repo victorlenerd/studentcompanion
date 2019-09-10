@@ -5,7 +5,7 @@ import capitalize from 'lodash/capitalize';
 import filter from 'lodash/filter';
 
 import { main, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import Loader from 'components/loader';
 
 import notes from 'containers/notes';

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, BackHandler, Platform } from 'react-native';
 
-import ListView from 'components/listView';
+import ListView from 'components/ListView';
 import courses from 'containers/courses';
 import drawerIcon from 'containers/drawerIcon';
 import Tracking from 'shared/tracking';

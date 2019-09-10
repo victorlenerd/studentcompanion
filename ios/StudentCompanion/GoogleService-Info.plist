@@ -2,39 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>797802251503-dvop54pjkv0iii7vnfuo59hgunqpmgs7.apps.googleusercontent.com</string>
+	<string>50665130384-0a4tv9d6kvr8psfd9q4t4id45lv5n889.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.797802251503-dvop54pjkv0iii7vnfuo59hgunqpmgs7</string>
+	<string>com.googleusercontent.apps.50665130384-0a4tv9d6kvr8psfd9q4t4id45lv5n889</string>
 	<key>API_KEY</key>
-	<string>AIzaSyApavrx2MtDeUQq-j39NsTJHoohgtkNd6w</string>
+	<string>AIzaSyDo19yEJbWARiYZPu7TjaX8Hki_QUdcry8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>797802251503</string>
+	<string>50665130384</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.StudentCompanion</string>
+	<string>com.test.STC</string>
 	<key>PROJECT_ID</key>
-	<string>unilagpastquestions-com</string>
+	<string>identity-test-246814</string>
 	<key>STORAGE_BUCKET</key>
-	<string>unilagpastquestions-com.appspot.com</string>
+	<string>identity-test-246814.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:797802251503:ios:fcf4cda54ea2eee7</string>
+	<string>1:50665130384:ios:e32be1fec0c212dc4ecb15</string>
 	<key>DATABASE_URL</key>
-	<string>https://unilagpastquestions-com.firebaseio.com</string>
+	<string>https://identity-test-246814.firebaseio.com</string>
 </dict>
 </plist>

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import Loader from 'components/loader';
-import ListView from 'components/listView';
+import ListView from 'components/ListView';
 
 import search from 'containers/search';
 import courses from 'containers/courses';

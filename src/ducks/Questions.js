@@ -1,8 +1,8 @@
 import { AsyncStorage } from 'react-native';
-import app, { toArray } from 'shared/firebase';
+import app, { toArray } from 'shared/Firebase';
 import filter from 'lodash/filter';
 
-import { StartRequest, FinishRequest } from './request';
+import { StartRequest, FinishRequest } from './Request';
 
 const QUESTIONS = 'QUESTIONS';
 const SET_CURRENT_QUESTION = 'SET_CURRENT_QUESTION';

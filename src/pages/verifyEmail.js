@@ -11,7 +11,7 @@ import {
 import { main, colors } from 'shared/styles';
 
 import Loader from 'components/loader';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import auth from 'containers/auth';
 import Tracking from 'shared/tracking';
 

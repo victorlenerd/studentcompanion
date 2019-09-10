@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const PAPERS = 'PAPERS';
 const SET_CURRENT_PAPER = 'SET_CURRENT_PAPER';

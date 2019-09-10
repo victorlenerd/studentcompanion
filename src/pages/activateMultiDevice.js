@@ -5,7 +5,7 @@ import users from 'containers/users';
 import Loader from 'components/loader';
 
 import { main, colors } from 'shared/styles';
-import { Button, ButtonInActive } from 'components/buttons';
+import { Button, ButtonInActive } from 'components/Buttons';
 import Tracking from 'shared/tracking';
 
 @users

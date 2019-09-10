@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 const SET_CURRENT_SEARCH_RESULTS = 'SET_CURRENT_SEARCH_RESULTS';

@@ -5,7 +5,7 @@ import { View, Text, StatusBar, ScrollView, Linking } from 'react-native';
 import users from 'containers/users';
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 
 import Tracking from 'shared/tracking';
 

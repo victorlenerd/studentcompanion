@@ -1,8 +1,12 @@
 import React from 'react';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
-import WelcomeScreen from 'pages/welcome';
-import IntroScreen from 'pages/intro';
+import { createStackNavigator } from 'react-navigation-stack';
+
+
+import WelcomeScreen from 'pages/Welcome';
+import IntroScreen from 'pages/Intro';
 import HomeScreen from 'pages/home';
 import PassScreen from 'pages/pass';
 import SignUpScreen from 'pages/signUp';
@@ -29,13 +33,13 @@ import NoteScreen from 'pages/note';
 import ActivateEmailScreen from 'pages/activateEmail';
 import VerifyEmailScreen from 'pages/verifyEmail';
 
-import Drawer from 'components/drawer';
+import Drawer from 'components/Drawer';
 import NoteToobarOptions from 'components/noteToobarOptions';
 import DrawerIcon from 'components/drawerIcon';
 
 import { colors } from 'shared/styles';
 
-const MainNavigator = DrawerNavigator({
+const MainNavigator = createDrawerNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: {
@@ -117,7 +121,8 @@ const MainNavigator = DrawerNavigator({
   contentComponent: Drawer
 });
 
-const Navigation = StackNavigator({
+
+const Navigation = createStackNavigator({
   Welcome: {
     screen: WelcomeScreen,
     navigationOptions: {
@@ -209,4 +214,4 @@ const Navigation = StackNavigator({
   }
 });
 
-export default Navigation;
+export default createAppContainer(Navigation);
