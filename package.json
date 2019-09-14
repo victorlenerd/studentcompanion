@@ -70,7 +70,7 @@
     "react-native-push-notification": "^3.1.9",
     "react-native-randombytes": "^3.5.3",
     "react-native-reanimated": "^1.2.0",
-    "react-native-screens": "^2.0.0-alpha.1",
+    "react-native-screens": "^2.0.0-alpha.3",
     "react-native-swiper": "^1.5.14",
     "react-native-tcp": "^3.3.0",
     "react-native-tts": "^3.0.0",

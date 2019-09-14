@@ -28,16 +28,16 @@ class Home extends Component {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    });
+    // BackHandler.addEventListener('hardwareBackPress', () => {
+    //   return false;
+    // });
 
     this.props.setMenu(true, null);
   }
 
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress');
-  }
+  // componentWillUnmount() {
+  //   BackHandler.removeEventListener('hardwareBackPress');
+  // }
 
   openNote(note) {
     const { setMenu, navigation: { navigate }, setCurrentNote } = this.props;

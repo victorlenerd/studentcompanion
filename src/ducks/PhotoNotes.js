@@ -31,7 +31,7 @@ export const AddPhotoNote = photoNote => (dispatch, getState) => new Promise(asy
     return RNS3.put({ uri: path, name, type: mime }, options)
       .then(response => {
         return { name, url: response.body.postResponse.location };
-      });
+      }).catch(err => console.log(err));
   });
   const response = await Promise.all(uploadsWrappers);
 

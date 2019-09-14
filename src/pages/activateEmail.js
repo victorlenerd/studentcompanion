@@ -20,6 +20,8 @@ class ActivateEmail extends PureComponent {
   }
 
   componentWillMount() {
+    const { currentUser } = this.props;
+    console.log(currentUser, 'currentUser');
     Tracking.setCurrentScreen('Page_Email_Verification');
   }
 

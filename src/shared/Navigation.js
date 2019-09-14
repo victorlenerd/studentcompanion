@@ -49,23 +49,48 @@ const MainNavigator = createDrawerNavigator({
   },
   SearchTyped: {
     screen: SearchTypedScreen,
-    navigationOptions: {
-      headerTitle: 'Search',
+    navigationOptions: ({ navigation }) => ({
       gesturesEnabled: false,
-    }
+      headerTitle: 'Search',
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTitleStyle: {
+        color: colors.white
+      },
+      headerTintColor: '#fff',
+      headerLeft: <DrawerIcon navigation={navigation} />,
+    })
   },
   ChooseCourse: {
     screen: ChooseCourseScreen,
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       headerTitle: 'Choose Courses',
-      gesturesEnabled: true,
-    }
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTitleStyle: {
+        color: colors.white
+      },
+      headerTintColor: '#fff',
+      headerLeft: <DrawerIcon navigation={navigation} />,
+    })
   },
   CourseHome: {
     screen: CourseHomeScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Courses'
-    }
+    navigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
+      headerTitle: 'Choose Courses',
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTitleStyle: {
+        color: colors.white
+      },
+      headerTintColor: '#fff',
+      headerLeft: <DrawerIcon navigation={navigation} />,
+    })
   },
   Feedback: {
     screen: FeedbackScreen,
@@ -118,7 +143,9 @@ const MainNavigator = createDrawerNavigator({
     }
   }
 }, {
-  contentComponent: Drawer
+  contentComponent: Drawer,
+  drawerType: 'slide',
+  initialRoute: 'Home'
 });
 
 

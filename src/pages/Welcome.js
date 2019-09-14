@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, StatusBar } from 'react-native';
+import { View, Image, StatusBar, Text } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 
@@ -49,18 +49,15 @@ class Welcome extends Component {
 
   _loadData = async () => {
     const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
-    console.log(this.state.connected, 'this.state.connected');
     try {
       if (this.state.connected) {
         const user = await getCurrentUser();
-        console.log(user, 'user');
         if (user !== null) {
           setCurrentUser(user);
 
           const now = moment();
           const paymentDate = moment(user.nextPaymentDate);
           const diffDays = paymentDate.diff(now, 'days');
-
           if (user.verified && user.vericationCode) {
             if (diffDays >= 0) {
               // if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {

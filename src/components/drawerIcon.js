@@ -23,7 +23,7 @@ class DrawerIcon extends Component {
         <TouchableOpacity
           onPress={() => {
             Keyboard.dismiss();
-            this.props.navigation.navigate('DrawerToggle');
+            this.props.navigation.toggleDrawer();
           }}
         >
           <Image style={style.menuIcon} source={require('../assets/menu.png')} />

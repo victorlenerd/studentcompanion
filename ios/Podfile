@@ -82,6 +82,8 @@ target 'StudentCompanion' do
 
   pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
 
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
   target 'StudentCompanionTests' do
     inherit! :search_paths
     # Pods for testing

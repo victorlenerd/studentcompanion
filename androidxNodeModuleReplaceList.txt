@@ -19,6 +19,8 @@ android.support.annotation.StyleRes/androidx.annotation.StyleRes
 android.support.v7.app.AlertDialog/androidx.appcompat.app.AlertDialog
 android.support.annotation.MainThread/androidx.annotation.MainThread
 android.support.transition/androidx.transition
-android.support.v4.content.LocalBroadcastManager,androidx.localbroadcastmanager.content.LocalBroadcastManager
+androidx.core.content.LocalBroadcastManager/androidx.localbroadcastmanager.content.LocalBroadcastManager
+androidx.appcompat.widget.GridLayoutManager/androidx.recyclerview.widget.GridLayoutManager
+androidx.appcompat.widget.Recyclerview/androidx.recyclerview.widget.Recyclerview
 
 

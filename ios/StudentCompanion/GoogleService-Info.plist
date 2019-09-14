@@ -3,25 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>50665130384-0a4tv9d6kvr8psfd9q4t4id45lv5n889.apps.googleusercontent.com</string>
+	<string>797802251503-dvop54pjkv0iii7vnfuo59hgunqpmgs7.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.50665130384-0a4tv9d6kvr8psfd9q4t4id45lv5n889</string>
+	<string>com.googleusercontent.apps.797802251503-dvop54pjkv0iii7vnfuo59hgunqpmgs7</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDo19yEJbWARiYZPu7TjaX8Hki_QUdcry8</string>
+	<string>AIzaSyApavrx2MtDeUQq-j39NsTJHoohgtkNd6w</string>
 	<key>GCM_SENDER_ID</key>
-	<string>50665130384</string>
+	<string>797802251503</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.test.STC</string>
+	<string>org.reactjs.native.example.StudentCompanion</string>
 	<key>PROJECT_ID</key>
-	<string>identity-test-246814</string>
+	<string>unilagpastquestions-com</string>
 	<key>STORAGE_BUCKET</key>
-	<string>identity-test-246814.appspot.com</string>
+	<string>unilagpastquestions-com.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_APPINVITE_ENABLED</key>
 	<true></true>
 	<key>IS_GCM_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:50665130384:ios:e32be1fec0c212dc4ecb15</string>
+	<string>1:797802251503:ios:fcf4cda54ea2eee7</string>
 	<key>DATABASE_URL</key>
-	<string>https://identity-test-246814.firebaseio.com</string>
+	<string>https://unilagpastquestions-com.firebaseio.com</string>
 </dict>
 </plist>

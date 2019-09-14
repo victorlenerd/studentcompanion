@@ -8,10 +8,6 @@ import { main, colors } from 'shared/styles';
 import auth from 'containers/auth';
 import Tracking from 'shared/tracking';
 
-const api_key = 'pubkey-d516243872838e1a6d6133d01c4ae634';
-const DOMAIN = 'studentcompanion.xyz';
-// const mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
-const mailgun = {}
 
 @auth
 class SignUp extends Component {
@@ -35,7 +31,7 @@ class SignUp extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, validEmail, navigation: { navigate } } = nextProps;
-    if (validEmail(currentUser.email)) navigate('Main');
+    if (validEmail(currentUser.email)) navigate('ActivateEmail');
   }
 
   signUp = async () => {

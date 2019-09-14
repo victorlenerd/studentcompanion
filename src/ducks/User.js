@@ -6,12 +6,6 @@ import moment from 'moment';
 import app, { toArray } from 'shared/Firebase';
 import { StartRequest, FinishRequest } from './Request';
 
-// const API_KEY='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'
-const lt_AP = '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';
-// sgMail.setApiKey(lt_AP);
-
-firebase.functions().useFunctionsEmulator('http://localhost:5000');
-
 
 const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
 
@@ -20,6 +14,18 @@ const initialState = {
 };
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
+
+const sendMailWithCode = async (mailHandler, data) => {
+  console.log(mailHandler, 'mailHandler');
+  try {
+    const code = codeGenerator();
+    await firebase
+      .functions()
+      .httpsCallable(mailHandler)({ ...data, code });
+  } catch (error) {
+    console.log(error, 'device errror');
+  }
+};
 
 export const Register = data => dispatch => new Promise(async (resolve, reject) => {
   try {
@@ -36,8 +42,6 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
       const nextPaymentDate = moment().add(trialPeriod, 'days');
 
       try {
-        await user.sendEmailVerification();
-
         await usersRefs.push({
           userId: user.uid,
           name,
@@ -47,16 +51,16 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
           deviceId: DeviceInfo.getUniqueID(),
           nextPaymentDate: nextPaymentDate.toISOString(),
         });
-
         dispatch(SetCurrentUser({
           userId: user.uid,
           name: data.name,
           email: data.email,
         }));
-
+        await sendMailWithCode('SendEmailVerificationCode', { user: { name, email, id: user.id } });
         resolve(data);
         dispatch(FinishRequest());
       } catch (err) {
+        console.log(err);
         reject(err);
         dispatch(FinishRequest());
       }
@@ -122,7 +126,7 @@ export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, r
     .equalTo(email)
     .once('value', async snapshot => {
       const user = toArray(snapshot.val())[0];
-
+      console.log(user, 'async');
       if (user !== null) {
         try {
           await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
@@ -200,53 +204,22 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
 export const SendDeviceActivationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const code = codeGenerator();
-    const data = {
-      from: 'Student Companion <hello@studentcompanion.xyz>',
-      to: email,
-      subject: 'Student Companion Device Verification Code',
-      text: `Hello ${name}, your device activation code is: ${code}`
-    };
-
-    const userRef = firebase.database().ref(`/users/${$id}`);
-    userRef.update({ deviceActivationCode: code }, async err => {
-      if (err !== null) reject(err);
-
-      // mailgun.messages().send(data, function(error) {
-      //   if (error) reject({ message: "Couldn't send the email." });
-      //   resolve(true);
-      // });
-    });
+    const user = { email, id: $id, name };
+    await sendMailWithCode('SendDeviceActivationCode', { user });
+    resolve(true);
   } catch (err) {
     reject(err);
   }
-
   dispatch(FinishRequest());
 });
 
 export const SendEmailVerificationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const code = codeGenerator();
-    console.log(email, $id, name, code);
-    const user = { email, $id, name };
-    const response = await firebase.functions().httpsCallable('SendEmailVerificationCode')({ user, code });
-    console.log(response, 'response');
-    const userRef = firebase.database().ref(`/users/${$id}`);
-    userRef.update({ vericationCode: code }, async err => {
-      if (err !== null) reject(err);
-      // const data = {
-      //   from: 'Student Companion <hello@studentcompanion.xyz>',
-      //   to: email,
-      //   subject: 'Student Companion Email Verification Code',
-      //   text: `Hello ${name}, your verification code is: ${code}`,
-      //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-      // };
-      // sgMail.send(data);
-      resolve(true);
-    });
+    const user = { email, id: $id, name };
+    await sendMailWithCode('SendEmailVerificationCode', { user });
+    resolve(true);
   } catch (err) {
-    console.log(err, 'error from cloud function');
     reject(err);
   }
   dispatch(FinishRequest());
@@ -271,6 +244,7 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
       resolve(false);
     }
   } catch (err) {
+    console.log(err);
     reject(err);
   }
 
@@ -313,6 +287,7 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
     const usersRefs = firebase.database().ref(`/users/${$id}`);
 
     if (deviceActivationCode === code) {
+      console.log(deviceActivationCode, 'deviceActivationCode');
       usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, async err => {
         if (err !== null) reject(err);
         const newUser = await dispatch(GetCurrentUser());

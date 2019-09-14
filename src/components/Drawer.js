@@ -26,7 +26,7 @@ class Drawer extends Component {
         text: 'Yes',
         onPress: async () => {
           await signOut();
-          navigate('Welcome');
+          navigate('Intro');
         },
       },
     ]);

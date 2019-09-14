@@ -36,14 +36,14 @@ class Feedback extends Component {
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Feedback');
     this.props.setMenu(false, 'Home');
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
+    // BackHandler.addEventListener('hardwareBackPress', () => {
+    //   this.props.navigation.goBack();
+    // });
   }
 
   componentWillUnmount() {
     Keyboard.dismiss();
-    BackHandler.removeEventListener('hardwareBackPress');
+    // BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _submit = async () => {

@@ -5,7 +5,8 @@ import {
   SendResetPasswordEmail,
   UpdateUserDeviceId,
   UserExist,
-  UpdateEmailVerification
+  UpdateEmailVerification,
+  SignOut
 } from 'ducks/User';
 
 const mapStateToProps = store => {
@@ -23,7 +24,8 @@ const mapDispatchToProps = dispatch => {
     sendPasswordReset: email => dispatch(SendResetPasswordEmail(email)),
     userExist: email => dispatch(UserExist(email)),
     updateDeviceId: code => dispatch(UpdateUserDeviceId(code)),
-    updateEmailVerification: code => dispatch(UpdateEmailVerification(code))
+    updateEmailVerification: code => dispatch(UpdateEmailVerification(code)),
+    SignOut,
   };
 };
 

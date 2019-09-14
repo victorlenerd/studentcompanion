@@ -19,6 +19,15 @@ class CameraGallery extends Component {
     cameraLight: 'auto'
   }
 
+  async componentDidMount() {
+    const isCameraAuthorized = await CameraKitCamera.checkDeviceCameraAuthorizationStatus();
+    console.log(isCameraAuthorized, 'isCameraAuthorized');
+    if (!isCameraAuthorized) {
+      // this.requestCameraPermission();
+    }
+  }
+
+
   changeFlashLight = async () => {
     try {
       if (this.state.cameraLight === 'auto') {
