@@ -29,7 +29,6 @@ class CourseHome extends Component {
   async componentWillMount() {
     const { navigation: { navigate, state: { params: { course } } }, setMenu, getNotes, currentUser: { courses: userCourses } } = this.props;
     const { $id } = course;
-    const notes = await getNotes($id);
 
     setMenu(false, 'SearchTyped');
 
@@ -40,8 +39,9 @@ class CourseHome extends Component {
     if (courseInLibrary) {
       return navigate('Course', { course, fromPage: 'SearchTyped' });
     }
+    const currentNote = await getNotes($id);
 
-    this.setState({ canAddToLibrary: true, notes });
+    this.setState({ canAddToLibrary: true, notes: currentNote });
   }
 
   saveCourse = async () => {

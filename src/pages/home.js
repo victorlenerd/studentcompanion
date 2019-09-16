@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Alert, View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
 import drawerIcon from 'containers/drawerIcon';
 import notes from 'containers/notes';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -62,12 +63,16 @@ class Home extends Component {
                     onPress={() => this.openNote(rr)}
                     style={[style.homeMenu, { height: 80, paddingHorizontal: 10 }]}
                   >
-                    <View style={style.number}>
-                      <Text style={{ color: '#fff' }}>{i + 1}</Text>
-                    </View>
-                    <View style={{ marginLeft: 20 }}>
-                      <Text style={style.homeSubtitle}>{rr.title}</Text>
-                    </View>
+                    {rr &&
+                    <Fragment>
+                      <View style={style.number}>
+                        <Text style={{ color: '#fff' }}>{i + 1}</Text>
+                      </View>
+                      <View style={{ marginLeft: 20 }}>
+                        <Text style={style.homeSubtitle}>{rr.title}</Text>
+                      </View>
+                    </Fragment>
+                      }
                   </TouchableOpacity>
                 );
               })}

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  WebView,
   ScrollView,
   Platform,
   Alert,
@@ -10,6 +9,8 @@ import {
   BackHandler,
   Dimensions
 } from 'react-native';
+import { WebView } from 'react-native-webview';
+
 
 import Tts from 'react-native-tts';
 import DeviceInfo from 'react-native-device-info';
@@ -139,6 +140,7 @@ class Note extends Component {
   _renderReaderView = () => {
     if (!this.props.isImages) {
       if (!supportsQuill()) {
+        console.log('in,......');
         return (
           <ScrollView style={{ flex: 1 }}>
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
@@ -156,7 +158,7 @@ class Note extends Component {
           </ScrollView>
         );
       }
-
+      console.log('read...');
       return (
         <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
           <WebView

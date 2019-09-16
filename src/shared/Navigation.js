@@ -64,33 +64,13 @@ const MainNavigator = createDrawerNavigator({
   },
   ChooseCourse: {
     screen: ChooseCourseScreen,
-    navigationOptions: ({ navigation }) => ({
-      gesturesEnabled: false,
-      headerTitle: 'Choose Courses',
-      headerStyle: {
-        backgroundColor: colors.brightBlue,
-      },
-      headerTitleStyle: {
-        color: colors.white
-      },
-      headerTintColor: '#fff',
-      headerLeft: <DrawerIcon navigation={navigation} />,
-    })
+    gesturesEnabled: false,
+    headerTitle: 'Choose Courses',
   },
   CourseHome: {
     screen: CourseHomeScreen,
-    navigationOptions: ({ navigation }) => ({
-      gesturesEnabled: false,
-      headerTitle: 'Choose Courses',
-      headerStyle: {
-        backgroundColor: colors.brightBlue,
-      },
-      headerTitleStyle: {
-        color: colors.white
-      },
-      headerTintColor: '#fff',
-      headerLeft: <DrawerIcon navigation={navigation} />,
-    })
+    headerTitle: 'Choose Home',
+    gesturesEnabled: false,
   },
   Feedback: {
     screen: FeedbackScreen,
@@ -145,7 +125,6 @@ const MainNavigator = createDrawerNavigator({
 }, {
   contentComponent: Drawer,
   drawerType: 'slide',
-  initialRoute: 'Home'
 });
 
 

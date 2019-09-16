@@ -12,6 +12,9 @@ import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.facebook.react.ReactApplication;
+import com.arttitude360.reactnative.rnpaystack.RNPaystackPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
@@ -46,6 +49,9 @@ public class MainApplication extends Application implements ReactApplication {
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNPaystackPackage(),
+            new AsyncStoragePackage(),
+            new RNCWebViewPackage(),
             new RNScreensPackage(),
             new RandomBytesPackage(),
             new RNCameraKitPackage(),

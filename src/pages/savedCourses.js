@@ -20,6 +20,7 @@ import connection from 'containers/connection';
 import drawerIcon from 'containers/drawerIcon';
 import user from 'containers/users';
 import Tracking from 'shared/tracking';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,7 +33,10 @@ class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
     const { setMenu, getCoursesOffline } = this.props;
-
+    const df = AsyncStorage.getAllKeys((err, keys) => {
+      console.log(err, 'error');
+      console.log(keys, 'keys');
+    });
     Tracking.setCurrentScreen('Page_Library');
     setMenu(false, 'Home');
 
@@ -41,6 +45,7 @@ class SavedCourses extends Component {
 
     try {
       const offineCourses = await getCoursesOffline();
+      console.log(offineCourses, 'offineCourses');
       this.setState({ courses: offineCourses });
 
       // const offlineCoursesId = offineCourses.map(({ id, $id: cid }) => id || cid);

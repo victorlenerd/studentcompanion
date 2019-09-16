@@ -84,11 +84,16 @@ target 'StudentCompanion' do
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'react-native-paystack', :path => '../node_modules/react-native-paystack'
+
   target 'StudentCompanionTests' do
     inherit! :search_paths
     # Pods for testing
   end
-  use_native_modules!
 end
 
 target 'StudentCompanion-tvOS' do

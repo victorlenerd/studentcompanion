@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const sgMail = require('@sendgrid/mail');
+const axios = require('axios');
+const fetch = require('node-fetch');
+
 
 
 admin.initializeApp();
@@ -49,4 +52,28 @@ exports.SendDeviceActivationCode = functions.https.onCall( ({ user, code }, cont
   } catch (err) {
     throw new functions.https.HttpsError(err);
   }
+});
+
+exports.initializePayStack = functions.https.onCall( async ({ email, amount, reference }) => {
+  const SECRET_KEY = 'sk_test_6c514bef2fd9b0b64f057d600af89fee6a666503'
+   try {
+     const data =   { reference, amount, email };
+    const response = await fetch(
+      'https://api.paystack.co/transaction/initialize',
+      {
+        method: 'POST',
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SECRET_KEY}`
+        },
+        body: JSON.stringify(data)
+      }
+    );
+    // const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+    const result = await response.json()
+    return result;
+   } catch (error) {
+     console.log('error occurred...');
+    throw new functions.https.HttpsError('Payment Error:', 'Unable to complete payment');
+   }
 });

@@ -18,9 +18,11 @@ import { main, colors } from 'shared/styles';
 @courses
 @drawerIcon
 class ChooseNotes extends Component {
-  componentWillMount() {
-    const { setMenu, navigation } = this.props;
+  
+  async componentWillMount() {
+    const { setMenu, navigation, getNotesOffline, currentCourse: { $id } } = this.props;
     Tracking.setCurrentScreen('Page_Choose_Notes');
+    await getNotesOffline($id);
 
     setMenu(false, 'SavedCourses');
     BackHandler.addEventListener('hardwareBackPress', () => {

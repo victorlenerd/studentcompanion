@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import filter from 'lodash/filter';
 import app, { toArray } from 'shared/Firebase';

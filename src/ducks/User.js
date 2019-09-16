@@ -1,11 +1,10 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import DeviceInfo from 'react-native-device-info';
 import firebase from 'react-native-firebase';
 
 import moment from 'moment';
 import app, { toArray } from 'shared/Firebase';
 import { StartRequest, FinishRequest } from './Request';
-
 
 const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
 
@@ -16,7 +15,6 @@ const initialState = {
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 const sendMailWithCode = async (mailHandler, data) => {
-  console.log(mailHandler, 'mailHandler');
   try {
     const code = codeGenerator();
     await firebase
@@ -31,10 +29,9 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
   try {
     dispatch(StartRequest());
     const { email, password, phoneNumber, name } = data;
-    const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    console.log(user, 'user');
+    const { user } = await app.auth().createUserWithEmailAndPassword(email, password);
 
-    const usersRefs = firebase.database().ref('/users');
+    const usersRefs = app.database().ref('/users');
     const trialPeriodRefs = app.database().ref('/trialPeriod');
 
     trialPeriodRefs.once('value', async snapshot => {
@@ -60,13 +57,11 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
         resolve(data);
         dispatch(FinishRequest());
       } catch (err) {
-        console.log(err);
         reject(err);
         dispatch(FinishRequest());
       }
     });
   } catch (err) {
-    console.log(err, 'error');
     reject(err);
     dispatch(FinishRequest());
   }
@@ -76,7 +71,7 @@ export const Login = data => dispatch => new Promise(async (resolve, reject) => 
   try {
     const { email, password } = data;
     dispatch(StartRequest());
-    const { uid: userId, name } = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const { uid: userId, name } = await app.auth().signInWithEmailAndPassword(email, password);
     dispatch(SetCurrentUser({
       userId,
       name,
@@ -85,7 +80,6 @@ export const Login = data => dispatch => new Promise(async (resolve, reject) => 
     resolve({ success: true, uid: userId });
     dispatch(FinishRequest());
   } catch (err) {
-    console.log(err, 'error');
     reject(err);
     dispatch(FinishRequest());
   }
@@ -94,7 +88,7 @@ export const Login = data => dispatch => new Promise(async (resolve, reject) => 
 export const SendResetPasswordEmail = email => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const data = firebase.auth().sendPasswordResetEmail(email);
+    const data = app.auth().sendPasswordResetEmail(email);
     resolve(data);
     dispatch(FinishRequest());
   } catch (err) {
@@ -104,7 +98,7 @@ export const SendResetPasswordEmail = email => dispatch => new Promise(async (re
 });
 
 export const UserExist = email => dispatch => new Promise((resolve, reject) => {
-  const usersRefs = firebase.database().ref('/users');
+  const usersRefs = app.database().ref('/users');
   usersRefs
     .orderByChild('email')
     .equalTo(email)
@@ -119,14 +113,13 @@ export const UserExist = email => dispatch => new Promise((resolve, reject) => {
 });
 
 export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, reject) => {
-  const usersRefs = firebase.database().ref('/users');
+  const usersRefs = app.database().ref('/users');
 
   usersRefs
     .orderByChild('email')
     .equalTo(email)
     .once('value', async snapshot => {
       const user = toArray(snapshot.val())[0];
-      console.log(user, 'async');
       if (user !== null) {
         try {
           await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
@@ -154,7 +147,7 @@ export const GetCurrentUser = () => dispatch => new Promise(async (resolve, reje
   }
 
   const { email } = JSON.parse(saved_data);
-  const usersRefs = firebase.database().ref('/users');
+  const usersRefs = app.database().ref('/users');
   usersRefs
     .orderByChild('email')
     .equalTo(email)
@@ -194,7 +187,6 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
   try {
     await firebase.auth().signOut();
     await dispatch(DeleteCurrentUser());
-    await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES');
     resolve(true);
   } catch (err) {
     reject(err);
@@ -230,7 +222,7 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
   try {
     const user = await dispatch(GetCurrentUser());
     const { vericationCode, $id } = user;
-    const usersRefs = firebase.database().ref(`/users/${$id}`);
+    const usersRefs = app.database().ref(`/users/${$id}`);
 
     if (vericationCode === code) {
       usersRefs.update({ verified: true }, async err => {
@@ -244,7 +236,6 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
       resolve(false);
     }
   } catch (err) {
-    console.log(err);
     reject(err);
   }
 
@@ -284,10 +275,9 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
   dispatch(StartRequest());
   try {
     const { deviceActivationCode, $id } = await dispatch(GetCurrentUser());
-    const usersRefs = firebase.database().ref(`/users/${$id}`);
+    const usersRefs = app.database().ref(`/users/${$id}`);
 
     if (deviceActivationCode === code) {
-      console.log(deviceActivationCode, 'deviceActivationCode');
       usersRefs.update({ deviceId: DeviceInfo.getUniqueID(), deviceActivationCode: null }, async err => {
         if (err !== null) reject(err);
         const newUser = await dispatch(GetCurrentUser());
@@ -307,7 +297,7 @@ export const UpdateUserDeviceId = code => dispatch => new Promise(async (resolve
 export const UpdateLibrary = (userId, courses) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
-    const usersRefs = firebase.database().ref(`/users/${userId}`);
+    const usersRefs = app.database().ref(`/users/${userId}`);
 
     usersRefs.update({ courses }, async err => {
       if (err !== null) reject(err);

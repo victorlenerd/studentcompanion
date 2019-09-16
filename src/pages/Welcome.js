@@ -23,7 +23,6 @@ class Welcome extends Component {
 
   async componentWillMount() {
     Tracking.setCurrentScreen('Page_Welcome');
-
     const { setConnection } = this.props;
     // const token = await FCM.getFCMToken();
     const { type } = await NetInfo.getConnectionInfo();
@@ -73,7 +72,8 @@ class Welcome extends Component {
               navigate('Main');
             } else {
               this.clearListeners();
-              return navigate('ActivateAccount');
+              // return navigate('ActivateAccount');
+              navigate('Main');
             }
           } else {
             this.clearListeners();

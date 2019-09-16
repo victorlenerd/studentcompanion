@@ -13,7 +13,6 @@ export const setMenu = (menu, to) => ({
 });
 
 export const DrawerIconReducer = (state = initalState, action) => {
-  console.log(action, 'action');
   switch (action.type) {
     case SET_MENU:
       return { menu: action.menu, to: action.to };

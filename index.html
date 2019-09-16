@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    body{
+      position: relative;
+      min-height: 100%;
+      top: 0px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <form id="paystack-card-form">
+    <input type="text" data-paystack="number">
+    <input type="text" data-paystack="cvv">            
+    <input type="text" data-paystack="expiryMonth">
+    <input type="text"  data-paystack="expiryYear">
+    <button type="submit" data-paystack="submit">Submit</button>
+  </form>
+  <script>
+  var paystack;
+    Paystack.init({
+      form: "paystack-card-form", // Form ID
+      access_code: 'd5gtr5gnex'   // You should programmatically pass the access
+                                  // code via Ajax or a server variable. Note that
+                                  // the access code can only be used once. 
+    }).then(function(returnedObj){
+      paystack = returnedObj;
+    }).catch(function(error){
+      console.log("There was an error loading Paystack", error);
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="https://js.paystack.co/v1/paystack.js"></script>
+</body>
+</html>

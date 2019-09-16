@@ -1,20 +1,35 @@
 import React, { Component } from 'react';
-import { View, WebView, Alert } from 'react-native';
+import { View, Alert, Text, TouchableOpacity, TextInput } from 'react-native';
+import { WebView } from 'react-native-webview';
+import RNPaystack from 'react-native-paystack';
+
 
 import { main, colors } from 'shared/styles';
 
 import Loader from 'components/loader';
+import AppInput from 'components/inputs/AppInput';
 
+
+import users from 'containers/users';
+import connection from 'containers/connection';
+
+const BLUE = '#428AF8';
+const LIGHT_GRAY = '#D3D3D3';
+
+@users
+@connection
 class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       loaded: false,
+      isFocused: false
     };
   }
 
   componentDidMount() {
+    RNPaystack.init({ publicKey: 'pk_test_3ad48b1d0eb101873e7947fe5287ae4331dbbb16' });
     this.props
       .getCurrentUser()
       .then(user => {
@@ -36,8 +51,22 @@ class Payment extends Component {
       })
     );
   }
+  onPay = async () => {
+    try {
+      const response = await RNPaystack.chargeCardWithAccessCode({
+        cardNumber: '4123450131001381',
+        expiryMonth: '10',
+        expiryYear: '19',
+        cvc: '883',
+        accessCode: 't61tq2c0w7njlk6'
+      });
+      console.log(response, 'payment response');
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  onLoadIos() {
+  onLoadIos = () => {
     if (this.state.loaded) return;
 
     this.setState({ loaded: true }, () => this.webView.injectJavaScript('window.onLoad()'));
@@ -101,15 +130,64 @@ class Payment extends Component {
         onLoad={this.onLoadIos}
         javaScriptEnabled={true}
         mediaPlaybackRequiresUserAction={true}
-        source={{ uri: 'https://universitypastquestions.com/payment' }}
+        source={{ uri: 'http://127.0.0.1:5500/index.html' }}
       />
+    );
+  }
+
+  handleInputChange = () => {
+
+  }
+
+  renderCardView() {
+    const { isFocused } = this.state;
+    return (
+      <View>
+        <AppInput
+          onChangeText={input => this.handleInputChange(input, 'email')}
+          placeholder="Email"
+          errors={[]}
+          label="Card number"
+          showLabel
+          textAlignVertical={false}
+          style={{ margin: 0, paddingBottom: 6 }}
+        />
+        <View style={{ flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+          <AppInput
+            onChangeText={input => this.handleInputChange(input, 'email')}
+            placeholder="MM/YY"
+            errors={[]}
+            label=""
+            showLabel={false}
+            textAlignVertical={true}
+            baseWidth="50%"
+            style={{ margin: 0, paddingBottom: 6 }}
+          />
+          <AppInput
+            onChangeText={input => this.handleInputChange(input, 'email')}
+            placeholder="CCV"
+            errors={[]}
+            label=""
+            showLabel={false}
+            baseWidth="50%"
+            textAlignVertical={false}
+          />
+        </View>
+      </View>
     );
   }
 
   render() {
     return (
       <View style={[main.container, { backgroundColor: colors.white }]}>
-        <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>{this._renderWebview()}</View>
+        <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
+          <View style={{ flex: 1, paddingTop: 40 }}>
+            {this.renderCardView()}
+          </View>
+          <TouchableOpacity onPress={this.onPay}>
+            <Text>Pay Now</Text>
+          </TouchableOpacity>
+        </View>
         <Loader />
       </View>
     );

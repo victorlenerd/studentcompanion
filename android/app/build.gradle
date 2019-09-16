@@ -108,7 +108,7 @@ android {
 
     defaultConfig {
         applicationId "com.studentcompanion"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 2
         versionName "2.0"
@@ -159,6 +159,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-paystack')
+    implementation project(':@react-native-community_async-storage')
+    implementation project(':react-native-webview')
     implementation project(':react-native-screens')
     implementation project(':react-native-fcm')
     implementation project(':react-native-randombytes')

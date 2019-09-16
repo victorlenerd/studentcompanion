@@ -108,6 +108,9 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - Paystack (3.0.12):
+    - Paystack/Core (= 3.0.12)
+  - Paystack/Core (3.0.12)
   - Protobuf (3.9.0)
   - QBImagePickerController (3.4.0)
   - React (0.60.5):
@@ -166,9 +169,12 @@ PODS:
     - React
   - react-native-netinfo (4.2.1):
     - React
+  - react-native-paystack (3.4.0):
+    - Paystack
+    - React
   - react-native-randombytes (3.5.3):
     - React
-  - react-native-udp (2.6.1):
+  - react-native-webview (7.0.5):
     - React
   - React-RCTActionSheet (0.60.5):
     - React-Core (= 0.60.5)
@@ -193,9 +199,7 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
-  - ReactNativeFabric (0.5.2):
-    - Crashlytics
-    - Fabric
+  - RNCAsyncStorage (1.6.1):
     - React
   - RNDeviceInfo (2.3.2):
     - React
@@ -210,8 +214,6 @@ PODS:
     - React
   - RNFS (2.14.1):
     - React
-  - RNGestureHandler (1.4.1):
-    - React
   - RNImageCropPicker (0.25.0):
     - QBImagePickerController
     - React-Core
@@ -219,7 +221,7 @@ PODS:
     - RSKImageCropper
   - RNReanimated (1.2.0):
     - React
-  - RNScreens (2.0.0-alpha.1):
+  - RNScreens (2.0.0-alpha.3):
     - React
   - RSKImageCropper (2.2.3)
   - TextToSpeech (2.0.0):
@@ -253,8 +255,9 @@ DEPENDENCIES:
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-paystack (from `../node_modules/react-native-paystack`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
-  - react-native-udp (from `../node_modules/react-native-udp`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -265,11 +268,10 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
-  - ReactNativeFabric (from `../node_modules/react-native-fabric`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
-  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -298,6 +300,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - Paystack
     - Protobuf
     - QBImagePickerController
     - RSKImageCropper
@@ -333,10 +336,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-paystack:
+    :path: "../node_modules/react-native-paystack"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
-  react-native-udp:
-    :path: "../node_modules/react-native-udp"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -357,16 +362,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   React-RCTWebSocket:
     :path: "../node_modules/react-native/Libraries/WebSocket"
-  ReactNativeFabric:
-    :path: "../node_modules/react-native-fabric"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFirebase:
     :path: "../node_modules/react-native-firebase/ios"
   RNFS:
     :path: "../node_modules/react-native-fs"
-  RNGestureHandler:
-    :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
   RNReanimated:
@@ -401,6 +404,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  Paystack: 80107f1ff7aa33ecab41dfd88be65be20e37cbed
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 53c53c4d99097af47cf60594b8706b4e3321e722
@@ -415,8 +419,9 @@ SPEC CHECKSUMS:
   react-native-fetch-blob: 0cbdf9764c75d9438c162427395f4bc35a857d5a
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-netinfo: aeb1752abb78a9c15cdcea067a6c95d596dcfc45
+  react-native-paystack: 90e74a1b5ff17bb4d9bd1cc35f0ff2d5ad442f87
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
-  react-native-udp: 54a1aa9bf5c0824f930b1ba6dbfb3fd3e733bba9
+  react-native-webview: 174e0f8f1bf547224a134215607c75c4bb0312b7
   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e
   React-RCTBlob: 5e2b55f76e9a1c7ae52b826923502ddc3238df24
@@ -427,18 +432,17 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  ReactNativeFabric: d05320ff347d5c72567c115b97edeead111ac4d2
+  RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
   RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNFS: a8fbe7060fa49157d819466404794ad9c58e58cf
-  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNImageCropPicker: 0a731d984e64ee4c28bddaa7ce52262e4b80979f
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
-  RNScreens: 35e771c226db35b0ef716d0eadaf5da3efa52365
+  RNScreens: 402a99b0a27c0c32f079cec12d3ccbd35e20cd7f
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   TextToSpeech: 4e2fc50c7495416c6da5a1662ad3f750c58d3c85
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
 
-PODFILE CHECKSUM: 370c10be784daaf4fca180c432541cd3a62165a5
+PODFILE CHECKSUM: 54335fda7e89a91c8a9416fd4046daeeb4ba8bb7
 
 COCOAPODS: 1.7.2
