@@ -4,6 +4,7 @@ const sgMail = require('@sendgrid/mail');
 const axios = require('axios');
 const fetch = require('node-fetch');
 
+const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
 
 
 admin.initializeApp();
@@ -76,4 +77,22 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount, ref
      console.log('error occurred...');
     throw new functions.https.HttpsError('Payment Error:', 'Unable to complete payment');
    }
+});
+
+exports.updatePaymentInfo = functions.https.onCall( ({ user, nextPaymentDate }) => {
+  try {
+    const code = codeGenerator();
+    const userRef = admin.database().ref().child(`/users/${user.uid}`);
+    userRef.update({ nextPaymentDate, }, async err => {
+      if (err !== null) throw new functions.https.HttpsError(err);
+    });
+    const subject = 'Payment Verification Code';
+    sendMail(user, code, subject)
+    return {
+      status: 'success',
+      code
+    }
+  } catch (err) {
+    throw new functions.https.HttpsError(err);
+  }
 });
