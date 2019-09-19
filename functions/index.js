@@ -55,10 +55,10 @@ exports.SendDeviceActivationCode = functions.https.onCall( ({ user, code }, cont
   }
 });
 
-exports.initializePayStack = functions.https.onCall( async ({ email, amount, reference }) => {
+exports.initializePayStack = functions.https.onCall( async ({ email, amount }) => {
   const SECRET_KEY = 'sk_test_6c514bef2fd9b0b64f057d600af89fee6a666503'
    try {
-     const data =   { reference, amount, email };
+     const data =   { amount, email };
     const response = await fetch(
       'https://api.paystack.co/transaction/initialize',
       {
@@ -70,12 +70,22 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount, ref
         body: JSON.stringify(data)
       }
     );
-    // const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
     const result = await response.json()
-    return result;
+    const { data: { reference, authorization_url } } = result;
+    admin.database().ref('/payments')
+    .push({
+      email,
+      amount,
+      paymentType: 'card',
+      reference,
+      status: 'initiated',
+      authorization_url,
+      dateAdded: new Date().toISOString(),
+    })
+    return result.data;
    } catch (error) {
      console.log('error occurred...');
-    throw new functions.https.HttpsError('Payment Error:', 'Unable to complete payment');
+    throw new functions.https.HttpsError('Payment Error:', 'Unable to initialize payment');
    }
 });
 
@@ -83,7 +93,7 @@ exports.updatePaymentInfo = functions.https.onCall( ({ user, nextPaymentDate }) 
   try {
     const code = codeGenerator();
     const userRef = admin.database().ref().child(`/users/${user.uid}`);
-    userRef.update({ nextPaymentDate, }, async err => {
+    userRef.update({ nextPaymentDate, paymentVerificationCode: code }, async err => {
       if (err !== null) throw new functions.https.HttpsError(err);
     });
     const subject = 'Payment Verification Code';
@@ -95,4 +105,21 @@ exports.updatePaymentInfo = functions.https.onCall( ({ user, nextPaymentDate }) 
   } catch (err) {
     throw new functions.https.HttpsError(err);
   }
+});
+
+
+exports.initializeManualPayment = functions.https.onCall( async ({ email, amount }) => {
+   try {
+    admin.database().ref('/payments')
+    .push({
+      email,
+      amount,
+      paymentType: 'manual',
+      status: 'initiated',
+      dateAdded: new Date().toISOString(),
+    });
+   } catch (error) {
+     console.log('error occurred...');
+    throw new functions.https.HttpsError('Payment Error:', 'Unable to initialize payment');
+   }
 });
