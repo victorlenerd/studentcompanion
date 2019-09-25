@@ -95,8 +95,7 @@ export const SaveCourseOffline = course => dispatch => new Promise(async (resolv
 export const RemoveCourseOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   const courses = await dispatch(GetCoursesOffline());
-  const newCourses = courses.filter(c => c.id !== courseId);
-
+  const newCourses = courses.filter(c => c.$id !== courseId);
   dispatch(SetLibrary(newCourses));
 
   try {
