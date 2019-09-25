@@ -23,6 +23,7 @@ import reader from 'containers/reader';
 
 import VoiceRatePane from 'components/voiceRatePane';
 import Tracking from 'shared/tracking';
+import withBackHandler from '../helpers/withBackHandler';
 
 const { height } = Dimensions.get('window');
 
@@ -80,10 +81,6 @@ class Note extends Component {
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
-
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -140,7 +137,6 @@ class Note extends Component {
   _renderReaderView = () => {
     if (!this.props.isImages) {
       if (!supportsQuill()) {
-        console.log('in,......');
         return (
           <ScrollView style={{ flex: 1 }}>
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
@@ -158,7 +154,6 @@ class Note extends Component {
           </ScrollView>
         );
       }
-      console.log('read...');
       return (
         <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
           <WebView
@@ -236,4 +231,4 @@ class Note extends Component {
   }
 }
 
-export default Note;
+export default withBackHandler(Note, 'Course');

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  BackHandler,
   ScrollView,
   TouchableOpacity,
   StatusBar
@@ -14,31 +13,22 @@ import drawerIcon from 'containers/drawerIcon';
 import Tracking from 'shared/tracking';
 import { main, colors } from 'shared/styles';
 
+import withBackHandler from '../helpers/withBackHandler';
+
 @notes
 @courses
 @drawerIcon
 class ChooseNotes extends Component {
-  
   async componentWillMount() {
-    const { setMenu, navigation, getNotesOffline, currentCourse: { $id } } = this.props;
+    const { getNotesOffline, currentCourse: { $id } } = this.props;
     Tracking.setCurrentScreen('Page_Choose_Notes');
     await getNotesOffline($id);
-
-    setMenu(false, 'SavedCourses');
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      navigation.goBack();
-    });
   }
 
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress');
-  }
-
-  _openNote = note => {
-    const { setMenu, navigation: { navigate }, setCurrentNote, updateReadNotes } = this.props;
+  _openNote = (note, id) => {
+    const { navigation: { navigate }, setCurrentNote, updateReadNotes } = this.props;
     setCurrentNote(note);
-    updateReadNotes(note);
-    setMenu(false, 'Course');
+    updateReadNotes(note, id);
     navigate('Note');
   }
 
@@ -62,7 +52,7 @@ class ChooseNotes extends Component {
                     alignItems: 'center',
                   }}
                   key={note.$id}
-                  onPress={() => this._openNote(note)}
+                  onPress={() => this._openNote(note, $id)}
                 >
                   <Text style={{ color: colors.black, fontSize: 18 }}>{note.title}</Text>
                 </TouchableOpacity>
@@ -101,4 +91,4 @@ class ChooseNotes extends Component {
   }
 }
 
-export default ChooseNotes;
+export default withBackHandler(ChooseNotes, 'SavedCourses', false);

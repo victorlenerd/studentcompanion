@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import DeviceInfo from 'react-native-device-info';
-import firebase from 'react-native-firebase';
 
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
@@ -11,7 +10,6 @@ import Tracking from 'shared/tracking';
 import auth from 'containers/auth';
 import user from 'containers/users';
 import moment from 'moment';
-import app, { toArray } from 'shared/Firebase';
 
 @user
 @auth
@@ -27,19 +25,6 @@ class SignIn extends Component {
 
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Login');
-    // const axios = require('axios');
-    // axios.get('https://jsonplaceholder.typicode.com/todos/1').then(res => console.log(res, 'res'))
-    //   .catch(err => console.log(err, 'err'));
-    console.log('error', 'no courses');
-    try {
-      console.log('success', 'courses');
-      firebase.auth().signInWithEmailAndPassword('victorugwueze@gmail.com', 'password')
-        .then(use => {
-          console.log(use.isAnonymous, 'man...');
-        });
-    } catch (error) {
-      console.log(error, 'no courses');
-    }
   }
 
   componentWillReceiveProps(nextProps) {
