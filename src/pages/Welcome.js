@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, StatusBar, Text } from 'react-native';
+import { View, Image, StatusBar } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 
@@ -72,8 +72,7 @@ class Welcome extends Component {
               navigate('Main');
             } else {
               this.clearListeners();
-              // return navigate('ActivateAccount');
-              navigate('Main');
+              return navigate('ActivateAccount');
             }
           } else {
             this.clearListeners();
