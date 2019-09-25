@@ -1,7 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const sgMail = require('@sendgrid/mail');
-const axios = require('axios');
 const fetch = require('node-fetch');
 
 const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
@@ -12,13 +11,18 @@ const lt_AP = 'SG.0tPxkG2UQHuSmiLM_QB4PQ.K6DBFRfSA7UDAetLT4Njtv65W5Ccs2chEGCICKT
 sgMail.setApiKey(lt_AP);
 
 
-function sendMail(user, code, subject){
+function sendMail({ user, code, subject, templateId, ...rest }){
   const data = {
     from: 'Student Companion <noreply@studentcompanion.com>',
     to: user.email,
     subject,
-    templateId: 'd-4610d056f0644a2f9f91a52609c502af',
-    dynamic_template_data: { activationLink: '', activationCode: code, name: user.name }
+    templateId: templateId || 'd-4610d056f0644a2f9f91a52609c502af',
+    dynamic_template_data: {
+      activationLink: '',
+      activationCode: code,
+      name: user.name,
+      ...rest
+    }
   };
   sgMail.send(data);
 }
@@ -30,7 +34,7 @@ exports.SendEmailVerificationCode = functions.https.onCall( ({ user, code }, con
       if (err !== null) throw new functions.https.HttpsError(err);
     });
     const subject = 'Student Companion Email Verification Code';
-    sendMail(user, code, subject)
+    sendMail({ user, code, subject })
     return {
       status: 'success',
     }
@@ -46,7 +50,7 @@ exports.SendDeviceActivationCode = functions.https.onCall( ({ user, code }, cont
       if (err !== null) throw new functions.https.HttpsError(err);
     });
     const subject = 'Student Companion Device Verification Code';
-    sendMail(user, code, subject)
+    sendMail({ user, code, subject })
     return {
       status: 'success',
     }
@@ -78,7 +82,6 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount }) =
       amount,
       paymentType: 'card',
       reference,
-      status: 'initiated',
       authorization_url,
       dateAdded: new Date().toISOString(),
     })
@@ -89,15 +92,37 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount }) =
    }
 });
 
+
+exports.verifyPayStackPayment = functions.https.onCall( async ({ reference }) => {
+  const SECRET_KEY = 'sk_test_6c514bef2fd9b0b64f057d600af89fee6a666503'
+   try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        method: 'GET',
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SECRET_KEY}`
+        },
+      }
+    );
+    const result = await response.json()
+    return result.data;
+   } catch (error) {
+     console.log(error);
+    throw new functions.https.HttpsError('Payment Error:', error);
+   }
+});
+
 exports.updatePaymentInfo = functions.https.onCall( ({ user, nextPaymentDate }) => {
   try {
     const code = codeGenerator();
-    const userRef = admin.database().ref().child(`/users/${user.uid}`);
+    const userRef = admin.database().ref().child(`/users/${user.$id}`);
     userRef.update({ nextPaymentDate, paymentVerificationCode: code }, async err => {
       if (err !== null) throw new functions.https.HttpsError(err);
     });
     const subject = 'Payment Verification Code';
-    sendMail(user, code, subject)
+    sendMail({ user, code, subject })
     return {
       status: 'success',
       code
@@ -115,11 +140,37 @@ exports.initializeManualPayment = functions.https.onCall( async ({ email, amount
       email,
       amount,
       paymentType: 'manual',
-      status: 'initiated',
       dateAdded: new Date().toISOString(),
     });
+    return {
+      status: 'success'
+    }
    } catch (error) {
-     console.log('error occurred...');
+     console.log('error occurred...', error);
     throw new functions.https.HttpsError('Payment Error:', 'Unable to initialize payment');
    }
+});
+
+
+exports.sendFeedBack = functions.https.onCall(async ({ senderEmail, senderName, senderId, feedback }) => {
+  try {
+    const subject = `Feedback from ${senderName}`;
+    sendMail({
+      user: {
+        email: 'vnwaokocha@gmail.com '
+      },
+      subject,
+      senderEmail,
+      senderName,
+      senderId,
+      feedback,
+      templateId: 'd-763cff2a66e943aa95e9dd6ed9ae4216'
+    })
+    return {
+      status: 'success'
+    }
+  } catch (error) {
+    console.log('error occurred...', error);
+   throw new functions.https.HttpsError('Payment Error:', 'Send feedback');
+  }
 });

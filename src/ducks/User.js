@@ -30,7 +30,6 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
     dispatch(StartRequest());
     const { email, password, phoneNumber, name } = data;
     const { user } = await app.auth().createUserWithEmailAndPassword(email, password);
-
     const usersRefs = app.database().ref('/users');
     const trialPeriodRefs = app.database().ref('/trialPeriod');
 
@@ -46,14 +45,13 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
           phoneNumber,
           dateAdded: new Date().toISOString(),
           deviceId: DeviceInfo.getUniqueID(),
-          nextPaymentDate: nextPaymentDate.toISOString(),
+          nextPaymentDate: '2019-09-15T09:39:14.626Z',
         });
         dispatch(SetCurrentUser({
           userId: user.uid,
           name: data.name,
           email: data.email,
         }));
-        await sendMailWithCode('SendEmailVerificationCode', { user: { name, email, id: user.id } });
         resolve(data);
         dispatch(FinishRequest());
       } catch (err) {
@@ -71,7 +69,7 @@ export const Login = data => dispatch => new Promise(async (resolve, reject) => 
   try {
     const { email, password } = data;
     dispatch(StartRequest());
-    const { uid: userId, name } = await app.auth().signInWithEmailAndPassword(email, password);
+    const { user: { uid: userId, name } } = await app.auth().signInWithEmailAndPassword(email, password);
     dispatch(SetCurrentUser({
       userId,
       name,
@@ -242,32 +240,17 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
   dispatch(FinishRequest());
 });
 
-export const SendFeedback = (userId, name, email, feedback) => dispatch => new Promise((resolve, reject) => {
+export const SendFeedback = (senderId, senderName, senderEmail, feedback) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
 
   try {
-    const data = {
-      from: 'Student Companion <hello@studentcompanion.xyz>',
-      to: 'vnwaokocha@gmail.com',
-      subject: `Feedback ${name}`,
-      text: `
-        ${feedback}
-
-
-        ${name}
-        ${email}
-        ${userId}
-      `
-    };
-
-    // mailgun.messages().send(data, function(error) {
-    //   if (error) reject({ message: "Couldn't send feedback." });
-    //   resolve(true);
-    // });
+    await firebase
+      .functions()
+      .httpsCallable('sendFeedBack')({ senderName, senderEmail, senderId, feedback });
+    resolve(true);
   } catch (err) {
     reject(err);
   }
-
   dispatch(FinishRequest());
 });
 
