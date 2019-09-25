@@ -12,6 +12,7 @@ import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.arttitude360.reactnative.rnpaystack.RNPaystackPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -25,7 +26,6 @@ import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.facebook.soloader.SoLoader;
@@ -49,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNGestureHandlerPackage(),
             new RNPaystackPackage(),
             new AsyncStoragePackage(),
             new RNCWebViewPackage(),
@@ -61,7 +62,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ReanimatedPackage(),
             new RNDeviceInfo(),
             new PickerPackage(),
-            new RNGestureHandlerPackage(),
             new ImagePickerPackage(),
             new RNFSPackage(),
             new RNFirebaseAnalyticsPackage(),
