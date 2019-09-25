@@ -19,6 +19,7 @@ import { main, colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
 
 import debounce from 'lodash/debounce';
+import withBackHandler from '../helpers/withBackHandler';
 
 const { width } = Dimensions.get('window');
 
@@ -33,9 +34,6 @@ class SearchTyped extends Component {
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Search_Courses');
     this.props.setMenu(false, 'Home');
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
   }
 
   componentDidMount() {
@@ -59,10 +57,10 @@ class SearchTyped extends Component {
   }
 
   _openCourse = course => {
-    const { setCurrentCourse, navigation: { navigate } } = this.props;
+    const { setCurrentCourse, navigation: { replace } } = this.props;
     const { departmentId, facultyId, universityId, levelId } = course;
     setCurrentCourse(course);
-    navigate('CourseHome', { course, departmentId, facultyId, universityId, levelId });
+    replace('CourseHome', { course, departmentId, facultyId, universityId, levelId });
   }
 
   render() {
@@ -95,4 +93,4 @@ const style = StyleSheet.create({
   }
 });
 
-export default SearchTyped;
+export default withBackHandler(SearchTyped, 'Home');
