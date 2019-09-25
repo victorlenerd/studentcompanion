@@ -45,6 +45,7 @@ export const SetCurrentSearchResults = data => {
 };
 
 export const Search = search => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
   const { searchState: { results } } = getState();
   const options = {
     keys: ['name', 'code', 'departmentName', 'universityName', 'facultyName'],
@@ -56,10 +57,9 @@ export const Search = search => (dispatch, getState) => new Promise(async (resol
     fuse = new Fuse(results, options);
     searchResults = fuse.search(search);
     dispatch(SetCurrentSearchResults(searchResults));
+    dispatch(FinishRequest());
     return resolve(searchResults);
   }
-
-  dispatch(StartRequest());
 
   const courseRef = app.database().ref('/courses');
 
