@@ -1,0 +1,31 @@
+{
+  "name": "react-native-paystack",
+  "version": "3.4.0",
+  "summary": "React Native Wrappers for Paystack Android & iOS Mobile SDKs",
+  "description": "React Native Wrappers for Paystack Android & iOS Mobile SDKs",
+  "license": "MIT",
+  "authors": "Tolu Olowu (Arttitude 360) <tolu@arttitude360.com>",
+  "homepage": "https://github.com/tolu360/react-native-paystack",
+  "source": {
+    "git": "https://github.com/tolu360/react-native-paystack.git",
+    "tag": "v3.4.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "preserve_paths": [
+    "README.md",
+    "package.json",
+    "index.js"
+  ],
+  "source_files": "ios/*.{h,m}",
+  "compiler_flags": "-fno-modules",
+  "dependencies": {
+    "React": [
+
+    ],
+    "Paystack": [
+
+    ]
+  }
+}
