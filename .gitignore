@@ -20,9 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcworkspace/contents.xcworkspacedata
+project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -53,4 +51,3 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
-
