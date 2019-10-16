@@ -29,11 +29,10 @@ const showError = (label, errors) => {
 const AppInput = React.forwardRef((props, ref) => {
   const { label, style, showLabel, errors, baseWidth, ...rest } = props;
   const { isError, errorText } = showError(label, errors);
-
   return (
     <BaseInput
       label={label}
-      showLabel={showLabel}
+      showLabel={showLabel && rest.value.length > 0}
       baseWidth={baseWidth}
     >
       <TextInput

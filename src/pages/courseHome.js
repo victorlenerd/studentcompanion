@@ -14,12 +14,16 @@ import courses from 'containers/courses';
 import questions from 'containers/questions';
 import Tracking from 'shared/tracking';
 import drawerIcon from 'containers/drawerIcon';
+import connection from 'containers/connection';
+
+import withBackHandler from '../helpers/withBackHandler';
 
 @users
 @notes
 @courses
 @questions
 @drawerIcon
+@connection
 class CourseHome extends Component {
   state = {
     notes: [],
@@ -27,32 +31,32 @@ class CourseHome extends Component {
   }
 
   async componentWillMount() {
-    const { navigation: { navigate, state: { params: { course } } }, setMenu, getNotes, currentUser: { courses: userCourses } } = this.props;
+    const { navigation: { replace, state: { params: { course } } }, setMenu, getNotes, currentUser: { courses: userCourses } } = this.props;
     const { $id } = course;
-
+    this.props.startRequest();
     setMenu(false, 'SearchTyped');
+    const currentNote = await getNotes($id);
 
     const courseInLibrary = await this.inLibrary($id);
-
     Tracking.setCurrentScreen('Page_Course_Home');
 
     if (courseInLibrary) {
-      return navigate('Course', { course, fromPage: 'SearchTyped' });
+      replace('Course', { course, fromPage: 'SearchTyped' });
+      this.props.finishRequest();
+      return;
     }
-    const currentNote = await getNotes($id);
-
     this.setState({ canAddToLibrary: true, notes: currentNote });
   }
 
   saveCourse = async () => {
-    const { navigation: { navigate, state: { params: { course } } }, saveCourseOffline, saveNotesOffline } = this.props;
+    const { navigation: { replace, state: { params: { course } } }, saveCourseOffline, saveNotesOffline } = this.props;
     const { $id } = course;
 
     try {
       await saveCourseOffline(course);
       await saveNotesOffline($id, this.state.notes);
       Alert.alert('Success', `${course.name} Has Been Added To Your Library`, [{ text: 'OK', style: 'cancel' }]);
-      return navigate('Course', { course });
+      return replace('Course', { course, fromPage: 'CourseHome' });
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
@@ -99,4 +103,4 @@ const style = StyleSheet.create({
   }
 });
 
-export default CourseHome;
+export default withBackHandler(CourseHome, 'SearchTyped');

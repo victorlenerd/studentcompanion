@@ -51,7 +51,7 @@ class SearchTyped extends Component {
   }
 
   setSearch = text => {
-    if (text.length > 3) {
+    if (text.length > 0) {
       this.props.search(text);
     }
   }

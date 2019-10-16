@@ -13,11 +13,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1FB1E2BEFD4F7C968CEC6E71 /* libPods-StudentCompanion-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C98185B7B3E0C0B5D595F9DE /* libPods-StudentCompanion-tvOS.a */; };
-		2A4353A62323D8B40072A429 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A4353A32323D8740072A429 /* libRNGestureHandler.a */; };
-		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2AB256B52353E55500C663B3 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3510C39202682810015056F /* Fabric.framework */; };
 		2DCD954D1E0B4F2C00145EB5 /* StudentCompanionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* StudentCompanionTests.m */; };
 		8580D4363561E7F641288756 /* libPods-StudentCompanion.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DDDC683C245E415D461E8C9 /* libPods-StudentCompanion.a */; };
 		901BAC4A2283B00C604610C9 /* libPods-StudentCompanion-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88908834E0E5572678B2ECD5 /* libPods-StudentCompanion-tvOSTests.a */; };
@@ -51,13 +47,6 @@
 			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
 			remoteInfo = "RNGestureHandler-tvOS";
 		};
-		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "StudentCompanion-tvOS";
-		};
 		F3C5B75B2017FD990000D6F0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F3C5B7552017FD990000D6F0 /* ReactNativeNavigation.xcodeproj */;
@@ -81,7 +70,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = StudentCompanion/main.m; sourceTree = "<group>"; };
 		21755AE65AC85F76FF31EFB2 /* Pods-StudentCompanionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanionTests.release.xcconfig"; path = "Target Support Files/Pods-StudentCompanionTests/Pods-StudentCompanionTests.release.xcconfig"; sourceTree = "<group>"; };
 		2A43539D2323D8740072A429 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* StudentCompanion-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "StudentCompanion-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* StudentCompanion-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "StudentCompanion-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3067E9997F00424BAC014A53 /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNShare.a; sourceTree = "<group>"; };
 		3A9680FAD76CD395D26F42A8 /* Pods-StudentCompanion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StudentCompanion.debug.xcconfig"; path = "Target Support Files/Pods-StudentCompanion/Pods-StudentCompanion.debug.xcconfig"; sourceTree = "<group>"; };
@@ -207,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB256B52353E55500C663B3 /* Fabric.framework in Frameworks */,
 				0B16F3C22DC7B42559D05BDF /* libPods-StudentCompanionTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,18 +204,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A4353A62323D8B40072A429 /* libRNGestureHandler.a in Frameworks */,
 				F3FE40B52044736400320E1A /* Crashlytics.framework in Frameworks */,
 				F3FE40B72044736400320E1A /* Fabric.framework in Frameworks */,
 				8580D4363561E7F641288756 /* libPods-StudentCompanion.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E4781E0B4A5D006451C7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1FB1E2BEFD4F7C968CEC6E71 /* libPods-StudentCompanion-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +316,6 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* StudentCompanion.app */,
 				00E356EE1AD99517003FC87E /* StudentCompanionTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* StudentCompanion-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* StudentCompanion-tvOSTests.xctest */,
 			);
 			name = Products;
@@ -666,25 +645,6 @@
 			productReference = 13B07F961A680F5B00A75B9A /* StudentCompanion.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* StudentCompanion-tvOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "StudentCompanion-tvOS" */;
-			buildPhases = (
-				00D55C2DDF0F4C0E08D74AD3 /* [CP] Check Pods Manifest.lock */,
-				2D02E4771E0B4A5D006451C7 /* Sources */,
-				2D02E4781E0B4A5D006451C7 /* Frameworks */,
-				2D02E4791E0B4A5D006451C7 /* Resources */,
-				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "StudentCompanion-tvOS";
-			productName = "StudentCompanion-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* StudentCompanion-tvOS.app */;
-			productType = "com.apple.product-type.application";
-		};
 		2D02E48F1E0B4A5D006451C7 /* StudentCompanion-tvOSTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "StudentCompanion-tvOSTests" */;
@@ -697,7 +657,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
 			name = "StudentCompanion-tvOSTests";
 			productName = "StudentCompanion-tvOSTests";
@@ -715,11 +674,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = RV75X33TAB;
+						DevelopmentTeam = 7F48H7WK5D;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = RV75X33TAB;
+						DevelopmentTeam = 7F48H7WK5D;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -729,14 +689,9 @@
 							};
 						};
 					};
-					2D02E47A1E0B4A5D006451C7 = {
-						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = RV75X33TAB;
-						ProvisioningStyle = Automatic;
-					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = RV75X33TAB;
+						DevelopmentTeam = 7F48H7WK5D;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
@@ -768,7 +723,6 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* StudentCompanion */,
 				00E356ED1AD99517003FC87E /* StudentCompanionTests */,
-				2D02E47A1E0B4A5D006451C7 /* StudentCompanion-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* StudentCompanion-tvOSTests */,
 			);
 		};
@@ -816,14 +770,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4791E0B4A5D006451C7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -834,28 +780,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00D55C2DDF0F4C0E08D74AD3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-StudentCompanion-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -864,20 +788,6 @@
 			inputPaths = (
 			);
 			name = "Bundle React Native code and images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1075,15 +985,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4771E0B4A5D006451C7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
-				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2D02E48C1E0B4A5D006451C7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1099,11 +1000,6 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* StudentCompanion */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* StudentCompanion-tvOS */;
-			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1125,7 +1021,11 @@
 			baseConfigurationReference = 3B7221570DED7429A1F30635 /* Pods-StudentCompanionTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1155,7 +1055,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1181,9 +1085,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = StudentCompanion/StudentCompanion.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1196,6 +1103,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios/**",
 				);
 				INFOPLIST_FILE = StudentCompanion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1207,7 +1115,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.studentcompanion.lss-note";
 				PRODUCT_NAME = StudentCompanion;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1218,8 +1129,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = StudentCompanion/StudentCompanion.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1232,6 +1147,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios/**",
 				);
 				INFOPLIST_FILE = StudentCompanion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1249,80 +1165,11 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xyz.studentcompanion.lss-note";
 				PRODUCT_NAME = StudentCompanion;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
-		2D02E4971E0B4A5E006451C7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A6F7056C1A0FB49A7D74DBE /* Pods-StudentCompanion-tvOS.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = RV75X33TAB;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
-					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
-					"$(SRCROOT)/../node_modules/react-native-camera-kit/ios",
-				);
-				INFOPLIST_FILE = "StudentCompanion-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.StudentCompanion-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-			};
-			name = Debug;
-		};
-		2D02E4981E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F44405752322D11874A17AA /* Pods-StudentCompanion-tvOS.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = RV75X33TAB;
-				GCC_NO_COMMON_BLOCKS = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
-					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
-					"$(SRCROOT)/../node_modules/react-native-camera-kit/ios",
-				);
-				INFOPLIST_FILE = "StudentCompanion-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.StudentCompanion-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
 			name = Release;
 		};
@@ -1335,8 +1182,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "StudentCompanion-tvOSTests/Info.plist";
@@ -1344,6 +1193,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.StudentCompanion-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StudentCompanion-tvOS.app/StudentCompanion-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
@@ -1359,15 +1209,18 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = RV75X33TAB;
+				DEVELOPMENT_TEAM = 7F48H7WK5D;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "StudentCompanion-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.StudentCompanion-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StudentCompanion-tvOS.app/StudentCompanion-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
@@ -1467,15 +1320,6 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "StudentCompanion-tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2D02E4971E0B4A5E006451C7 /* Debug */,
-				2D02E4981E0B4A5E006451C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -45,7 +45,7 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
           phoneNumber,
           dateAdded: new Date().toISOString(),
           deviceId: DeviceInfo.getUniqueID(),
-          nextPaymentDate: '2019-09-15T09:39:14.626Z',
+          nextPaymentDate: nextPaymentDate.toISOString(),
         });
         dispatch(SetCurrentUser({
           userId: user.uid,

@@ -1,9 +1,11 @@
+/* eslint-disable react/sort-comp */
 import React, { Component, Fragment } from 'react';
 import { Alert, View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
 import drawerIcon from 'containers/drawerIcon';
 import notes from 'containers/notes';
+import withBackHandler from '../helpers/withBackHandler';
 
 
 const { width, height } = Dimensions.get('window');
@@ -30,15 +32,18 @@ class Home extends Component {
     }
 
     // BackHandler.addEventListener('hardwareBackPress', () => {
-    //   return false;
+    //   this.handleBackButton();
+    //   return true;
     // });
-
     this.props.setMenu(true, null);
   }
 
-  // componentWillUnmount() {
-  //   BackHandler.removeEventListener('hardwareBackPress');
-  // }
+  // eslint-disable-next-line react/sort-comp
+
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
+  }
 
   openNote(note) {
     const { setMenu, navigation: { navigate }, setCurrentNote } = this.props;
@@ -56,7 +61,7 @@ class Home extends Component {
           {this.state.rencentReads.length > 0 &&
             <View style={{ padding: 15 }}>
               <Text style={style.homeTitle}>Continue Reading</Text>
-              {this.state.rencentReads.map((rr, i) => {
+              {this.state.rencentReads.filter(note => note !== null).map((rr, i) => {
                 return (
                   <TouchableOpacity
                     key={i}
@@ -218,4 +223,4 @@ const style = StyleSheet.create({
   }
 });
 
-export default Home;
+export default withBackHandler(Home, 'exit', true);

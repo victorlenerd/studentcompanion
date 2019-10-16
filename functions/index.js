@@ -7,13 +7,13 @@ const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Mat
 
 
 admin.initializeApp();
-const lt_AP = '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'
-sgMail.setApiKey(lt_AP);
+const sendGridAPIKey = functions.config().sendgrid.key;
+sgMail.setApiKey(sendGridAPIKey);
 
 
 function sendMail({ user, code, subject, templateId, ...rest }){
   const data = {
-    from: 'Student Companion <noreply@studentcompanion.com>',
+    from: 'Student Companion <noreply@studentcompanion.xyz>',
     to: user.email,
     subject,
     templateId: templateId || 'd-4610d056f0644a2f9f91a52609c502af',
@@ -60,7 +60,7 @@ exports.SendDeviceActivationCode = functions.https.onCall( ({ user, code }, cont
 });
 
 exports.initializePayStack = functions.https.onCall( async ({ email, amount }) => {
-  const SECRET_KEY = 'sk_test_6c514bef2fd9b0b64f057d600af89fee6a666503'
+  const PAYSTACK_SECRET_KEY = functions.config().paystack.key
    try {
      const data =   { amount, email };
     const response = await fetch(
@@ -69,7 +69,7 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount }) =
         method: 'POST',
         headers:{
           "Content-Type": "application/json",
-          Authorization: `Bearer ${SECRET_KEY}`
+          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`
         },
         body: JSON.stringify(data)
       }
@@ -94,7 +94,7 @@ exports.initializePayStack = functions.https.onCall( async ({ email, amount }) =
 
 
 exports.verifyPayStackPayment = functions.https.onCall( async ({ reference }) => {
-  const SECRET_KEY = 'sk_test_6c514bef2fd9b0b64f057d600af89fee6a666503'
+  const PAYSTACK_SECRET_KEY = functions.config().paystack.key
    try {
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${reference}`,
@@ -102,7 +102,7 @@ exports.verifyPayStackPayment = functions.https.onCall( async ({ reference }) =>
         method: 'GET',
         headers:{
           "Content-Type": "application/json",
-          Authorization: `Bearer ${SECRET_KEY}`
+          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`
         },
       }
     );
@@ -157,7 +157,7 @@ exports.sendFeedBack = functions.https.onCall(async ({ senderEmail, senderName, 
     const subject = `Feedback from ${senderName}`;
     sendMail({
       user: {
-        email: 'vnwaokocha@gmail.com '
+        email: 'mexybond@gmail.com'
       },
       subject,
       senderEmail,

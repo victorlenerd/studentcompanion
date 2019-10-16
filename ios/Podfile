@@ -90,6 +90,8 @@ target 'StudentCompanion' do
 
   pod 'react-native-paystack', :path => '../node_modules/react-native-paystack'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'StudentCompanionTests' do
     inherit! :search_paths
     # Pods for testing
