@@ -1,8 +1,10 @@
 import React from 'react';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createStackNavigator, HeaderBackButton } from 'react-navigation-stack';
 
-import WelcomeScreen from 'pages/welcome';
-import IntroScreen from 'pages/intro';
+import WelcomeScreen from 'pages/Welcome';
+import IntroScreen from 'pages/Intro';
 import HomeScreen from 'pages/home';
 import PassScreen from 'pages/pass';
 import SignUpScreen from 'pages/signUp';
@@ -28,53 +30,69 @@ import NoteScreen from 'pages/note';
 
 import ActivateEmailScreen from 'pages/activateEmail';
 import VerifyEmailScreen from 'pages/verifyEmail';
+import manualPayment from 'pages/manualPayment';
 
-import Drawer from 'components/drawer';
+import Drawer from 'components/Drawer';
 import NoteToobarOptions from 'components/noteToobarOptions';
 import DrawerIcon from 'components/drawerIcon';
 
 import { colors } from 'shared/styles';
 
-const MainNavigator = DrawerNavigator({
+import resetToRoute from '../helpers/redirect';
+
+
+const HomeStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
-    navigationOptions: {
-      headerTitle: 'Home',
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
       gesturesEnabled: false,
-    }
+      headerLeft: <DrawerIcon navigation={navigation} />,
+    })
   },
   SearchTyped: {
     screen: SearchTypedScreen,
-    navigationOptions: {
-      headerTitle: 'Search',
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTintColor: '#fff',
       gesturesEnabled: false,
-    }
+    })
   },
   ChooseCourse: {
     screen: ChooseCourseScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Courses',
-      gesturesEnabled: true,
-    }
+    gesturesEnabled: false,
+    headerTitle: 'Choose Courses',
   },
   CourseHome: {
     screen: CourseHomeScreen,
-    navigationOptions: {
-      headerTitle: 'Choose Courses'
-    }
+    headerTitle: 'Choose Home',
+    gesturesEnabled: false,
   },
   Feedback: {
     screen: FeedbackScreen,
-    navigationOptions: {
-      headerTitle: 'Feedback',
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerLeft: <HeaderBackButton tintColor="#fff" onPress={() => { resetToRoute(navigation, 'Main'); }} />,
+      headerTintColor: '#fff',
       gesturesEnabled: false
-    }
+    })
   },
   SavedCourses: {
     screen: SavedCoursesScreen,
-    navigationOptions: {
-      headerTitle: 'Library'
-    }
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerLeft: <HeaderBackButton tintColor="#fff" onPress={() => { resetToRoute(navigation, 'Main'); }} />,
+      headerTintColor: '#fff',
+      gesturesEnabled: false,
+    })
   },
   UploadPhotos: {
     screen: UploadPhotosScreen,
@@ -92,32 +110,68 @@ const MainNavigator = DrawerNavigator({
   Note: {
     screen: NoteScreen,
     navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTintColor: '#fff',
       headerRight: <NoteToobarOptions navigation={navigation} />
     })
   },
   TextExtractor: {
     screen: TextExtractorScreen,
     navigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTintColor: '#fff',
       headerTitle: 'Extract Text',
     }
   },
   Reader: {
     screen: ReaderScreen,
     navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerTintColor: '#fff',
       headerRight: <NoteToobarOptions extracted={true} navigation={navigation} />,
     })
   },
   Course: {
     screen: ChooseNotesScreen,
-    navigationOptions: {
-      headerTitle: 'Notes',
-    }
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: colors.brightBlue,
+      },
+      headerLeft: <HeaderBackButton tintColor="#fff" onPress={() => { navigation.replace('SavedCourses'); }} />,
+      headerTintColor: '#fff',
+      gesturesEnabled: false,
+    })
   }
 }, {
-  contentComponent: Drawer
+  headerBackTitleVisible: false
 });
 
-const Navigation = StackNavigator({
+HomeStack.navigationOptions = ({ navigation }) => {
+  let drawerLockMode = 'unlocked';
+  if (navigation.state.index > 0) {
+    drawerLockMode = 'locked-closed';
+  }
+
+  return {
+    drawerLockMode,
+  };
+};
+
+const MainNavigator = createDrawerNavigator({
+  Home: HomeStack,
+}, {
+  contentComponent: Drawer,
+  drawerType: 'slide',
+});
+
+
+const Navigation = createStackNavigator({
   Welcome: {
     screen: WelcomeScreen,
     navigationOptions: {
@@ -165,6 +219,13 @@ const Navigation = StackNavigator({
       header: null
     }
   },
+  CompleteManualPayment: {
+    screen: manualPayment,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false,
+    }
+  },
   Pass: {
     screen: PassScreen,
     navigationOptions: {
@@ -196,6 +257,7 @@ const Navigation = StackNavigator({
   Main: {
     screen: MainNavigator,
     navigationOptions: ({ navigation }) => ({
+      header: null,
       gesturesEnabled: false,
       headerStyle: {
         backgroundColor: colors.brightBlue,
@@ -209,4 +271,4 @@ const Navigation = StackNavigator({
   }
 });
 
-export default Navigation;
+export default createAppContainer(Navigation);

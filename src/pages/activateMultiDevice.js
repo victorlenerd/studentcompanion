@@ -5,7 +5,7 @@ import users from 'containers/users';
 import Loader from 'components/loader';
 
 import { main, colors } from 'shared/styles';
-import { Button, ButtonInActive } from 'components/buttons';
+import { Button, ButtonInActive } from 'components/Buttons';
 import Tracking from 'shared/tracking';
 
 @users
@@ -72,7 +72,7 @@ class ActivateMultipleDevice extends PureComponent {
           You cannot use your account on more than one device. You can deactivate the original device and activate this new device.
         </Text>
         <Button onPress={this.sendActivationCode} text="Activate New Device" />
-        <ButtonInActive onPress={this.signout} text="No Not Now." />
+        <ButtonInActive onPress={this.signout} text="Go Back" />
       </View>
     );
   }

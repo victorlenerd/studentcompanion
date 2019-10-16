@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import AsyncStorage from '@react-native-community/async-storage';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const NOTES = 'NOTES';
 const SET_CURRENT_NOTE = 'SET_CURRENT_NOTE';
@@ -22,6 +22,7 @@ export const SetNotes = (courseId, notes) => {
 
 export const GetNotes = courseId => (dispatch, getState) => new Promise((resolve, reject) => {
   const { notesState: { notes } } = getState();
+  dispatch(StartRequest());
 
   if (notes[courseId]) {
     resolve(notes[courseId]);
@@ -34,8 +35,6 @@ export const GetNotes = courseId => (dispatch, getState) => new Promise((resolve
     .ref('/notes')
     .equalTo(courseId)
     .orderByChild('courseId');
-
-  dispatch(StartRequest());
 
   notesRef.once('value', snapshot => {
     const courseNotes = toArray(snapshot.val()) || [];
@@ -83,6 +82,8 @@ export const RemoveNoteOffline = courseId => dispatch => new Promise(async (reso
   dispatch(StartRequest());
   try {
     await AsyncStorage.removeItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`);
+    await AsyncStorage.removeItem('@UPQ:READ_NOTES');
+    await AsyncStorage.removeItem(`@UPQ:READ_NOTES:COURSE_ID_${courseId}`);
     dispatch({ type: REMOVE_NOTE, courseId });
     resolve();
   } catch (err) {
@@ -94,7 +95,9 @@ export const RemoveNoteOffline = courseId => dispatch => new Promise(async (reso
 export const GetReadNotes = () => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
-    const read_notes = await AsyncStorage.getItem('@UPQ:READ_NOTES');
+    const keys = await AsyncStorage.getAllKeys();
+    const recentReadKey = keys.find(key => key.includes('@UPQ:READ_NOTES'));
+    const read_notes = await AsyncStorage.getItem(recentReadKey || '');
     let rnotes = [];
     if (read_notes !== null) rnotes = JSON.parse(read_notes);
     resolve(rnotes);
@@ -104,20 +107,25 @@ export const GetReadNotes = () => dispatch => new Promise(async (resolve, reject
   dispatch(FinishRequest());
 });
 
-export const UpdateReadNotes = note => dispatch => new Promise(async (resolve, reject) => {
+export const UpdateReadNotes = (note, id) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
 
   try {
-    const read_notes = await AsyncStorage.getItem('@UPQ:READ_NOTES');
+    const read_notes = await AsyncStorage.getItem(`@UPQ:READ_NOTES:COURSE_ID_${id}`);
     let rnotes = [];
 
     if (read_notes !== null) rnotes = JSON.parse(read_notes);
-    const noteExists = rnotes.filter(rn => rn.$id === note.$id);
+    const noteExists = rnotes.filter(rn => {
+      if (rn !== null) {
+        return rn.$id === note.$id;
+      }
+      return false;
+    });
 
     if (noteExists.length > 0) return resolve();
 
     const notes = [note, rnotes[0], rnotes[1] ];
-    await AsyncStorage.setItem('@UPQ:READ_NOTES', JSON.stringify(notes));
+    await AsyncStorage.setItem(`@UPQ:READ_NOTES:COURSE_ID_${id}`, JSON.stringify(notes));
   } catch (err) {
     reject(err);
   }
@@ -151,7 +159,13 @@ export const NotesReducer = (state = initialState, action) => {
       const { notes } = state;
       const allNotes = { ...notes };
       allNotes[courseId] = undefined;
-      return allNotes;
+      return {
+        ...state,
+        notes: {
+          ...state.notes,
+          ...allNotes
+        }
+      };
     }
 
     case SET_CURRENT_NOTE:

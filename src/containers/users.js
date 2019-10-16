@@ -10,7 +10,7 @@ import {
   SendEmailVerificationCode,
   SendFeedback,
   UpdateLibrary
-} from 'ducks/user';
+} from 'ducks/User';
 
 const mapDispatchToProps = dispatch => {
   return {

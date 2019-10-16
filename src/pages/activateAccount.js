@@ -5,7 +5,7 @@ import { View, Text, StatusBar, ScrollView, Linking } from 'react-native';
 import users from 'containers/users';
 import Loader from 'components/loader';
 import { main, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 
 import Tracking from 'shared/tracking';
 
@@ -16,8 +16,7 @@ class ActivateAccount extends Component {
   }
 
   render() {
-    const { currentUser: { email, name } } = this.props;
-
+    // const { currentUser: { email, name, uid } } = this.props;
     return (
       <ScrollView style={{ flex: 1, backgroundColor: colors.black }}>
         <View style={[main.container, { backgroundColor: colors.black }]}>
@@ -45,15 +44,17 @@ class ActivateAccount extends Component {
 
               <Button
                 onPress={() => {
-                  Linking.openURL(`https://paystack.com/pay/09a7m9phd3?email=${email}&name=${name}`);
+                  // Linking.openURL(`https://paystack.com/pay/09a7m9phd3?email=${email}&name=${name}`);
+                  this.props.navigation.navigate('Payment', { paymentType: 'monthly', email: 'victorugwueze@gmail.com' });
                 }}
                 text="₦200 Monthly"
               />
               <Button
                 onPress={() => {
-                  Linking.openURL(`https://paystack.com/pay/2d28enjfhd?email=${email}&name=${name}`);
+                  // Linking.openURL(`https://paystack.com/pay/2d28enjfhd?email=${email}&name=${name}`);
+                  this.props.navigation.navigate('Payment', { paymentType: 'annually', email: 'victorugwueze@gmail.com' });
                 }}
-                text="₦1000 Annualy"
+                text="₦1000 Annually"
               />
             </View>
           </View>

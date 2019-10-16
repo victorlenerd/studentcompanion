@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetCoursesByOtherId, GetCourse, GetCoursesOffline, SaveCourseOffline, SetCurrentCourse, RemoveCourseOffline } from 'ducks/courses';
+import { GetCoursesByOtherId, GetCourse, GetCoursesOffline, SaveCourseOffline, SetCurrentCourse, RemoveCourseOffline } from 'ducks/Courses';
 
 const mapStateToProps = store => {
   return {

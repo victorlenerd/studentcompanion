@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetPhotoNotes, AddPhotoNote } from 'ducks/photoNotes';
+import { GetPhotoNotes, AddPhotoNote } from 'ducks/PhotoNotes';
 
 const mapDispatchToProps = dispatch => {
   return {

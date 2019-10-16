@@ -1,7 +1,6 @@
 import omit from 'lodash/omit';
-import {
-  AsyncStorage
-} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 import objToArr from 'shared/objToArr';
 

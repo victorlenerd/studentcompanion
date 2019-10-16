@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  BackHandler
+  BackHandler,
+  PermissionsAndroid
 } from 'react-native';
 
 import reverse from 'lodash/reverse';
@@ -61,8 +62,28 @@ class TextExtractor extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress');
   }
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple(
+        [
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]
+      );
+      console.log(granted, 'granted');
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 
-  add = () => {
+  add = async () => {
+    await this.requestCameraPermission();
     if (!this.props.isConnected) {
       return Alert.alert(
         'Offline',
@@ -119,6 +140,7 @@ class TextExtractor extends Component {
   }
 
   done = images => {
+    console.log(images, 'done');
     this.setState({ ready: true, images });
   }
 

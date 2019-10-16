@@ -1,8 +1,8 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import filter from 'lodash/filter';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const COURSES = 'COURSES';
 const SET_CURRENT_COURSE = 'SET_CURRENT_COURSE';
@@ -95,8 +95,7 @@ export const SaveCourseOffline = course => dispatch => new Promise(async (resolv
 export const RemoveCourseOffline = courseId => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   const courses = await dispatch(GetCoursesOffline());
-  const newCourses = courses.filter(c => c.id !== courseId);
-
+  const newCourses = courses.filter(c => c.$id !== courseId);
   dispatch(SetLibrary(newCourses));
 
   try {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Image, NetInfo, StatusBar } from 'react-native';
+import { View, Image, StatusBar } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+
 
 import moment from 'moment';
 
@@ -21,7 +23,6 @@ class Welcome extends Component {
 
   async componentWillMount() {
     Tracking.setCurrentScreen('Page_Welcome');
-
     const { setConnection } = this.props;
     // const token = await FCM.getFCMToken();
     const { type } = await NetInfo.getConnectionInfo();
@@ -47,7 +48,6 @@ class Welcome extends Component {
 
   _loadData = async () => {
     const { navigation: { navigate }, getCurrentUser, getCurrentUserOffline, deleteCurrentUser, setCurrentUser } = this.props;
-
     try {
       if (this.state.connected) {
         const user = await getCurrentUser();
@@ -57,7 +57,6 @@ class Welcome extends Component {
           const now = moment();
           const paymentDate = moment(user.nextPaymentDate);
           const diffDays = paymentDate.diff(now, 'days');
-
           if (user.verified && user.vericationCode) {
             if (diffDays >= 0) {
               // if (!user.universityId || !user.facultyId || !user.departmentId || !user.levelId) {

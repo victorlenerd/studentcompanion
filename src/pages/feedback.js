@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { main, colors } from 'shared/styles';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import Loader from 'components/loader';
 import users from 'containers/users';
 import drawerIcon from 'containers/drawerIcon';
@@ -36,14 +36,14 @@ class Feedback extends Component {
   componentWillMount() {
     Tracking.setCurrentScreen('Page_Feedback');
     this.props.setMenu(false, 'Home');
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
+    // BackHandler.addEventListener('hardwareBackPress', () => {
+    //   this.props.navigation.goBack();
+    // });
   }
 
   componentWillUnmount() {
     Keyboard.dismiss();
-    BackHandler.removeEventListener('hardwareBackPress');
+    // BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _submit = async () => {

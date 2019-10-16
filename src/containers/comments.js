@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetComments, PostComments, DeleteComment } from 'ducks/comments';
+import { GetComments, PostComments, DeleteComment } from 'ducks/Comments';
 
 const mapStateToProps = store => {
   return {

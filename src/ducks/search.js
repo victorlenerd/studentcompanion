@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 const SET_CURRENT_SEARCH_RESULTS = 'SET_CURRENT_SEARCH_RESULTS';
@@ -45,6 +45,7 @@ export const SetCurrentSearchResults = data => {
 };
 
 export const Search = search => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  dispatch(StartRequest());
   const { searchState: { results } } = getState();
   const options = {
     keys: ['name', 'code', 'departmentName', 'universityName', 'facultyName'],
@@ -56,10 +57,9 @@ export const Search = search => (dispatch, getState) => new Promise(async (resol
     fuse = new Fuse(results, options);
     searchResults = fuse.search(search);
     dispatch(SetCurrentSearchResults(searchResults));
+    dispatch(FinishRequest());
     return resolve(searchResults);
   }
-
-  dispatch(StartRequest());
 
   const courseRef = app.database().ref('/courses');
 

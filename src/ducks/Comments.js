@@ -1,5 +1,5 @@
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const initialState = {
   notesComments: {},

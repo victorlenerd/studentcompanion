@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+/* eslint-disable react/sort-comp */
+import React, { Component, Fragment } from 'react';
 import { Alert, View, ScrollView, Text, Image, StatusBar, TouchableOpacity, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import { colors } from 'shared/styles';
 import Tracking from 'shared/tracking';
 import drawerIcon from 'containers/drawerIcon';
 import notes from 'containers/notes';
+import withBackHandler from '../helpers/withBackHandler';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,12 +31,15 @@ class Home extends Component {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    });
-
+    // BackHandler.addEventListener('hardwareBackPress', () => {
+    //   this.handleBackButton();
+    //   return true;
+    // });
     this.props.setMenu(true, null);
   }
+
+  // eslint-disable-next-line react/sort-comp
+
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress');
@@ -55,19 +61,23 @@ class Home extends Component {
           {this.state.rencentReads.length > 0 &&
             <View style={{ padding: 15 }}>
               <Text style={style.homeTitle}>Continue Reading</Text>
-              {this.state.rencentReads.map((rr, i) => {
+              {this.state.rencentReads.filter(note => note !== null).map((rr, i) => {
                 return (
                   <TouchableOpacity
                     key={i}
                     onPress={() => this.openNote(rr)}
                     style={[style.homeMenu, { height: 80, paddingHorizontal: 10 }]}
                   >
-                    <View style={style.number}>
-                      <Text style={{ color: '#fff' }}>{i + 1}</Text>
-                    </View>
-                    <View style={{ marginLeft: 20 }}>
-                      <Text style={style.homeSubtitle}>{rr.title}</Text>
-                    </View>
+                    {rr &&
+                    <Fragment>
+                      <View style={style.number}>
+                        <Text style={{ color: '#fff' }}>{i + 1}</Text>
+                      </View>
+                      <View style={{ marginLeft: 20 }}>
+                        <Text style={style.homeSubtitle}>{rr.title}</Text>
+                      </View>
+                    </Fragment>
+                      }
                   </TouchableOpacity>
                 );
               })}
@@ -213,4 +223,4 @@ const style = StyleSheet.create({
   }
 });
 
-export default Home;
+export default withBackHandler(Home, 'exit', true);

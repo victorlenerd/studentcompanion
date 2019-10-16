@@ -11,25 +11,28 @@ import {
 import { main, colors } from 'shared/styles';
 
 import Loader from 'components/loader';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import auth from 'containers/auth';
+import users from 'containers/users';
 import Tracking from 'shared/tracking';
+import resetToWelcome from '../helpers/redirect';
 
 @auth
+@users
 class VerifyEmail extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { code: '' };
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     Tracking.setCurrentScreen('Page_Verify_Email');
 
     Keyboard.dismiss();
   }
 
   done = async () => {
-    const { updateEmailVerification, navigation: { navigate } } = this.props;
+    const { updateEmailVerification, navigation } = this.props;
 
     if (this.state.code.length < 1) {
       Alert.alert('Err! Invalid Code', 'You cannote submit an empty text', [{ text: 'Cancel', style: 'cancel' }]);
@@ -38,7 +41,7 @@ class VerifyEmail extends PureComponent {
     try {
       const done = await updateEmailVerification(this.state.code);
       if (done) {
-        return navigate('Welcome');
+        return resetToWelcome(navigation);
       }
 
       Alert.alert('An Error Occured', 'The code you used is not valid.', [{ text: 'Cancel', style: 'cancel' }]);

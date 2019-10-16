@@ -50,7 +50,7 @@ class UploadPhotos extends Component {
 
   async componentWillMount() {
     const { isConnected, currentUser: { $id }, getPhotoNotes } = this.props;
-
+    console.log('mounted...')
     Tracking.setCurrentScreen('Page_Upload_Photo');
 
     if (isConnected) {

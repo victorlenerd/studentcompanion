@@ -1,7 +1,7 @@
-import app, { toArray } from 'shared/firebase';
+import app, { toArray } from 'shared/Firebase';
 
 import { RNS3 } from 'react-native-aws3';
-import { StartRequest, FinishRequest } from 'ducks/request';
+import { StartRequest, FinishRequest } from 'ducks/Request';
 
 const SET_UPLOADED_PHOTOS = 'SET_UPLOADED_PHOTOS';
 
@@ -31,7 +31,7 @@ export const AddPhotoNote = photoNote => (dispatch, getState) => new Promise(asy
     return RNS3.put({ uri: path, name, type: mime }, options)
       .then(response => {
         return { name, url: response.body.postResponse.location };
-      });
+      }).catch(err => console.log(err));
   });
   const response = await Promise.all(uploadsWrappers);
 

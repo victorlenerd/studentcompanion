@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { GetUniversities, SetUniversities } from 'ducks/universities';
+import { GetUniversities, SetUniversities } from 'ducks/Universities';
 
 const mapStateToProps = store => {
   return {

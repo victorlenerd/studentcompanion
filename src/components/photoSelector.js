@@ -7,7 +7,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 import { colors } from 'shared/styles';
 import EmptyState from 'components/emptyState';
-import { Button, ButtonInActive } from 'components/buttons';
+import { Button, ButtonInActive } from 'components/Buttons';
 
 const { width } = Dimensions.get('window');
 

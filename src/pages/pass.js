@@ -10,9 +10,10 @@ import {
 import { main, colors } from 'shared/styles';
 
 import Loader from 'components/loader';
-import { Button } from 'components/buttons';
+import { Button } from 'components/Buttons';
 import auth from 'containers/auth';
 import Tracking from 'shared/tracking';
+import resetToRoute from '../helpers/redirect';
 
 @auth
 class Pass extends Component {
@@ -26,7 +27,7 @@ class Pass extends Component {
   }
 
   done = async () => {
-    const { updateDeviceId, navigation: { navigate } } = this.props;
+    const { updateDeviceId, navigation } = this.props;
 
     if (this.state.code.length < 1) {
       Alert.alert('Err! Invalid Code', 'You cannote submit an empty text', [{ text: 'Cancel', style: 'cancel' }]);
@@ -36,7 +37,7 @@ class Pass extends Component {
       const done = await updateDeviceId(this.state.code);
       if (done) {
         Keyboard.dismiss();
-        return navigate('Welcome');
+        return resetToRoute(navigation);
       }
 
       Alert.alert('An Error Occured', 'The code you used is not valid.', [{ text: 'Cancel', style: 'cancel' }]);

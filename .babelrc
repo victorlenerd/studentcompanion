@@ -1,12 +1,17 @@
 {
-  "presets": ["react-native"],
+  "presets": ["module:metro-react-native-babel-preset"],
   "plugins": [
     ["@babel/plugin-proposal-decorators", {
       "legacy": true
     }],
+    "@babel/plugin-proposal-object-rest-spread",
     ["@babel/plugin-transform-runtime",{
-      "polyfill": false,
       "regenerator": false
+    }],
+    ["babel-plugin-rewrite-require", {
+      "aliases": {
+        "crypto": "crypto-browserify"
+      }
     }],
     ["module-resolver", {
       "cwd": "babelrc",

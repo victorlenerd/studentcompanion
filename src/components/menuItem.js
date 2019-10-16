@@ -5,13 +5,13 @@ import { main } from 'shared/styles';
 
 class MenuItem extends Component {
   render() {
-    const { navigation: { navigate }, label, path } = this.props;
+    const { navigation, label, path } = this.props;
     return (
       <TouchableOpacity
         style={main.nav}
         onPress={() => {
-          navigate('DrawerToggle');
-          navigate(path);
+          navigation.toggleDrawer();
+          navigation.navigate(path);
         }}
       >
         {path === 'Home' && <Image source={require('../assets/home.png')} style={main.nav_image} />}

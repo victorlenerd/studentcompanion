@@ -1,13 +1,10 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import DeviceInfo from 'react-native-device-info';
+import firebase from 'react-native-firebase';
 
 import moment from 'moment';
-import app, { toArray } from 'shared/firebase';
-import { StartRequest, FinishRequest } from './request';
-
-const api_key = 'key-93ca8e4ff39284ac39f1627abc5edd1d';
-const DOMAIN = 'studentcompanion.xyz';
-const mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
+import app, { toArray } from 'shared/Firebase';
+import { StartRequest, FinishRequest } from './Request';
 
 const codeGenerator = () => `${(Math.floor(Math.random() * 9))}${(Math.floor(Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}${Math.floor((Math.random() * 9))}`;
 
@@ -17,11 +14,22 @@ const initialState = {
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
+const sendMailWithCode = async (mailHandler, data) => {
+  try {
+    const code = codeGenerator();
+    await firebase
+      .functions()
+      .httpsCallable(mailHandler)({ ...data, code });
+  } catch (error) {
+    console.log(error, 'device errror');
+  }
+};
+
 export const Register = data => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
     const { email, password, phoneNumber, name } = data;
-    const usr = await app.auth().createUserWithEmailAndPassword(email, password);
+    const { user } = await app.auth().createUserWithEmailAndPassword(email, password);
     const usersRefs = app.database().ref('/users');
     const trialPeriodRefs = app.database().ref('/trialPeriod');
 
@@ -30,10 +38,8 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
       const nextPaymentDate = moment().add(trialPeriod, 'days');
 
       try {
-        await usr.sendEmailVerification();
-
         await usersRefs.push({
-          userId: usr.uid,
+          userId: user.uid,
           name,
           email,
           phoneNumber,
@@ -41,13 +47,11 @@ export const Register = data => dispatch => new Promise(async (resolve, reject) 
           deviceId: DeviceInfo.getUniqueID(),
           nextPaymentDate: nextPaymentDate.toISOString(),
         });
-
         dispatch(SetCurrentUser({
-          userId: usr.uid,
+          userId: user.uid,
           name: data.name,
           email: data.email,
         }));
-
         resolve(data);
         dispatch(FinishRequest());
       } catch (err) {
@@ -65,7 +69,7 @@ export const Login = data => dispatch => new Promise(async (resolve, reject) => 
   try {
     const { email, password } = data;
     dispatch(StartRequest());
-    const { uid: userId, name } = await app.auth().signInWithEmailAndPassword(email, password);
+    const { user: { uid: userId, name } } = await app.auth().signInWithEmailAndPassword(email, password);
     dispatch(SetCurrentUser({
       userId,
       name,
@@ -114,7 +118,6 @@ export const SetCurrentUser = ({ email }) => dispatch => new Promise((resolve, r
     .equalTo(email)
     .once('value', async snapshot => {
       const user = toArray(snapshot.val())[0];
-
       if (user !== null) {
         try {
           await AsyncStorage.setItem('@UPQ:CURRENT_USER', JSON.stringify(user));
@@ -180,9 +183,8 @@ export const DeleteCurrentUser = () => dispatch => new Promise(async (resolve, r
 
 export const SignOut = () => dispatch => new Promise(async (resolve, reject) => {
   try {
-    await app.auth().signOut();
+    await firebase.auth().signOut();
     await dispatch(DeleteCurrentUser());
-    await AsyncStorage.removeItem('@UPQ:OFFLINE_COURSES');
     resolve(true);
   } catch (err) {
     reject(err);
@@ -192,54 +194,24 @@ export const SignOut = () => dispatch => new Promise(async (resolve, reject) => 
 export const SendDeviceActivationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const code = codeGenerator();
-    const data = {
-      from: 'Student Companion <hello@studentcompanion.xyz>',
-      to: email,
-      subject: 'Student Companion Device Verification Code',
-      text: `Hello ${name}, your device activation code is: ${code}`
-    };
-
-    const userRef = app.database().ref(`/users/${$id}`);
-    userRef.update({ deviceActivationCode: code }, async err => {
-      if (err !== null) reject(err);
-
-      mailgun.messages().send(data, function(error) {
-        if (error) reject({ message: "Couldn't send the email." });
-        resolve(true);
-      });
-    });
+    const user = { email, id: $id, name };
+    await sendMailWithCode('SendDeviceActivationCode', { user });
+    resolve(true);
   } catch (err) {
     reject(err);
   }
-
   dispatch(FinishRequest());
 });
 
 export const SendEmailVerificationCode = (email, $id, name) => dispatch => new Promise(async (resolve, reject) => {
   try {
     dispatch(StartRequest());
-    const code = codeGenerator();
-    const data = {
-      from: 'Student Companion <hello@studentcompanion.xyz>',
-      to: email,
-      subject: 'Student Companion Email Verification Code',
-      text: `Hello ${name}, your verification code is: ${code}`
-    };
-
-    const userRef = app.database().ref(`/users/${$id}`);
-    userRef.update({ vericationCode: code }, async err => {
-      if (err !== null) reject(err);
-
-      mailgun.messages().send(data, function(error) {
-        if (error) reject({ message: "Couldn't send the email." });
-        resolve(true);
-      });
-    });
+    const user = { email, id: $id, name };
+    await sendMailWithCode('SendEmailVerificationCode', { user });
+    resolve(true);
   } catch (err) {
     reject(err);
   }
-
   dispatch(FinishRequest());
 });
 
@@ -268,32 +240,17 @@ export const UpdateEmailVerification = code => dispatch => new Promise(async (re
   dispatch(FinishRequest());
 });
 
-export const SendFeedback = (userId, name, email, feedback) => dispatch => new Promise((resolve, reject) => {
+export const SendFeedback = (senderId, senderName, senderEmail, feedback) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
 
   try {
-    const data = {
-      from: 'Student Companion <hello@studentcompanion.xyz>',
-      to: 'vnwaokocha@gmail.com',
-      subject: `Feedback ${name}`,
-      text: `
-        ${feedback}
-
-
-        ${name}
-        ${email}
-        ${userId}
-      `
-    };
-
-    mailgun.messages().send(data, function(error) {
-      if (error) reject({ message: "Couldn't send feedback." });
-      resolve(true);
-    });
+    await firebase
+      .functions()
+      .httpsCallable('sendFeedBack')({ senderName, senderEmail, senderId, feedback });
+    resolve(true);
   } catch (err) {
     reject(err);
   }
-
   dispatch(FinishRequest());
 });
 

@@ -6,7 +6,6 @@ import {
   StatusBar,
   TouchableOpacity,
   Dimensions,
-  BackHandler,
   Image,
   Alert
 } from 'react-native';
@@ -21,7 +20,10 @@ import drawerIcon from 'containers/drawerIcon';
 import user from 'containers/users';
 import Tracking from 'shared/tracking';
 
+import withBackHandler from '../helpers/withBackHandler';
+
 const { width, height } = Dimensions.get('window');
+
 
 @user
 @courses
@@ -32,7 +34,6 @@ class SavedCourses extends Component {
   state = { courses: [] }
   async componentWillMount() {
     const { setMenu, getCoursesOffline } = this.props;
-
     Tracking.setCurrentScreen('Page_Library');
     setMenu(false, 'Home');
 
@@ -77,14 +78,6 @@ class SavedCourses extends Component {
     } catch (err) {
       Alert.alert('Error', err.message, [{ text: 'Cancel', style: 'cancel' }]);
     }
-
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack();
-    });
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress');
   }
 
   _openCourse = async course => {
@@ -104,7 +97,7 @@ class SavedCourses extends Component {
     }
   }
 
-  _deleteCourse = ({ name, id }) => {
+  _deleteCourse = ({ name, $id }) => {
     const { removeNoteOffline, removeCourseOffline } = this.props;
 
     Alert.alert('Delete Course', `Are you sure you want to remove ${name} from you library`,
@@ -112,10 +105,10 @@ class SavedCourses extends Component {
         { text: 'Cancel', style: 'cancel' },
         { text: 'Yes',
           onPress: async () => {
-            await removeNoteOffline(id);
-            await removeCourseOffline(id);
+            await removeNoteOffline($id);
+            await removeCourseOffline($id);
             this.setState({
-              courses: this.state.courses.filter(c => c.id !== id)
+              courses: this.state.courses.filter(c => c.$id !== $id)
             });
           } }
       ]);
@@ -168,15 +161,16 @@ class SavedCourses extends Component {
           flexDirection: 'row',
           backgroundColor: colors.lightBlue,
           borderTopColor: colors.accent,
-          borderTopWidth: 2
+          borderTopWidth: 2,
+          paddingBottom: 5
         }}
       >
         <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
-        <View style={[main.content, { flex: 1, padding: 0 }]}>{this._renderSection()}</View>
+        <View style={[main.content, { flex: 1, padding: 0, paddingBottom: 50 }]}>{this._renderSection()}</View>
         <Loader />
       </View>
     );
   }
 }
 
-export default SavedCourses;
+export default withBackHandler(SavedCourses, 'Home', true);
