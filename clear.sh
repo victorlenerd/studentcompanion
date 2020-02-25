@@ -10,3 +10,6 @@ do
       fi
    done
 done
+
+firebaseInstanceIdClass="$PWD/node_modules/react-native-fcm/android/src/main/java/com/evollu/react/fcm/InstanceIdService.java"
+echo "$(cat $PWD/fcm-backup.java)" > $firebaseInstanceIdClass

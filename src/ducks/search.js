@@ -52,20 +52,21 @@ export const Search = search => (dispatch, getState) => new Promise(async (resol
   };
   let fuse;
   let searchResults;
-
-  if (results && results.length > 0) {
-    fuse = new Fuse(results, options);
-    searchResults = fuse.search(search);
-    dispatch(SetCurrentSearchResults(searchResults));
-    dispatch(FinishRequest());
-    return resolve(searchResults);
-  }
+  // if (results && results.length > 0) {
+  //   fuse = new Fuse(results, options);
+  //   searchResults = fuse.search(search);
+  //   dispatch(SetCurrentSearchResults(searchResults));
+  //   dispatch(FinishRequest());
+  //   return resolve(searchResults);
+  // }
 
   const courseRef = app.database().ref('/courses');
 
   courseRef.once('value', snapshot => {
     const data = toArray(snapshot.val()) || [];
     dispatch(SetResults(data));
+    console.log(data, 'data');
+    console.log(results, 'results');
 
     fuse = new Fuse(data, options);
     searchResults = fuse.search(search);

@@ -105,7 +105,7 @@ class Welcome extends Component {
         <Image resizeMode="contain" source={require('../assets/things.png')} style={{ position: 'absolute', top: 0, left: 0 }} />
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ height: 150, width: 200, elevation: 15 }}>
-            <Animatable.Image animation="fadeIn" duration={500} resizeMode="contain" source={require('../assets/logo-lshw.png')} style={{ height: 150, width: 200 }} />
+            <Animatable.Image animation="fadeIn" duration={500} resizeMode="contain" source={require('../assets/new_logo.jpg')} style={{ height: 150, width: 200 }} />
           </View>
         </View>
         <Loader />

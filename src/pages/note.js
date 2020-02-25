@@ -7,7 +7,8 @@ import {
   Alert,
   AppState,
   BackHandler,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 
@@ -20,10 +21,13 @@ import { main, colors } from 'shared/styles';
 import notes from 'containers/notes';
 import comments from 'containers/comments';
 import reader from 'containers/reader';
+import Pdf from 'react-native-pdf';
+
 
 import VoiceRatePane from 'components/voiceRatePane';
 import Tracking from 'shared/tracking';
 import withBackHandler from '../helpers/withBackHandler';
+
 
 const { height } = Dimensions.get('window');
 
@@ -55,11 +59,12 @@ class Note extends Component {
     const { $id } = currentNote;
 
     Tracking.setCurrentScreen('Page_Note');
-
     this.setState({
       currentSentence: 0,
       usingWebView: supportsQuill(),
-      sentences: this.props.currentNote.text.split('.'),
+      // sentences: this.props.currentNote.text.split('.'),
+      sentences: 'dhdsgsgvs.vdsghvs'.split('.'),
+
     });
 
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -86,9 +91,9 @@ class Note extends Component {
   componentWillReceiveProps(nextProps) {
     const { themeMode, playing } = nextProps;
 
-    if (themeMode !== this.state.themeMode && this.state.usingWebView) {
+    if (themeMode !== this.state.themeMode) {
       this.setState({ themeMode });
-      this.webView.postMessage(`${themeMode}.mode`);
+      // this.webView.postMessage(`${themeMode}.mode`);
     }
 
     if (this.state.playing !== playing && playing) {
@@ -212,23 +217,66 @@ class Note extends Component {
     }
   }
 
+  renderLoading = () => {
+    return (
+      <Text>
+        Loading...
+      </Text>
+    );
+  }
   render() {
     return (
       <View
         style={[
-          main.container,
-          {
-            backgroundColor: this.state.themeMode === 'light' ? colors.white : colors.black,
-            borderTopColor: colors.accent,
-            borderTopWidth: 2,
-          },
-        ]}
+        main.container,
+        {
+          backgroundColor: this.state.themeMode === 'light' ? colors.white : colors.black,
+          borderTopColor: colors.accent,
+          borderTopWidth: 2,
+        },
+      ]}
       >
-        <VoiceRatePane change={this.rateChange} />
-        {this._renderReaderView()}
+        {/* <VoiceRatePane change={this.rateChange} /> */}
+        {/* {this._renderReaderView()} */}
+        {/* /</View> */}
+        {/* <View style={styles.container}> */}
+        <Pdf
+          source={{ uri: `data:application/pdf;base64,${this.props.currentNote.pdf}` }}
+          activityIndicator={this.renderLoading()}
+          onLoadComplete={(numberOfPages, filePath) => {
+              console.log(`number of pages: ${numberOfPages}`);
+          }}
+          onPageChanged={(page, numberOfPages) => {
+              console.log(`current page: ${page}`);
+          }}
+          page={1}
+          onError={error => {
+              console.log(error);
+          }}
+          onPressLink={uri => {
+              console.log(`Link presse: ${uri}`);
+          }}
+          style={styles.pdf}
+        />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 25,
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    backgroundColor: '#000'
+  }
+});
+
 
 export default withBackHandler(Note, 'Course');

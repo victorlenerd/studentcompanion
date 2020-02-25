@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 import app, { toArray } from 'shared/Firebase';
 import { StartRequest, FinishRequest } from './Request';
 
@@ -70,6 +71,14 @@ export const GetNotesOffline = courseId => (dispatch, getState) => new Promise(a
 export const SaveNotesOffline = (courseId, notes) => dispatch => new Promise(async (resolve, reject) => {
   dispatch(StartRequest());
   try {
+    const getNote = note => RNFetchBlob.fetch('GET', 'https://www.tutorialspoint.com/computer_programming/computer_programming_tutorial.pdf');
+    await Promise.all(notes.map(async note => {
+      const base64Note = await getNote(note);
+      console.log(base64Note.base64(), 'base64');
+      note.pdf = base64Note.base64();
+    }));
+    // the following conversions are done in js, it's SYNC
+    AsyncStorage.removeItem('pdf');
     await AsyncStorage.setItem(`@UPQ:OFFLINE_NOTES:ID_${courseId}`, JSON.stringify(notes));
     resolve(notes);
   } catch (err) {

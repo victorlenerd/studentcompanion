@@ -28,8 +28,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "StudentCompanion-tvOS.app"
+               BlueprintIdentifier = "2A999EEE236DB3F600FF5256"
+               BuildableName = "StudentCompanion-tvOS.xctest"
                BlueprintName = "StudentCompanion-tvOS"
                ReferencedContainer = "container:StudentCompanion.xcodeproj">
             </BuildableReference>
@@ -70,8 +70,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "StudentCompanion-tvOS.app"
+            BlueprintIdentifier = "2A999EEE236DB3F600FF5256"
+            BuildableName = "StudentCompanion-tvOS.xctest"
             BlueprintName = "StudentCompanion-tvOS"
             ReferencedContainer = "container:StudentCompanion.xcodeproj">
          </BuildableReference>
@@ -93,8 +93,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "StudentCompanion-tvOS.app"
+            BlueprintIdentifier = "2A999EEE236DB3F600FF5256"
+            BuildableName = "StudentCompanion-tvOS.xctest"
             BlueprintName = "StudentCompanion-tvOS"
             ReferencedContainer = "container:StudentCompanion.xcodeproj">
          </BuildableReference>
@@ -112,8 +112,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "StudentCompanion-tvOS.app"
+            BlueprintIdentifier = "2A999EEE236DB3F600FF5256"
+            BuildableName = "StudentCompanion-tvOS.xctest"
             BlueprintName = "StudentCompanion-tvOS"
             ReferencedContainer = "container:StudentCompanion.xcodeproj">
          </BuildableReference>

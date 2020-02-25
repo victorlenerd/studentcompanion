@@ -101,6 +101,11 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 def enableHermes = project.ext.react.get("enableHermes", false);
+long dbSizeInMB = 6L
+def newDbSize = rootProject.properties['AsyncStorage_db_size_in_MB']
+if( newDbSize != null && newDbSize.isLong()) {
+    dbSizeInMB = newDbSize.toLong()
+}
 
 android {
     compileSdkVersion 28
@@ -117,6 +122,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        buildConfigField "Long", "AsyncStorage_db_size", "${dbSizeInMB}L"
     }
     signingConfigs {
         release {
@@ -156,9 +162,19 @@ android {
             }
         }
     }
+    packagingOptions {
+      pickFirst 'lib/x86/libc++_shared.so'
+       pickFirst 'lib/x86_64/libjsc.so'
+       pickFirst 'lib/arm64-v8a/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+       pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }
 }
 
 dependencies {
+    implementation project(':rn-fetch-blob')
+    implementation project(':react-native-pdf')
     implementation project(':react-native-paystack')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-webview')
@@ -167,7 +183,6 @@ dependencies {
     implementation project(':react-native-randombytes')
     implementation project(':react-native-camera-kit')
     implementation project(':react-native-tts')
-    implementation project(':react-native-fetch-blob')
     implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-device-info')

@@ -114,7 +114,7 @@ const HomeStack = createStackNavigator({
         backgroundColor: colors.brightBlue,
       },
       headerTintColor: '#fff',
-      headerRight: <NoteToobarOptions navigation={navigation} />
+      headerLeft: <HeaderBackButton tintColor="#fff" onPress={() => { navigation.replace('SavedCourses'); }} />,
     })
   },
   TextExtractor: {
@@ -134,7 +134,7 @@ const HomeStack = createStackNavigator({
         backgroundColor: colors.brightBlue,
       },
       headerTintColor: '#fff',
-      headerRight: <NoteToobarOptions extracted={true} navigation={navigation} />,
+      headerLeft: <HeaderBackButton tintColor="#fff" onPress={() => { navigation.replace('SavedCourses'); }} />,
     })
   },
   Course: {

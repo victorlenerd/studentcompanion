@@ -12,6 +12,7 @@ import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.facebook.react.ReactApplication;
+import org.wonday.pdf.RCTPdfView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.arttitude360.reactnative.rnpaystack.RNPaystackPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -49,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RCTPdfView(),
             new RNGestureHandlerPackage(),
             new RNPaystackPackage(),
             new AsyncStoragePackage(),

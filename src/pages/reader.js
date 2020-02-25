@@ -11,7 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import fs from 'react-native-fs';
 

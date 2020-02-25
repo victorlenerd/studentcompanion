@@ -49,8 +49,6 @@ target 'StudentCompanion' do
   pod 'Crashlytics'
   pod 'Firebase/Messaging'
 
-  pod 'react-native-fetch-blob',
-    :path => '../node_modules/react-native-fetch-blob'
 
   pod 'react-native-camera-kit', :path => '../node_modules/react-native-camera-kit'
 
@@ -91,6 +89,10 @@ target 'StudentCompanion' do
   pod 'react-native-paystack', :path => '../node_modules/react-native-paystack'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
+
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
   target 'StudentCompanionTests' do
     inherit! :search_paths
